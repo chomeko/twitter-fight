@@ -4,7 +4,12 @@
       <img src="../assets/mvlogo.png" alt="メインビジュアル画像">
       <p>ついったー同士戦って称号を集める</p>
     </div>
-    <h1>ついふぁい</h1>
+    <transition
+      enter-active-class="animate__animated animate__bounceInDown"
+      appear
+    >
+      <h1>ついふぁい</h1>
+    </transition>
     <div class="button-center">
       <Button
         class="a"
