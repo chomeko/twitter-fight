@@ -1,11 +1,11 @@
 <template>
   <div id="header">
-    <div class="header_left">
-      <router-link
-        exact
-        to="/"
-      ><img src="../assets/ヘッダーロゴ.png" alt="ヘッダーロゴ"></router-link>
-    </div>
+    <router-link
+      exact
+      to="/"
+    >
+    <div class="header_left">ついふぁい</div>
+    </router-link>
     <div class="toggle" @click="Navactive" :class="{'is-active': active}">
       <span></span>
       <span></span>
@@ -13,28 +13,28 @@
     </div>
     <transition name="fade" mode="out-in">
       <nav v-show="navactive">
-      <div>
-        <router-link
-          to="/help"
-          class="link"
-          exact
-          @click.native="Navactive"
-        >ヘルプ</router-link>
-        <router-link
-          to="/Termsofservice"
-          class="link"
-          exact
-          @click.native="Navactive"
-        >利用規約</router-link>
-        <router-link
-          to="/Privacypolicy"
-          class="link"
-          exact
-          @click.native="Navactive"
-        >プライバシーポリシー</router-link>
-        <p>ログアウト</p>
-      </div>
-    </nav>
+        <div>
+          <router-link
+            to="/help"
+            class="link"
+            exact
+            @click.native="Navactive"
+          >ヘルプ</router-link>
+          <router-link
+            to="/Termsofservice"
+            class="link"
+            exact
+            @click.native="Navactive"
+          >利用規約</router-link>
+          <router-link
+            to="/Privacypolicy"
+            class="link"
+            exact
+            @click.native="Navactive"
+          >プライバシーポリシー</router-link>
+          <p>ログアウト</p>
+        </div>
+      </nav>
     </transition>
   </div>
 </template>
@@ -65,6 +65,7 @@ export default {
     position: fixed
     display: flex
     border: solid 3px #fff
+    z-index: 10
     a
       color: #FFF
 
@@ -72,6 +73,15 @@ export default {
     height: 52px
     display: flex
     align-items: center
+    &::after
+      content: ''
+      display: inline-block
+      background-image: url(../assets/logo.svg)
+      background-size: contain
+      background-repeat: no-repeat
+      vertical-align: middle
+      width: 32px
+      height: 32px
 
   img
     width: 120px

@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <Header></Header>
-    <router-view></router-view>
+    <header>
+      <Header></Header>
+    </header>
+    <main>
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
@@ -22,6 +26,7 @@ export default {
   font-family: 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', sans-serif
   background: #000
   color: #FFF
+  line-height: 1.5
 
 *
   box-sizing: border-box
@@ -34,6 +39,10 @@ export default {
   .fade-enter-active,
   .fade-leave-active
     transition: opacity .5s
+
+  main
+    padding-top: 52px
+    //height: auto
 
 </style>
 

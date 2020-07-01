@@ -1,24 +1,6 @@
 # twitter-fight
 
-## Project setup
-```
-npm install
-```
+## Vue Router
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## sass
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
