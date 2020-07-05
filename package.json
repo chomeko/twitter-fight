@@ -10,6 +10,7 @@
   "dependencies": {
     "animate.css": "^4.1.0",
     "core-js": "^3.6.5",
+    "firebase": "^7.15.5",
     "vue": "^2.6.11",
     "vue-router": "^3.3.4"
   },

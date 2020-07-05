@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <Header></Header>
+      <Header :user="userData"></Header>
     </header>
     <main>
       <router-view></router-view>
@@ -13,11 +13,26 @@
 import 'normalize.css'
 import Header from './components/Header'
 
+import firebase from 'firebase'
+
 export default {
+  data(){
+    return {
+      userData: {}
+    }
+  },
   components: {
     Header
+  },
+  created(){
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.userData = user
+      }else {
+        this.userData = {}
+      }
+    })
   }
-
 }
 </script>
 

@@ -2,42 +2,39 @@
   <div id="home">
     <div class="mvlogo">
       <img src="../assets/mvlogo.png" alt="メインビジュアル画像">
-      <p>ついったー同士戦って称号を集める</p>
+      <p class="mvlogo__p">ついったー同士戦って称号を集める</p>
     </div>
     <transition
-      enter-active-class="animate__animated animate__bounceInDown"
+      enter-active-class="animate__animated animate__flip"
       appear
     >
       <h1>ついふぁい</h1>
     </transition>
-    <div class="button-center">
-      <Button
-        class="a"
-        type="twitter"
-        @myclick="login"
-        >Twitterログイン</Button>
-    </div>
+    <Login></Login>
     <Eyeball></Eyeball>
+    <Explain></Explain>
+    <ExplainBattle></ExplainBattle>
+
   </div>
 </template>
 
 <script>
-import Button from '../components/Button'
+import Login from '../components/Login'
 import Eyeball from '../components/Eyeball'
+import Explain from '../components/Explain'
+import ExplainBattle from '../components/ExplainBattle'
+
 
 export default {
   components: {
-    Button,
-    Eyeball
+    Eyeball,
+    Explain,
+    ExplainBattle,
+    Login
+
   },
   data(){
     return {
-
-    }
-  },
-  methods: {
-    login(){
-      alert("ログインしました")
     }
   }
 }
@@ -47,7 +44,7 @@ export default {
   #home
     width: 100%
     height: auto
-    padding-top: 150px
+    padding: 150px 24px 10px
   .mvlogo
     width: 320px
     height: 120px
@@ -55,7 +52,7 @@ export default {
     position: relative
   img
     max-width: 100%
-  p
+  .mvlogo__p
     color: #9A9A9A
     font-size: 18px
     text-align: center
@@ -68,9 +65,6 @@ export default {
   h1
     margin-top: 56px
     font-size: 40px
-    text-align: center
-
-  .button-center
     text-align: center
 
 </style>

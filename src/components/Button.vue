@@ -33,7 +33,7 @@ export default {
   .my-button
     background: #f6f6f6
     border: none
-    border-radius: 3px
+    border-radius: 10px
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3)
     color: #666
     cursor: pointer
@@ -49,5 +49,10 @@ export default {
   .twitter
     background: #00A7FF
     color: #fff
+    font-weight: bold
+  .userStatus
+    background: #d10dff
+    color: #FFF
+    font-weight: bold
     //サイズ
 </style>

@@ -32,7 +32,7 @@
             exact
             @click.native="Navactive"
           >プライバシーポリシー</router-link>
-          <p>ログアウト</p>
+          <p v-if="user.uid" @click="logout">ログアウト</p>
         </div>
       </nav>
     </transition>
@@ -40,15 +40,24 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
+  props: ["user"],
   data(){
     return {
       active: false,
-      navactive: false
+      navactive: false,
+      islogin: false
     }
   },
   methods: {
     Navactive(){
+      this.active = !this.active
+      this.navactive = !this.navactive
+    },
+    logout(){
+      firebase.auth().signOut()
       this.active = !this.active
       this.navactive = !this.navactive
     }
@@ -62,15 +71,17 @@ export default {
     background-color: #000
     width: 100%
     height: 52px
+    padding: 0 8px
     position: fixed
     display: flex
-    border: solid 3px #fff
+    border-bottom: solid 3px #fff
     z-index: 10
     a
       color: #FFF
 
   .header_left
     height: 52px
+    font-weight: bold
     display: flex
     align-items: center
     &::after
