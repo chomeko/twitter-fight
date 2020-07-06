@@ -37,11 +37,17 @@ export default {
 </script>
 
 <style lang="sass">
-#app
+
+body
   font-family: 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', sans-serif
   background: #000
   color: #FFF
   line-height: 1.5
+  height: 100vh
+  background: #000
+
+Header
+  padding-bottom: 52px
 
 *
   box-sizing: border-box
@@ -54,9 +60,5 @@ export default {
   .fade-enter-active,
   .fade-leave-active
     transition: opacity .5s
-
-  main
-    padding-top: 52px
-    //height: auto
 
 </style>

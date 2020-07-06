@@ -5,3 +5,5 @@
 ## sass
 
 ## animeta.css
+
+## npm i --save lodash

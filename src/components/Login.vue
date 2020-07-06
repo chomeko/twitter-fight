@@ -22,6 +22,7 @@ export default {
     login(){
       const provider = new firebase.auth.TwitterAuthProvider()
       firebase.auth().signInWithPopup(provider)
+      .then()
     }
   }
 }

@@ -16,6 +16,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      name: 'Home',
       components: {
         default: Home
       }
@@ -47,25 +48,47 @@ const router = new Router({
   ]
 })
 
-// ナビゲーションの前に実行
+// ルーティングする時のチェック
 router.beforeEach((to, from, next) => {
-  // ログインの有無判断
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  if (requiresAuth) {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        // ログイン時は各ページに移動
-        next()
-      } else {
-        // 未ログイン時はhome画面にリダイレクト
+  // リダイレクト先が設定されていれば取得しておく
+  let redirect = null
+  if (to.query.redirect) {
+    redirect = to.query.redirect
+  }
+  // 現在ログインしているユーザーを取得する
+  firebase.auth().onAuthStateChanged(user => {
+    // ユーザが認証済みの場合（userが取得できた場合）
+    if (user) {
+      // リダイレクトが設定されていればリダイレクト先に
+      if (redirect  != null) {
+        next(redirect)
+        return
+      }
+      // Homeページに入る時、ログインされているならmypage画面に行く
+      if(to.name === "Home") {
         next({
-          path: '/'
+          name: 'Mypage',
         })
       }
-    })
-  } else {
-    next()
-  }
-});
+      // 認証済みならどこでも行ってもOK
+      next()
+    }
+
+    // ユーザが認証されていない場合
+    else {
+      // 認証が必要かチェックし、必要であればHomeページに強制遷移
+      if(to.matched.some(record => record.meta.requiresAuth)){
+        next({
+          name: 'Home',
+          query: {
+            redirect: to.fullPath
+          },
+        })
+      }
+      // 認証が必要ない場合はそのままでOK
+      next()
+    }
+  })
+})
 
 export default router

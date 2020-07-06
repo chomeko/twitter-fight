@@ -44,11 +44,12 @@ export default {
   #home
     width: 100%
     height: auto
-    padding: 150px 24px 10px
+    padding: 0 24px 10px
   .mvlogo
     width: 320px
     height: 120px
     margin: auto
+    margin-top: 148px
     position: relative
   img
     max-width: 100%
