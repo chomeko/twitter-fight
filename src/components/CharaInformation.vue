@@ -1,6 +1,6 @@
 <template>
   <div class="user__information">
-    <p>{{loginuser.displayName}}</p>
+    <p v-if="loginuser">{{loginuser.displayName}}</p>
     <p>キャラクターID  {{output.id}}</p>
     <p>Lv： {{output.lv}}</p>
     <p>EXP</p>
