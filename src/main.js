@@ -4,6 +4,7 @@ import router from './router'
 import animate from 'animate.css'
 import lodash from 'lodash'
 
+
 import firebase from 'firebase'
 
 Vue.config.productionTip = false

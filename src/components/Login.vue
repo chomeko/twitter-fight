@@ -1,11 +1,11 @@
 <template>
   <div class="button-center">
-    <router-link to="/mypage">
-      <Button
-        type="twitter"
-        @myclick="login"
-        >Twitterログイン</Button>
-    </router-link>
+    <!-- <router-link :to="{name: 'mypage', params: { loginUser }}"> -->
+    <Button
+      type="twitter"
+      @myclick="login"
+      >Twitterログイン</Button>
+    <!-- </router-link> -->
   </div>
 
 </template>
@@ -22,7 +22,28 @@ export default {
     login(){
       const provider = new firebase.auth.TwitterAuthProvider()
       firebase.auth().signInWithPopup(provider)
-      .then()
+      .then((result) =>{
+        console.log('ログインに成功しました')
+        const user = result.user
+        if (user) {
+          const db = firebase.firestore()
+          const docID = String(user.providerData[0].uid)
+          db.collection('users').doc(docID)
+          .set({
+            displayName: user.displayName,
+            photoURL: user.photoURL
+          })
+          .then(
+            console.log('ユーザー作成完了しました')
+          )
+          .catch((error) => {
+          console.log(error)
+          })
+        }
+      })
+      .catch((error => {
+        console.log(error)
+      }))
     }
   }
 }

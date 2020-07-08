@@ -1,21 +1,21 @@
 <template>
   <div id="mypage">
     <!-- 初期ログイン後に表示 -->
-    <div v-if="!status">
+    <div v-if="welcomHome">
       <transition
         enter-active-class="animate__animated animate__zoomInDown"
         appear
       >
-        <h2 v-if="newStatus">ついふぁいへ<br>ようこそ！</h2>
+        <h2>ついふぁいへ<br>ようこそ！</h2>
       </transition>
       <p class="explanation" v-if="loginUser">{{loginUser.displayName}}の<br>キャラステータスを作って<span>TwitterNO.1</span>を目指そう</p>
-      <div class="userstatus" v-if="newStatus">
+      <div class="userstatus">
         <Button type="userStatus" @myclick="createCharacter">キャラステータス作成</Button>
       </div>
     </div>
 
     <!-- キャラクターステータス作成画面 -->
-    <template v-if="BeforeStauts">
+    <template v-if="beforeSutefuri">
       <div class="before__status">
         <NewStatus :character="character"></NewStatus>
       </div>
@@ -26,8 +26,8 @@
       </div>
     </template>
     <!-- キャラクターステータス確定後 -->
-    <CharaInformation v-if="status" :output="output" :loginuser="loginUser"></CharaInformation>
-    <CharaStatus v-if="status" :inputDocRef="inputDocRef" :output="output"></CharaStatus>
+    <CharaInformation v-if="oldSutefuri" :output="output" :loginuser="loginUser"></CharaInformation>
+    <CharaStatus v-if="oldSutefuri" :inputDocRef="inputDocRef" :output="output"></CharaStatus>
     <transition
       name="fade"
       enter-active-class="animate__animated animate__tada"
@@ -61,31 +61,54 @@ export default {
       //twitter情報
       loginUser: {},
       //ついふぁいにようこそ表示
-      newStatus: true,
+      welcomHome: true,
       //ステータス確定前表示
-      BeforeStauts: false,
-      //ステータス表示非表示
-      status: false,
+      beforeSutefuri: false,
+      //ステータス表示
+      oldSutefuri: false,
       //キャラステータス
       character: {
         lv: 1,
-        id: '',
         hp: 0,
         attack: 0,
         defense: 0,
         avoidance: 0,
         speed: 0,
-        exp: 100
+        exp: 0
       },
       //db関連
       inputDocRef: '', // 保存したデータのIDを入れる（1件だけ取得する時に使う）
       output: '', // 保存したデータをgetで取得したもの
     }
   },
-  mounted(){
-    firebase.auth().onAuthStateChanged(user => {
-      this.loginUser = user
+  async mounted(){
+    if (localStorage.welcomHome) {
+      this.welcomHome = localStorage.welcomHome
+    }
+    if (localStorage.beforeSutefuri) {
+      this.beforeSutefuri = localStorage.beforeSutefuri
+    }
+    if (localStorage.oldSutefuri) {
+      this.oldSutefuri = localStorage.oldSutefuri
+    }
+
+    await firebase.auth().onAuthStateChanged(user => {
+      if (user){
+        this.loginUser = user
+        this.get()
+      }
     })
+  },
+  watch: {
+    WelcomHome(welcomHome) {
+      localStorage.welcomHome = welcomHome
+    },
+    BeforeSutefuri(beforeSutefuri) {
+      localStorage.beforeSutefuri = beforeSutefuri
+    },
+    OldSutefuri(oldSutefuri) {
+      localStorage.oldSutefuri = oldSutefuri
+    }
   },
   created() {
     this.db = firebase.firestore(); // dbインスタンスを初期化
@@ -97,37 +120,37 @@ export default {
       this.character.defense = _.random(100)
       this.character.avoidance = _.random(100)
       this.character.speed = _.random(100)
-      this.newStatus = false
-      this.BeforeStauts = true
+      this.welcomHome = false
+      this.beforeSutefuri = true
     },
     async okCharacter(){
-      let self = this
-      await this.db.collection('status')
-      .add({
-        id: this.character.id + 1,
+      const docID = String(this.loginUser.providerData[0].uid)
+      await this.db.collection('sutefuri').doc(docID)
+      .set({
         lv: this.character.lv,
         hp: this.character.hp,
         attack: this.character.attack,
         defense: this.character.defense,
         avoidance: this.character.avoidance,
         speed: this.character.speed,
+        exp: this.character.exp
       })
-      .then((docRef) => {
-        console.log('キャラクター作成完了しました', docRef.id);
-        self.inputDocRef = docRef.id
-        console.log(self.inputDocRef);
-      })
+      .then(
+        console.log('キャラクター作成完了しました')
+      )
       .catch((error) => {
         console.log(error);
       })
       await this.get()
-      this.BeforeStauts = false
-      this.status = true
+      this.beforeSutefuri = false
+      this.oldSutefuri = true
     },
     async get(){
       let self = this
-      let docRef = this.db.collection("status").doc(this.inputDocRef)
-      await docRef.get().then((doc) => {
+      let docID = String(this.loginUser.providerData[0].uid)
+      let docRef = this.db.collection("sutefuri").doc(docID)
+      await docRef.get()
+      .then((doc) => {
         if (doc.exists) {
           console.log('doc.data()')
           self.output = doc.data();
