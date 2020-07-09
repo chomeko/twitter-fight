@@ -28,7 +28,7 @@
 <script>
 
 export default {
-  props: ['output', 'inputDocRef']
+  props: ['output']
 }
 </script>
 

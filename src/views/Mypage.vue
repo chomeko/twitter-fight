@@ -26,15 +26,29 @@
       </div>
     </template>
     <!-- キャラクターステータス確定後 -->
-    <CharaInformation v-if="oldSutefuri" :output="output" :loginuser="loginUser"></CharaInformation>
-    <CharaStatus v-if="oldSutefuri" :inputDocRef="inputDocRef" :output="output"></CharaStatus>
+    <template v-if="oldSutefuri">
+      <CharaInformation v-if="!equipment" :output="output" :loginuser="loginUser"></CharaInformation>
+      <Equipment v-if="equipment"></Equipment>
+      <CharaStatus :output="output"></CharaStatus>
+
+      <router-link to="/Battle">
+        <Button>バトル</Button>
+      </router-link>
+
+      <Button @myclick="Equipment">装備</Button>
+
+      <router-link to="/Gacha">
+        <Button>ガチャ</Button>
+      </router-link>
+    </template>
+    <!-- 固定画像 -->
     <transition
       name="fade"
       enter-active-class="animate__animated animate__tada"
       appear
     >
       <div class="user__image" v-if="loginUser">
-        <img :src='loginUser.photoURL'>
+        <img v-if="!equipment" :src='loginUser.photoURL'>
       </div>
     </transition>
   </div>
@@ -47,13 +61,30 @@ import Button from '../components/Button'
 import NewStatus from '../components/NewStatus'
 import CharaStatus from '../components/CharaStatus'
 import CharaInformation from '../components/CharaInformation'
+import Equipment from '../components/Equipment'
+
 
 export default {
   components: {
     Button,
     NewStatus,
     CharaStatus,
-    CharaInformation
+    CharaInformation,
+    Equipment
+  },
+  localStorage: {
+    welcomHome: {
+      type: Boolean,
+      default: true
+    },
+    beforeSutefuri: {
+      type: Boolean,
+      default: false
+    },
+    oldSutefuri: {
+      type: Boolean,
+      default: false
+    }
   },
   data(){
     return {
@@ -77,19 +108,20 @@ export default {
         exp: 0
       },
       //db関連
-      inputDocRef: '', // 保存したデータのIDを入れる（1件だけ取得する時に使う）
       output: '', // 保存したデータをgetで取得したもの
+      //装備画面表示
+      equipment: false
     }
   },
   async mounted(){
     if (localStorage.welcomHome) {
-      this.welcomHome = localStorage.welcomHome
+      this.welcomHome = this.$localStorage.get('welcomHome')
     }
     if (localStorage.beforeSutefuri) {
-      this.beforeSutefuri = localStorage.beforeSutefuri
+      this.beforeSutefuri = this.$localStorage.get('beforeSutefuri')
     }
     if (localStorage.oldSutefuri) {
-      this.oldSutefuri = localStorage.oldSutefuri
+      this.oldSutefuri = this.$localStorage.get('oldSutefuri')
     }
 
     await firebase.auth().onAuthStateChanged(user => {
@@ -100,20 +132,23 @@ export default {
     })
   },
   watch: {
-    WelcomHome(welcomHome) {
-      localStorage.welcomHome = welcomHome
+    welcomHome() {
+      this.welcomHome = this.$localStorage.set('welcomHome',this.welcomHome)
     },
-    BeforeSutefuri(beforeSutefuri) {
-      localStorage.beforeSutefuri = beforeSutefuri
+    beforeSutefuri() {
+      this.beforeSutefuri = this.$localStorage.set('beforeSutefuri',this.beforeSutefuri)
     },
-    OldSutefuri(oldSutefuri) {
-      localStorage.oldSutefuri = oldSutefuri
+    oldSutefuri() {
+      this.oldSutefuri = this.$localStorage.set('oldSutefuri',this.oldSutefuri)
     }
   },
   created() {
     this.db = firebase.firestore(); // dbインスタンスを初期化
   },
   methods: {
+    Equipment(){
+      this.equipment = !this.equipment
+    },
     createCharacter() {
       this.character.hp = _.random(500)
       this.character.attack = _.random(100)
@@ -170,7 +205,7 @@ export default {
   #mypage
     width: 100%
     height: 100%
-    padding: 0 24px 10px
+    padding: 10px
   h2
     text-align: center
     margin: 0

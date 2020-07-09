@@ -1,7 +1,6 @@
 <template>
   <div class="user__information">
     <p v-if="loginuser">{{loginuser.displayName}}</p>
-    <p>キャラクターID  {{output.id}}</p>
     <p>Lv： {{output.lv}}</p>
     <p>EXP</p>
     <p>次のレベルまであと{{output.exp}}exp</p>

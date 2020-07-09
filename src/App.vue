@@ -54,6 +54,11 @@ Header
   a
     text-decoration: none
 
+ul,ol
+  list-style: none
+  padding-left: 0
+  margin: 0
+
   .fade-enter,
   .fade-leave-to
     opacity: 0

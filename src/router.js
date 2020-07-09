@@ -8,6 +8,10 @@ const Help = () => import(/* webpackChunkName: "Help" */ "./views/Help.vue")
 const Privacypolicy = () => import(/* webpackChunkName: "Privacypolicy" */ "./views/Privacypolicy.vue")
 const Termsofservice = () => import(/* webpackChunkName: "Termsofservice" */ "./views/Termsofservice.vue")
 const Mypage = () => import(/* webpackChunkName: "Mypage" */ "./views/Mypage.vue")
+const Battle = () => import(/* webpackChunkName: "Battle" */ "./views/Battle.vue")
+const Equipment = () => import(/* webpackChunkName: "Equipment" */ "./components/Equipment.vue")
+const Gacha = () => import(/* webpackChunkName: "Gacha" */ "./views/Gacha.vue")
+
 
 Vue.use(Router)
 
@@ -25,7 +29,22 @@ const router = new Router({
       path: '/mypage',
       name: 'Mypage',
       meta: { requiresAuth: true },
-      component: Mypage
+      component: Mypage,
+    },
+    {
+      path: '/battle',
+      component: Battle,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/equipment',
+      component: Equipment,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/gacha',
+      component: Gacha,
+      meta: { requiresAuth: true }
     },
     {
       path: '/help',
@@ -44,6 +63,10 @@ const router = new Router({
       components: {
         default: Termsofservice
       }
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })

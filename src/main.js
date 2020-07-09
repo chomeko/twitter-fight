@@ -3,9 +3,12 @@ import App from './App.vue'
 import router from './router'
 import animate from 'animate.css'
 import lodash from 'lodash'
+import VueLocalStorage from 'vue-localstorage'
 
 
 import firebase from 'firebase'
+
+Vue.use(VueLocalStorage)
 
 Vue.config.productionTip = false
 
