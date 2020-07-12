@@ -28,7 +28,11 @@
 <script>
 
 export default {
-  props: ['output']
+  props: {
+    output: {
+      required: true
+    }
+  }
 }
 </script>
 
@@ -36,12 +40,11 @@ export default {
 #status
   margin-top: 8px
 .user__status
-  width: 200px
+  width: 100%
   height: auto
   background: #000
   border: 3px solid #FFF
   border-radius: 10px
-  margin: 0 0 0 auto
   dl
     display: flex
     margin: 5px 0

@@ -15,7 +15,6 @@ export default {
 
 <style lang="sass" scoped>
   .user__information
-    width: 100%
     height: auto
     background: #000
     border: 3px solid #FFF

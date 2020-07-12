@@ -25,25 +25,24 @@
         <p>このステータスでよいか？</p>
       </div>
     </template>
+
     <!-- キャラクターステータス確定後 -->
     <template v-if="oldSutefuri">
       <CharaInformation v-if="!equipment" :output="output" :loginuser="loginUser"></CharaInformation>
-      <Equipment v-if="equipment"></Equipment>
-      <CharaStatus :output="output"></CharaStatus>
-
-      <router-link to="/Battle">
-        <Button>バトル</Button>
-      </router-link>
-
-      <Button @myclick="Equipment">装備</Button>
-
-      <router-link to="/Gacha">
-        <Button>ガチャ</Button>
-      </router-link>
+      <EquipmentList
+        v-if="equipment"
+        :equipmentTitles="equipmentTitles"
+        @addTitleToStatus="emitEvent"
+        >
+      </EquipmentList>
+      <div class="components__flex">
+        <Equipment :addTitle="addTitle"></Equipment>
+        <CharaStatus :output="output"></CharaStatus>
+      </div>
     </template>
+
     <!-- 固定画像 -->
     <transition
-      name="fade"
       enter-active-class="animate__animated animate__tada"
       appear
     >
@@ -51,6 +50,22 @@
         <img v-if="!equipment" :src='loginUser.photoURL'>
       </div>
     </transition>
+
+    <!-- バトル,装備、ガチャボタン -->
+    <template v-if="oldSutefuri">
+      <div class="menu__container">
+        <!-- バトル -->
+        <router-link to="/Battle">
+          <Button type="menu" size="menu--size">バトル</Button>
+        </router-link>
+        <!-- 装備 -->
+        <Button type="menu" size="menu--size" @myclick="Equipment">装備</Button>
+        <!-- ガチャボタン -->
+        <router-link to="/Gacha">
+          <Button type="menu" size="menu--size">ガチャ</Button>
+        </router-link>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -61,7 +76,9 @@ import Button from '../components/Button'
 import NewStatus from '../components/NewStatus'
 import CharaStatus from '../components/CharaStatus'
 import CharaInformation from '../components/CharaInformation'
+import EquipmentList from '../components/EquipmentList'
 import Equipment from '../components/Equipment'
+
 
 
 export default {
@@ -70,6 +87,7 @@ export default {
     NewStatus,
     CharaStatus,
     CharaInformation,
+    EquipmentList,
     Equipment
   },
   localStorage: {
@@ -110,9 +128,14 @@ export default {
       //db関連
       output: '', // 保存したデータをgetで取得したもの
       //装備画面表示
-      equipment: false
+      equipment: false,
+      // ユーザーの持ってる称号の入れ物
+      equipmentTitles: [],
+      //ユーザーの持ってる称号をクリックした時の称号名
+      addTitle: ["なし"]
     }
   },
+  //mount時にローカルストレージから状態を取得して現在のdataにする
   async mounted(){
     if (localStorage.welcomHome) {
       this.welcomHome = this.$localStorage.get('welcomHome')
@@ -123,7 +146,7 @@ export default {
     if (localStorage.oldSutefuri) {
       this.oldSutefuri = this.$localStorage.get('oldSutefuri')
     }
-
+    //mount時にユーザー情報を取得して表示
     await firebase.auth().onAuthStateChanged(user => {
       if (user){
         this.loginUser = user
@@ -131,6 +154,7 @@ export default {
       }
     })
   },
+  //描画の状態をローカルストレージに保持
   watch: {
     welcomHome() {
       this.welcomHome = this.$localStorage.set('welcomHome',this.welcomHome)
@@ -146,9 +170,56 @@ export default {
     this.db = firebase.firestore(); // dbインスタンスを初期化
   },
   methods: {
+    //送られてきた称号名をMax５件まで保存できる処理と
+    //称号装備画面から送られてきた称号を基礎ステータスに足す処理
+    emitEvent(addTitleToStatus){
+      ////称号装備画面から送られてきた称号を再度クリックすると称号分のステータスを引く処理
+      if(this.addTitle.some( target => target === addTitleToStatus.id)){
+        const index = this.addTitle.indexOf(addTitleToStatus.id)
+        this.addTitle.splice(index,1)
+        if (addTitleToStatus.status.hp) {
+          this.output.hp = this.output.hp - addTitleToStatus.status.hp
+        }
+        if (addTitleToStatus.status.attack) {
+          this.output.attack = this.output.attack - addTitleToStatus.status.attack
+        }
+        if (addTitleToStatus.status.defence) {
+          this.output.defence = this.output.defence - addTitleToStatus.status.defence
+        }
+        if (addTitleToStatus.status.avoidance) {
+          this.output.avoidance = this.output.avoidance - addTitleToStatus.status.avoidance
+        }
+        if (addTitleToStatus.status.speed) {
+          this.output.speed = this.output.speed - addTitleToStatus.status.speed
+        }
+      }else {
+        //称号装備画面から送られてきた称号を5件まで追加して基礎ステータスに足す処理
+        if(this.addTitle.length < 5){
+          this.addTitle.push(addTitleToStatus.id)
+          if (addTitleToStatus.status.hp) {
+            this.output.hp = this.output.hp + addTitleToStatus.status.hp
+          }
+          if (addTitleToStatus.status.attack) {
+            this.output.attack = this.output.attack + addTitleToStatus.status.attack
+          }
+          if (addTitleToStatus.status.defence) {
+            this.output.defence = this.output.defence + addTitleToStatus.status.defence
+          }
+          if (addTitleToStatus.status.avoidance) {
+            this.output.avoidance = this.output.avoidance + addTitleToStatus.status.avoidance
+          }
+          if (addTitleToStatus.status.speed) {
+            this.output.speed = this.output.speed + addTitleToStatus.status.speed
+          }
+        }
+      }
+    },
+    //称号リスト表示
     Equipment(){
       this.equipment = !this.equipment
+      this.getTitles()
     },
+    //基礎キャラクターステータス作成時
     createCharacter() {
       this.character.hp = _.random(500)
       this.character.attack = _.random(100)
@@ -158,6 +229,7 @@ export default {
       this.welcomHome = false
       this.beforeSutefuri = true
     },
+    //基礎ステータス確定してdatabaseに登録
     async okCharacter(){
       const docID = String(this.loginUser.providerData[0].uid)
       await this.db.collection('sutefuri').doc(docID)
@@ -180,6 +252,7 @@ export default {
       this.beforeSutefuri = false
       this.oldSutefuri = true
     },
+    //databaseからキャラクター情報取得
     async get(){
       let self = this
       let docID = String(this.loginUser.providerData[0].uid)
@@ -196,6 +269,18 @@ export default {
       .catch(function(error) {
           console.log("Error getting document:", error);
       })
+    },
+    //ユーザーの持ってる称号リストを取得
+    async getTitles() {
+      let docID = String(this.loginUser.providerData[0].uid)
+      let docRef = this.db.collection("users").doc(docID).collection("titles")
+      const querySnapshot = await docRef.get()
+      const data = querySnapshot.docs.map(doc => {
+        // console.log(doc.id, "=>", doc.data())
+        return doc.data()
+      })
+      // console.log(data)
+      this.equipmentTitles = data
     }
   }
 }
@@ -203,9 +288,10 @@ export default {
 
 <style lang="sass" scoped>
   #mypage
-    width: 100%
+    max-width: 400px
     height: 100%
     padding: 10px
+    margin: auto
   h2
     text-align: center
     margin: 0
@@ -240,4 +326,15 @@ export default {
     margin-top: 20px
     display: flex
     justify-content: center
+
+  .components__flex
+    display: flex
+    justify-content: space-between
+
+  .menu__container
+    display: flex
+    justify-content: center
+    .menu
+      &:nth-child(2)
+        margin: 0px 10px
 </style>

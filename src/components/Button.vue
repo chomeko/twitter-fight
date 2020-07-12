@@ -54,5 +54,14 @@ export default {
     background: #d10dff
     color: #FFF
     font-weight: bold
-    //サイズ
+  .menu
+    background: rgba( #000, .5 )
+    color: #FFF
+    font-weight: bold
+    border: 3px solid #FFF
+  //サイズ
+  .menu--size
+    padding: 20px 30px
+    &::nth-child(2)
+      margin: 0px 10px
 </style>

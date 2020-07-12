@@ -9,6 +9,7 @@ const Privacypolicy = () => import(/* webpackChunkName: "Privacypolicy" */ "./vi
 const Termsofservice = () => import(/* webpackChunkName: "Termsofservice" */ "./views/Termsofservice.vue")
 const Mypage = () => import(/* webpackChunkName: "Mypage" */ "./views/Mypage.vue")
 const Battle = () => import(/* webpackChunkName: "Battle" */ "./views/Battle.vue")
+const EquipmentList = () => import(/* webpackChunkName: "EquipmentList" */ "./components/EquipmentList.vue")
 const Equipment = () => import(/* webpackChunkName: "Equipment" */ "./components/Equipment.vue")
 const Gacha = () => import(/* webpackChunkName: "Gacha" */ "./views/Gacha.vue")
 
@@ -34,6 +35,11 @@ const router = new Router({
     {
       path: '/battle',
       component: Battle,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/equipmentList',
+      component: EquipmentList,
       meta: { requiresAuth: true },
     },
     {
