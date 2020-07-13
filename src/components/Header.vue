@@ -87,9 +87,10 @@ export default {
     &::after
       content: ''
       display: inline-block
-      background-image: url(../assets/logo.svg)
-      background-size: contain
+      background-image: url(../assets/logoPanchi.svg)
+      background-size: cover
       background-repeat: no-repeat
+      background-position: center;
       vertical-align: middle
       width: 32px
       height: 32px
