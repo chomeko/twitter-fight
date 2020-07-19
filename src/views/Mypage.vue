@@ -187,9 +187,9 @@ export default {
     emitEvent(addTitleToStatus){
       //称号装備画面から送られてきた称号を再度クリックすると称号分のステータスを引く処理
       //配列に称号があればtrueなければfalse
-      if(this.addTitle.some( target => target.id === addTitleToStatus.id)){
-        const index = this.addTitle.findIndex(({id}) => id === addTitleToStatus.id)
-        this.addTitle.splice(index,1)
+      if(this.addTitle.equip.some( target => target.id === addTitleToStatus.id)){
+        const index = this.addTitle.equip.findIndex(({id}) => id === addTitleToStatus.id)
+        this.addTitle.equip.splice(index,1)
         this.DeleteEquipTitles(addTitleToStatus)
         if (addTitleToStatus.property.hp) {
           this.output.hp = this.output.hp - addTitleToStatus.property.hp
@@ -206,13 +206,13 @@ export default {
         if (addTitleToStatus.property.speed) {
           this.output.speed = this.output.speed - addTitleToStatus.property.speed
         }
-        //this.userSutefuri()
+        this.userSutefuri()
       }
       else {
         //称号装備画面から送られてきた称号を5件まで追加して基礎ステータスに足す処理
-        if(this.addTitle.length < 5){
-          this.addTitle.push(addTitleToStatus)
-          //this.addEquipTitles(addTitleToStatus)
+        if(this.addTitle.equip.length < 5){
+          this.addTitle.equip.push(addTitleToStatus)
+          this.addEquipTitles(addTitleToStatus)
           if (addTitleToStatus.property.hp) {
             this.output.hp = this.output.hp + addTitleToStatus.property.hp
           }
@@ -228,7 +228,7 @@ export default {
           if (addTitleToStatus.property.speed) {
             this.output.speed = this.output.speed + addTitleToStatus.property.speed
           }
-          //this.userSutefuri()
+          this.userSutefuri()
         }
       }
     },
@@ -337,9 +337,8 @@ export default {
     addEquipTitles(addTitleToStatus){
       const docID = String(this.loginUser.providerData[0].uid)
       const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
-      washingtonRef.set({equip: firebase.firestore.FieldValue.arrayUnion(addTitleToStatus)})
+      washingtonRef.update({equip: firebase.firestore.FieldValue.arrayUnion(addTitleToStatus)})
       .then(
-        this.addTitle = addTitleToStatus,
         console.log('称号を追加しました')
       )
       .catch((error) => {
@@ -349,7 +348,6 @@ export default {
     //ユーザーが装備した称号を削除して外す
     DeleteEquipTitles(addTitleToStatus){
       const docID = String(this.loginUser.providerData[0].uid)
-      //const EquipDocID = addTitleToStatus.id
       const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
       washingtonRef.update({equip: firebase.firestore.FieldValue.arrayRemove(addTitleToStatus)})
       .then(

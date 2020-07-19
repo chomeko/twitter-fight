@@ -3,28 +3,28 @@
     <dl>
       <dt>E</dt>
       <transition name="fade" mode="out-in">
-        <AddTitle v-if="addTitle[0]" key="title1" v-bind="addTitle[0]"></AddTitle>
+        <AddTitle v-if="addTitle.equip[0]" key="title1" v-bind="addTitle.equip[0]"></AddTitle>
         <dd v-else>なし</dd>
       </transition>
     </dl>
     <dl>
       <dt>E</dt>
       <transition name="fade" mode="out-in">
-        <AddTitle v-if="addTitle[1]" key="title1" v-bind="addTitle[1]"></AddTitle>
+        <AddTitle v-if="addTitle.equip[1]" key="title1" v-bind="addTitle.equip[1]"></AddTitle>
         <dd v-else>なし</dd>
       </transition>
     </dl>
     <dl>
       <dt>E</dt>
       <transition name="fade" mode="out-in">
-        <AddTitle v-if="addTitle[2]" key="title1" v-bind="addTitle[2]"></AddTitle>
+        <AddTitle v-if="addTitle.equip[2]" key="title1" v-bind="addTitle.equip[2]"></AddTitle>
         <dd v-else>なし</dd>
       </transition>
     </dl>
     <dl>
       <dt>E</dt>
       <transition name="fade" mode="out-in">
-        <AddTitle v-if="addTitle[3]" key="title1" v-bind="addTitle[3]"></AddTitle>
+        <AddTitle v-if="addTitle.equip[3]" key="title1" v-bind="addTitle.equip[3]"></AddTitle>
         <dd v-else>なし</dd>
       </transition>
     </dl>
