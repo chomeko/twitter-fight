@@ -64,4 +64,8 @@ export default {
     padding: 20px 30px
     &::nth-child(2)
       margin: 0px 10px
+
+  .add-button
+    width: 150px
+    margin-top: 10px
 </style>

@@ -2,33 +2,45 @@
   <div id="equipment">
     <dl>
       <dt>E</dt>
-      <dd v-if="addTitle[1]">{{addTitle[1]}}</dd>
-      <dd v-else>{{addTitle[0]}}</dd>
+      <transition name="fade" mode="out-in">
+        <AddTitle v-if="addTitle[0]" key="title1" v-bind="addTitle[0]"></AddTitle>
+        <dd v-else>なし</dd>
+      </transition>
     </dl>
     <dl>
       <dt>E</dt>
-      <dd v-if="addTitle[2]">{{addTitle[2]}}</dd>
-      <dd v-else>{{addTitle[0]}}</dd>
-
+      <transition name="fade" mode="out-in">
+        <AddTitle v-if="addTitle[1]" key="title1" v-bind="addTitle[1]"></AddTitle>
+        <dd v-else>なし</dd>
+      </transition>
     </dl>
     <dl>
       <dt>E</dt>
-      <dd v-if="addTitle[3]">{{addTitle[3]}}</dd>
-      <dd v-else>{{addTitle[0]}}</dd>
+      <transition name="fade" mode="out-in">
+        <AddTitle v-if="addTitle[2]" key="title1" v-bind="addTitle[2]"></AddTitle>
+        <dd v-else>なし</dd>
+      </transition>
     </dl>
     <dl>
       <dt>E</dt>
-      <dd v-if="addTitle[4]">{{addTitle[4]}}</dd>
-      <dd v-else>{{addTitle[0]}}</dd>
+      <transition name="fade" mode="out-in">
+        <AddTitle v-if="addTitle[3]" key="title1" v-bind="addTitle[3]"></AddTitle>
+        <dd v-else>なし</dd>
+      </transition>
     </dl>
   </div>
 </template>
 
 <script>
+import AddTitle from '../components/AddTitle'
+
 export default {
+  components: {
+    AddTitle
+  },
   props: {
     addTitle: {
-      required: false
+      required: true
     }
   }
 }
@@ -52,4 +64,21 @@ export default {
     width: 126px
     margin: 0
     margin: auto
+
+  .white
+    color: white
+  .blue
+    color: #538fff
+  .orange
+    color: #ff8300
+  .pink
+    color: #ff11e0
+
+  .fade-enter,
+  .fade-leave-to
+    opacity: 0
+  .fade-enter-active
+    transition: opacity .1s
+  .fade-leave-active
+    transition: opacity .1s
 </style>

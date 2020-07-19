@@ -150,4 +150,11 @@ export default {
     transition: .5s
     &:hover
       font-size: 20px
+
+  .fade-enter,
+  .fade-leave-to
+    opacity: 0
+  .fade-enter-active,
+  .fade-leave-active
+    transition: opacity .5s
 </style>

@@ -28,13 +28,21 @@
 
     <!-- キャラクターステータス確定後 -->
     <template v-if="oldSutefuri">
-      <CharaInformation v-if="!equipment" :output="output" :loginuser="loginUser"></CharaInformation>
-      <EquipmentList
-        v-if="equipment"
-        :equipmentTitles="equipmentTitles"
-        @addTitleToStatus="emitEvent"
+      <transition-group name="fade">
+        <CharaInformation
+          v-if="!equipment"
+          :output="output"
+          :loginuser="loginUser"
+          key="CharaInformation"
+        ></CharaInformation>
+        <EquipmentList
+          v-if="equipment"
+          :equipmentTitles="equipmentTitles"
+          @addTitleToStatus="emitEvent"
+          key="equipment"
         >
       </EquipmentList>
+      </transition-group>
       <div class="components__flex">
         <Equipment :addTitle="addTitle"></Equipment>
         <CharaStatus :output="output"></CharaStatus>
@@ -131,8 +139,8 @@ export default {
       equipment: false,
       // ユーザーの持ってる称号の入れ物
       equipmentTitles: [],
-      //ユーザーの持ってる称号をクリックした時の称号名
-      addTitle: ["なし"]
+      //ユーザーの持ってる称号をクリックして装備
+      addTitle: []
     }
   },
   //mount時にローカルストレージから状態を取得して現在のdataにする
@@ -151,6 +159,7 @@ export default {
       if (user){
         this.loginUser = user
         this.get()
+        this.userEquipTitle()
       }
     })
   },
@@ -164,6 +173,9 @@ export default {
     },
     oldSutefuri() {
       this.oldSutefuri = this.$localStorage.set('oldSutefuri',this.oldSutefuri)
+    },
+    outputUpdate(){
+      this.output
     }
   },
   created() {
@@ -173,44 +185,50 @@ export default {
     //送られてきた称号名をMax５件まで保存できる処理と
     //称号装備画面から送られてきた称号を基礎ステータスに足す処理
     emitEvent(addTitleToStatus){
-      ////称号装備画面から送られてきた称号を再度クリックすると称号分のステータスを引く処理
-      if(this.addTitle.some( target => target === addTitleToStatus.id)){
-        const index = this.addTitle.indexOf(addTitleToStatus.id)
+      //称号装備画面から送られてきた称号を再度クリックすると称号分のステータスを引く処理
+      //配列に称号があればtrueなければfalse
+      if(this.addTitle.some( target => target.id === addTitleToStatus.id)){
+        const index = this.addTitle.findIndex(({id}) => id === addTitleToStatus.id)
         this.addTitle.splice(index,1)
-        if (addTitleToStatus.status.hp) {
-          this.output.hp = this.output.hp - addTitleToStatus.status.hp
+        this.DeleteEquipTitles(addTitleToStatus)
+        if (addTitleToStatus.property.hp) {
+          this.output.hp = this.output.hp - addTitleToStatus.property.hp
         }
-        if (addTitleToStatus.status.attack) {
-          this.output.attack = this.output.attack - addTitleToStatus.status.attack
+        if (addTitleToStatus.property.attack) {
+          this.output.attack = this.output.attack - addTitleToStatus.property.attack
         }
-        if (addTitleToStatus.status.defence) {
-          this.output.defence = this.output.defence - addTitleToStatus.status.defence
+        if (addTitleToStatus.property.defence) {
+          this.output.defence = this.output.defence - addTitleToStatus.property.defence
         }
-        if (addTitleToStatus.status.avoidance) {
-          this.output.avoidance = this.output.avoidance - addTitleToStatus.status.avoidance
+        if (addTitleToStatus.property.avoidance) {
+          this.output.avoidance = this.output.avoidance - addTitleToStatus.property.avoidance
         }
-        if (addTitleToStatus.status.speed) {
-          this.output.speed = this.output.speed - addTitleToStatus.status.speed
+        if (addTitleToStatus.property.speed) {
+          this.output.speed = this.output.speed - addTitleToStatus.property.speed
         }
-      }else {
+        //this.userSutefuri()
+      }
+      else {
         //称号装備画面から送られてきた称号を5件まで追加して基礎ステータスに足す処理
         if(this.addTitle.length < 5){
-          this.addTitle.push(addTitleToStatus.id)
-          if (addTitleToStatus.status.hp) {
-            this.output.hp = this.output.hp + addTitleToStatus.status.hp
+          this.addTitle.push(addTitleToStatus)
+          //this.addEquipTitles(addTitleToStatus)
+          if (addTitleToStatus.property.hp) {
+            this.output.hp = this.output.hp + addTitleToStatus.property.hp
           }
-          if (addTitleToStatus.status.attack) {
-            this.output.attack = this.output.attack + addTitleToStatus.status.attack
+          if (addTitleToStatus.property.attack) {
+            this.output.attack = this.output.attack + addTitleToStatus.property.attack
           }
-          if (addTitleToStatus.status.defence) {
-            this.output.defence = this.output.defence + addTitleToStatus.status.defence
+          if (addTitleToStatus.property.defence) {
+            this.output.defence = this.output.defence + addTitleToStatus.property.defence
           }
-          if (addTitleToStatus.status.avoidance) {
-            this.output.avoidance = this.output.avoidance + addTitleToStatus.status.avoidance
+          if (addTitleToStatus.property.avoidance) {
+            this.output.avoidance = this.output.avoidance + addTitleToStatus.property.avoidance
           }
-          if (addTitleToStatus.status.speed) {
-            this.output.speed = this.output.speed + addTitleToStatus.status.speed
+          if (addTitleToStatus.property.speed) {
+            this.output.speed = this.output.speed + addTitleToStatus.property.speed
           }
+          //this.userSutefuri()
         }
       }
     },
@@ -273,14 +291,73 @@ export default {
     //ユーザーの持ってる称号リストを取得
     async getTitles() {
       let docID = String(this.loginUser.providerData[0].uid)
-      let docRef = this.db.collection("users").doc(docID).collection("titles")
+      let docRef = this.db.collection("users").doc(docID).collection("titles").orderBy('rea', 'asc')
       const querySnapshot = await docRef.get()
       const data = querySnapshot.docs.map(doc => {
-        // console.log(doc.id, "=>", doc.data())
         return doc.data()
       })
-      // console.log(data)
+      console.log('称号取得完了しました')
       this.equipmentTitles = data
+    },
+    //ユーザーが装備してる称号を取得
+    async userEquipTitle(){
+      let self = this
+      const docID = String(this.loginUser.providerData[0].uid)
+      await this.db.collection('sutefuri').doc(docID).collection('equip')
+      .get()
+      .then((doc) => {
+        doc.forEach((doc) => {
+          self.addTitle = doc.data()
+          console.log('装備してる称号を取得しました')
+        })
+      })
+      .catch(function(error) {
+          console.log("Error getting document:", error)
+      })
+    },
+    //ユーザーが装備した称号のステータスを反映
+    userSutefuri(){
+      const docID = String(this.loginUser.providerData[0].uid)
+      this.db.collection('sutefuri').doc(docID)
+      .update({
+        hp: this.output.hp,
+        attack: this.output.attack,
+        defense: this.output.defense,
+        avoidance: this.output.avoidance,
+        speed: this.output.speed,
+      })
+      .then(
+        console.log('ステータス更新')
+      )
+      .catch((error) => {
+        console.log(error);
+      })
+    },
+    //ユーザーが装備した称号をdatabaseに登録
+    addEquipTitles(addTitleToStatus){
+      const docID = String(this.loginUser.providerData[0].uid)
+      const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
+      washingtonRef.set({equip: firebase.firestore.FieldValue.arrayUnion(addTitleToStatus)})
+      .then(
+        this.addTitle = addTitleToStatus,
+        console.log('称号を追加しました')
+      )
+      .catch((error) => {
+        console.log(error);
+      })
+    },
+    //ユーザーが装備した称号を削除して外す
+    DeleteEquipTitles(addTitleToStatus){
+      const docID = String(this.loginUser.providerData[0].uid)
+      //const EquipDocID = addTitleToStatus.id
+      const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
+      washingtonRef.update({equip: firebase.firestore.FieldValue.arrayRemove(addTitleToStatus)})
+      .then(
+        console.log('称号を削除しました')
+      )
+      .catch((error) => {
+        console.log(error);
+      })
     }
   }
 }
@@ -337,4 +414,15 @@ export default {
     .menu
       &:nth-child(2)
         margin: 0px 10px
+
+  .fade-move
+    transition: transform 1s
+  .fade-enter,
+  .fade-leave-to
+    opacity: 0
+  .fade-enter-active
+    transition: opacity .5s
+  .fade-leave-active
+    transition: opacity .5s
+    position: absolute
 </style>

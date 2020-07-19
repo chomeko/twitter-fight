@@ -11,7 +11,6 @@
     <Login></Login>
     <Explain></Explain>
     <ExplainBattle></ExplainBattle>
-
   </div>
 </template>
 

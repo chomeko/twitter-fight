@@ -4,7 +4,9 @@
       <Header :user="userData"></Header>
     </header>
     <main>
-      <router-view></router-view>
+      <transition name="fade">
+        <router-view></router-view>
+      </transition>
     </main>
   </div>
 </template>

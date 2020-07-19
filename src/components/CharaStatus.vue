@@ -3,7 +3,7 @@
     <div class="user__status">
       <dl>
         <dt>最大HP :</dt>
-        <dd>{{output.hp}}</dd>
+        <dd key="hp">{{output.hp}}</dd>
       </dl>
       <dl>
         <dt>攻撃力 :</dt>
@@ -55,4 +55,13 @@ export default {
   dd
     //width: 100px
     margin-inline-start: 10px
+
+.fade-enter,
+.fade-leave-to
+  opacity: 0
+.fade-enter-active
+  transition: opacity .5s
+.fade-leave-active
+  transition: opacity .5s
+  position: absolute
 </style>
