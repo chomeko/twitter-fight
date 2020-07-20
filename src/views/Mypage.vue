@@ -54,8 +54,8 @@
       enter-active-class="animate__animated animate__tada"
       appear
     >
-      <div class="user__image" v-if="loginUser">
-        <img v-if="!equipment" :src='loginUser.photoURL'>
+      <div class="user__image" v-if="!equipment">
+        <img v-if="loginUser.photoURL" :src='twitterImg'>
       </div>
     </transition>
 
@@ -67,7 +67,8 @@
           <Button type="menu" size="menu--size">バトル</Button>
         </router-link>
         <!-- 装備 -->
-        <Button type="menu" size="menu--size" @myclick="Equipment">装備</Button>
+        <Button v-if="!equipment" type="menu" size="menu--size" @myclick="Equipment">装備</Button>
+        <Button v-else type="menu" size="menu--size" @myclick="Equipment">戻る</Button>
         <!-- ガチャボタン -->
         <router-link to="/Gacha">
           <Button type="menu" size="menu--size">ガチャ</Button>
@@ -144,7 +145,7 @@ export default {
     }
   },
   //mount時にローカルストレージから状態を取得して現在のdataにする
-  async mounted(){
+  mounted(){
     if (localStorage.welcomHome) {
       this.welcomHome = this.$localStorage.get('welcomHome')
     }
@@ -155,11 +156,12 @@ export default {
       this.oldSutefuri = this.$localStorage.get('oldSutefuri')
     }
     //mount時にユーザー情報を取得して表示
-    await firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user){
-        this.loginUser = user
-        this.get()
-        this.userEquipTitle()
+        this.loginUser = user//ユーザー情報
+        this.get()//databaseからキャラクター情報取得
+        await this.getTitles()//ユーザーの持ってる称号リストを取得
+        await this.userEquipTitle()//ユーザーが装備してる称号を取得
       }
     })
   },
@@ -180,6 +182,11 @@ export default {
   },
   created() {
     this.db = firebase.firestore(); // dbインスタンスを初期化
+  },
+  computed:{
+    twitterImg(){
+      return this.loginUser.photoURL.split('_normal').join('')
+    }
   },
   methods: {
     //送られてきた称号名をMax５件まで保存できる処理と
@@ -235,7 +242,6 @@ export default {
     //称号リスト表示
     Equipment(){
       this.equipment = !this.equipment
-      this.getTitles()
     },
     //基礎キャラクターステータス作成時
     createCharacter() {
@@ -266,10 +272,27 @@ export default {
       .catch((error) => {
         console.log(error);
       })
+      await this.addEmptyTitle()
       await this.get()
       this.beforeSutefuri = false
       this.oldSutefuri = true
     },
+    //初期装備データ空を登録する
+    async addEmptyTitle(){
+      const self = this
+      const docID = String(this.loginUser.providerData[0].uid)
+      const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
+      await washingtonRef.set({equip: this.addTitle})
+      washingtonRef.get()
+      .then((doc) => {
+        self.addTitle = doc.data()
+        console.log('空称号を追加しデータを取得しました')
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    },
+
     //databaseからキャラクター情報取得
     async get(){
       let self = this
@@ -279,13 +302,13 @@ export default {
       .then((doc) => {
         if (doc.exists) {
           console.log('doc.data()')
-          self.output = doc.data();
+          self.output = doc.data()
         } else {
-          console.log("No such document!");
+          console.log("No such document!")
         }
       })
       .catch(function(error) {
-          console.log("Error getting document:", error);
+        console.log("Error getting document:", error);
       })
     },
     //ユーザーの持ってる称号リストを取得
@@ -382,10 +405,10 @@ export default {
       color: #FFE600
       font-size: 18px
   .user__image
-    width: 80px
+    width: 120px
     height: auto
     margin: auto
-    padding-top: 24px
+    margin-top: 30px
   img
     width: 100%
   .userstatus
@@ -409,6 +432,7 @@ export default {
   .menu__container
     display: flex
     justify-content: center
+    margin-top: 30px
     .menu
       &:nth-child(2)
         margin: 0px 10px

@@ -3,7 +3,7 @@
     <dl>
       <dt>E</dt>
       <transition name="fade" mode="out-in">
-        <AddTitle v-if="addTitle.equip[0]" key="title1" v-bind="addTitle.equip[0]"></AddTitle>
+        <AddTitle v-if="addTitle.equip[0]" v-bind="addTitle.equip[0]"></AddTitle>
         <dd v-else>なし</dd>
       </transition>
     </dl>

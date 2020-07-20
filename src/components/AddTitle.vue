@@ -6,19 +6,13 @@
     props: {
       id: {
         type: String,
-        required: true
+        required: false
       },
       rea: {
         type: Number,
         required: false
       },
     },
-    // props: {
-    //   addTitle: {
-    //     type: Object,
-    //     required: false
-    //   }
-    // },
     computed: {
       color() {
         return this.rea === 2
