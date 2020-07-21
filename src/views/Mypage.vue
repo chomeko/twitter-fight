@@ -44,7 +44,9 @@
       </EquipmentList>
       </transition-group>
       <div class="components__flex">
-        <Equipment :addTitle="addTitle"></Equipment>
+        <!-- ここのv-ifはaddTitleをキャラ作成時配列(空)をdatabaseに登録してるからv-ifはtureになり
+        Equipment内のv-if="addTitle.equip[0]"などのerrorを回避する目的 -->
+        <Equipment v-if="addTitle.equip" :addTitle="addTitle"></Equipment>
         <CharaStatus :output="output"></CharaStatus>
       </div>
     </template>
