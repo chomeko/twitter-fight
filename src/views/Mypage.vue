@@ -61,22 +61,7 @@
       </div>
     </transition>
 
-    <!-- バトル,装備、ガチャボタン -->
-    <template v-if="oldSutefuri">
-      <div class="menu__container">
-        <!-- バトル -->
-        <router-link to="/Battle">
-          <Button type="menu" size="menu--size">バトル</Button>
-        </router-link>
-        <!-- 装備 -->
-        <Button v-if="!equipment" type="menu" size="menu--size" @myclick="Equipment">装備</Button>
-        <Button v-else type="menu" size="menu--size" @myclick="Equipment">戻る</Button>
-        <!-- ガチャボタン -->
-        <router-link to="/Gacha">
-          <Button type="menu" size="menu--size">ガチャ</Button>
-        </router-link>
-      </div>
-    </template>
+    <Footer v-if="oldSutefuri" :equipment="equipment" @emitEquipment="footerEmit"></Footer>
   </div>
 </template>
 
@@ -89,6 +74,7 @@ import CharaStatus from '../components/CharaStatus'
 import CharaInformation from '../components/CharaInformation'
 import EquipmentList from '../components/EquipmentList'
 import Equipment from '../components/Equipment'
+import Footer from '../components/Footer'
 
 
 
@@ -99,7 +85,8 @@ export default {
     CharaStatus,
     CharaInformation,
     EquipmentList,
-    Equipment
+    Equipment,
+    Footer
   },
   localStorage: {
     welcomHome: {
@@ -241,9 +228,8 @@ export default {
         }
       }
     },
-    //称号リスト表示
-    Equipment(){
-      this.equipment = !this.equipment
+    footerEmit(emitEquipment){
+      this.equipment = emitEquipment
     },
     //基礎キャラクターステータス作成時
     createCharacter() {
@@ -294,7 +280,6 @@ export default {
         console.log(error);
       })
     },
-
     //databaseからキャラクター情報取得
     async get(){
       let self = this
@@ -411,6 +396,7 @@ export default {
     height: auto
     margin: auto
     margin-top: 30px
+    margin-bottom: 24px
   img
     width: 100%
   .userstatus
@@ -430,14 +416,6 @@ export default {
   .components__flex
     display: flex
     justify-content: space-between
-
-  .menu__container
-    display: flex
-    justify-content: center
-    margin-top: 30px
-    .menu
-      &:nth-child(2)
-        margin: 0px 10px
 
   .fade-move
     transition: transform 1s

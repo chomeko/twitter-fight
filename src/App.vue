@@ -8,6 +8,9 @@
         <router-view></router-view>
       </transition>
     </main>
+    <footer>
+      <span>@chomeko</span>
+    </footer>
   </div>
 </template>
 
@@ -47,9 +50,15 @@ body
   line-height: 1.5
   height: 100vh
   background: #000
+  position: rerative
 
-Header
+header
   padding-bottom: 52px
+footer
+  text-align: center
+  width: 100%
+  position: absolute
+  bottom: 0
 
 *
   box-sizing: border-box

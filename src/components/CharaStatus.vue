@@ -40,7 +40,7 @@ export default {
 #status
   margin-top: 8px
 .user__status
-  width: 100%
+  width: 184px
   height: auto
   background: #000
   border: 3px solid #FFF
@@ -48,7 +48,7 @@ export default {
   dl
     display: flex
     margin: 5px 0
-    padding: 0 40px
+    padding: 0 30px
   dt
     width: 70px
     text-align: right

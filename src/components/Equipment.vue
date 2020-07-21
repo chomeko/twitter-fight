@@ -49,7 +49,7 @@ export default {
 <style lang="sass" scoped>
 #equipment
   margin-top: 8px
-  width: 100%
+  width: 160px
   height: 156px
   background: #000
   border: 3px solid #FFF
