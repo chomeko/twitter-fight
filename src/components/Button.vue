@@ -42,7 +42,7 @@ export default {
     padding: 10px 5px
     transition: opacity 0.4s
     &:hover
-      opacity: 0.8
+      opacity: 0.6
     &:active
       transform: translateY(3px)
     // 色分け
@@ -59,6 +59,15 @@ export default {
     color: #FFF
     font-weight: bold
     border: 3px solid #FFF
+  .gacha__switch
+    width: 120px
+    height: 200px
+    cursor: pointer
+    background-image: url('../assets/煉瓦@2x.png')
+    &:hover
+      opacity: 1
+    &:active
+      border: 1px solid #fff
   //サイズ
   .menu--size
     padding: 20px 30px
