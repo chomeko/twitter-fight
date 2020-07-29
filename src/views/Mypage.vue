@@ -170,7 +170,7 @@ export default {
     }
   },
   created() {
-    this.db = firebase.firestore(); // dbインスタンスを初期化
+    this.db = firebase.firestore() // dbインスタンスを初期化
   },
   computed:{
     twitterImg(){

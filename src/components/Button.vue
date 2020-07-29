@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
   // デフォルト
   .my-button
     background: #f6f6f6
@@ -64,6 +64,8 @@ export default {
     height: 200px
     cursor: pointer
     background-image: url('../assets/煉瓦@2x.png')
+    background-size: cover
+    color: transparent
     &:hover
       opacity: 1
     &:active

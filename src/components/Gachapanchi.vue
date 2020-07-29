@@ -8,7 +8,7 @@
           <span class="black"></span>
       </div>
       <div class="panchi__img"><img src="../assets/右ストレート.png" alt="右ストレート"></div>
-      <Button type="gacha__switch" class="switch" @myclick="GetTitle"></Button>
+      <Button type="gacha__switch" class="switch" @myclick="getTitle">ああああ</Button>
     </template>
     <template v-if="this.gettitle">
       <div class="gettitle__style animate__animated animate__zoomInDown">
@@ -52,8 +52,60 @@ export default {
     }
   },
   methods: {
-    GetTitle(){
-      this.gettitle = true
+    getRandom(){
+      //1~100の数値にしたい
+      //floor整数
+      //Math.random 0~0.999999 * (100) + 1
+      //Math.floor 0~0.9 * (100) = 0~99 + 1
+      //(最大値+1 - 最小値 ) + 最小値
+      //(101 - 1 ) + 1
+      const random = Math.floor( Math.random() * ( 100 )) + 1
+      return random
+    },
+    getTitle(){
+      //配列
+      const normal = 60
+      const rare = 90
+      const epic = 98
+      const legend = 100
+      //1~100
+      const result = this.getRandom()
+      console.log(result)
+      if(result <= normal){
+        //1~60
+        console.log('ノーマル')
+      }
+      else if( result <= rare){
+        //61~90
+        console.log('レア')
+      }
+      else if( result <= epic){
+        //91~98
+        console.log('エピック')
+      }
+      else if( result <= legend){
+        //99~100
+        console.log('legend')
+      }
+      // switch(result){
+      //   case result < normal:
+      //     console.log('ノーマル')
+      //     break
+      //   case result < rare:
+      //     console.log('レア')
+      //     break
+      //   case result < epic:
+      //     console.log('エピック')
+      //     break
+      //   case result < legend:
+      //     console.log('レジェンド')
+      //     break
+      //   default:
+      //     console.log('デフォルト')
+      //     break
+      //}
+
+      //his.gettitle = !this.gettitle
     }
   }
 }
@@ -185,24 +237,30 @@ p
 
 @keyframes item
   0%
-    transform: translate(70%, -70%)
+    transform: translate(-30%, -70%)
+    border: 3px solid #000
+  1%
+    background-image: url('../assets/煉瓦崩れる@2x.png')
+    background-size: cover
   10%
-    transform: translate(100%, -70%) rotate(70deg)
+    transform: translate(40%, -70%)
+
   20%
-    transform: translate(100%, -70%) rotate(70deg)
+    transform: translate(40%, -70%)
+
   30%
-    transform: translate(100%, -70%) rotate(70deg)
-  40%
-    transform: translate(100%, -70%) rotate(70deg)
-  50%
-    transform: translate(100%, 100%) rotate(60deg)
-  55%
-    transform: translate(100%, 100%) rotate(60deg)
-    opacity: 1
-  60%
-    transform: translate(-200%, -100%) rotate(50deg)
+    transform: translate(50%, -70%)
     opacity: 0
-    background-image: url('../assets/煉瓦@2x.png')
+  40%
+    transform: translate(60%, -70%)
+  50%
+    transform: translate(70%, 100%)
+
+  55%
+    transform: translate(100%, 100%)
+
+  60%
+    transform: translate(-200%, -100%)
   61%
     background: #000
   70%
@@ -211,14 +269,12 @@ p
     transform: translate(-200%, -70%) rotate(30deg)
   90%
     transform: translate(200%, 200%) rotate(20deg)
-    // background: red
-    // color: transparent
+    border: 0
   100%
     transform: translate(-50%, -70%) rotate(0deg)
     width: 200px
     height: 200px
     border: 3px solid #FFF
-    border-radius: 10px
     background: #000
     color: #FFF
 

@@ -13,6 +13,7 @@
 <script>
 import Button from '../components/Button'
 import Gachapanchi from  '../components/Gachapanchi'
+import firebase from 'firebase'
 
 export default {
   components: {
@@ -23,7 +24,11 @@ export default {
     return {
       gachaStart: false,
     }
-  },methods: {
+  },
+  created(){
+    this.db = firebase.firestore() // dbインスタンスを初期化
+  },
+  methods: {
     Strat(){
       this.gachaStart = !this.gachaStart
     }
