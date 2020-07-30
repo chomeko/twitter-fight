@@ -52,60 +52,8 @@ export default {
     }
   },
   methods: {
-    getRandom(){
-      //1~100の数値にしたい
-      //floor整数
-      //Math.random 0~0.999999 * (100) + 1
-      //Math.floor 0~0.9 * (100) = 0~99 + 1
-      //(最大値+1 - 最小値 ) + 最小値
-      //(101 - 1 ) + 1
-      const random = Math.floor( Math.random() * ( 100 )) + 1
-      return random
-    },
     getTitle(){
-      //配列
-      const normal = 60
-      const rare = 90
-      const epic = 98
-      const legend = 100
-      //1~100
-      const result = this.getRandom()
-      console.log(result)
-      if(result <= normal){
-        //1~60
-        console.log('ノーマル')
-      }
-      else if( result <= rare){
-        //61~90
-        console.log('レア')
-      }
-      else if( result <= epic){
-        //91~98
-        console.log('エピック')
-      }
-      else if( result <= legend){
-        //99~100
-        console.log('legend')
-      }
-      // switch(result){
-      //   case result < normal:
-      //     console.log('ノーマル')
-      //     break
-      //   case result < rare:
-      //     console.log('レア')
-      //     break
-      //   case result < epic:
-      //     console.log('エピック')
-      //     break
-      //   case result < legend:
-      //     console.log('レジェンド')
-      //     break
-      //   default:
-      //     console.log('デフォルト')
-      //     break
-      //}
-
-      //his.gettitle = !this.gettitle
+      this.gettitle = !this.gettitle
     }
   }
 }
