@@ -11,7 +11,7 @@
       <Button v-else type="menu" size="menu--size" @myclick="Equipment">戻る</Button>
       <!-- ガチャボタン -->
       <router-link to="/Gacha">
-        <Button type="menu" size="menu--size">ガチャ</Button>
+        <Button type="menu" size="menu--size" @emitGacha="emitGachaChild">ガチャ</Button>
       </router-link>
     </div>
   </div>
@@ -25,7 +25,8 @@ export default {
   },
   data(){
     return {
-      switchEquip: false
+      switchEquip: false,
+      emit: []
     }
   },
   methods: {
@@ -34,6 +35,11 @@ export default {
       this.switchEquip = !this.switchEquip
       this.$emit('emitEquipment',this.switchEquip)
     },
+    emitGachaChild(emitGachaChild){
+      this.emit = emitGachaChild
+      console.log(this.emit)
+      this.$emit('emitGacha',this.emit)
+    }
   }
 }
 </script>

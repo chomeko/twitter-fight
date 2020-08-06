@@ -66,10 +66,13 @@ export default {
     background-image: url('../assets/煉瓦@2x.png')
     background-size: cover
     color: transparent
+    line-height: 2
     &:hover
       opacity: 1
     &:active
       border: 1px solid #fff
+    span
+      font-size: 20px
   //サイズ
   .menu--size
     padding: 20px 30px

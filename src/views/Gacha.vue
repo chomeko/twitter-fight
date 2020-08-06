@@ -5,7 +5,7 @@
       <Button type="menu" @myclick="Strat">１回500コイン</Button>
     </template>
     <template v-if="this.gachaStart">
-      <Gachapanchi></Gachapanchi>
+      <Gachapanchi :gachaGet=gachaGet></Gachapanchi>
     </template>
   </div>
 </template>
@@ -14,6 +14,7 @@
 import Button from '../components/Button'
 import Gachapanchi from  '../components/Gachapanchi'
 import firebase from 'firebase'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   components: {
@@ -24,7 +25,7 @@ export default {
     return {
       gachaStart: false,
       titleRea: '',
-      gachaGet: {}
+      gachaGet: null
     }
   },
   created(){
@@ -79,18 +80,26 @@ export default {
     async getGacha(){
       let self = this
       const rea = this.titleRea
-      console.log(rea)
-      let docRef = this.db.collection("titles").where('rea', '==', rea)
-      const querySnapshot = await docRef.get()
-      //titlesコレクションの全てのドキュメント取得
-      //console.log(querySnapshot.docs.map(doc => doc.data()))
-      //titlesコレクションの全てのドキュメントを順番に取得
-      querySnapshot.forEach((doc) =>{
-        if(doc.exists) {
-          self.gachaGet = doc.data()
-          console.log(self.gachaGet)
-        }else {
-          console.log("No such document!")
+      const randomKey = uuidv4()
+      let docRef = this.db.collection("titles").where('rea', '==', rea).where('random', '>', randomKey).limit(1)
+      let ifDocRef = this.db.collection("titles").where('rea', '==', rea).where('random', '<=', randomKey).limit(1)
+      await docRef.get()
+      .then(async (querySnapshot) => {
+        if(querySnapshot.empty){
+          await ifDocRef.get()
+          .then((querySnapshot2) => {
+            self.gachaGet = querySnapshot2.docs[0].data()
+            this.$emit('emitGacha',self.gachaGet)
+            self.gachaStart = true
+            //console.log(self.gachaGet)
+            //console.log('>')
+          })
+        }else{
+          self.gachaGet = await querySnapshot.docs[0].data()
+          self.gachaStart = true
+          this.$emit('emitGacha',self.gachaGet)
+          //console.log(self.gachaGet)
+          //console.log('<=')
         }
       })
     }
@@ -141,3 +150,4 @@ export default {
       text-shadow: 0 0 .5vw #800E0B, 0 0 1.5vw #800E0B, 0 0 5vw #800E0B, 0 0 5vw #800E0B, 0 0 .2vw #800E0B, .5vw .5vw .1vw #40340A
       color: #806914
 </style>
+

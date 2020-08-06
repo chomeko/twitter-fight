@@ -130,7 +130,8 @@ export default {
       // ユーザーの持ってる称号の入れ物
       equipmentTitles: [],
       //ユーザーの持ってる称号をクリックして装備
-      addTitle: []
+      addTitle: [],
+      //testemit: []
     }
   },
   //mount時にローカルストレージから状態を取得して現在のdataにする
@@ -178,6 +179,9 @@ export default {
     }
   },
   methods: {
+    // emitGacha(emitGachaAdd){
+    //   this.testemit = emitGachaAdd
+    // },
     //送られてきた称号名をMax５件まで保存できる処理と
     //称号装備画面から送られてきた称号を基礎ステータスに足す処理
     emitEvent(addTitleToStatus){

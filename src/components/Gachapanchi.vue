@@ -8,34 +8,35 @@
           <span class="black"></span>
       </div>
       <div class="panchi__img"><img src="../assets/右ストレート.png" alt="右ストレート"></div>
-      <Button type="gacha__switch" class="switch" @myclick="getTitle">ああああ</Button>
+      <Button type="gacha__switch" class="switch" @myclick="getTitle">お前にぴったしな称号を与えよう<br><span>Getする</span></Button>
     </template>
     <template v-if="this.gettitle">
-      <div class="gettitle__style animate__animated animate__zoomInDown">
-        <div class="title__item">称号名がはいる</div>
-        <div class="title__sutefuri">
-          <dl>
+      <div class="animate__animated animate__zoomInDown">
+        <div class="title__item">{{gachaGet.id}}</div>
+        <div class="title__sutefuri gettitle__style">
+          <dl v-if=gachaGet.hp>
             <dt>最大HP :</dt>
-            <dd>hp</dd>
+            <dd>{{gachaGet.hp}}</dd>
           </dl>
-          <dl>
+          <dl v-if=gachaGet.attack>
             <dt>攻撃力 :</dt>
-            <dd>attack</dd>
+            <dd>{{gachaGet.attack}}</dd>
           </dl>
-          <dl>
+          <dl v-if=gachaGet.defense>
             <dt>防御力 :</dt>
-            <dd>defense</dd>
+            <dd>{{gachaGet.defense}}</dd>
           </dl>
-          <dl>
+          <dl v-if=gachaGet.avoidance>
             <dt>回避力 :</dt>
-            <dd>avoidance</dd>
+            <dd>{{gachaGet.avoidance}}</dd>
           </dl>
-          <dl>
+          <dl v-if=gachaGet.speed>
             <dt>素早さ :</dt>
-            <dd>speed</dd>
+            <dd>{{gachaGet.speed}}</dd>
           </dl>
         </div>
       </div>
+      <router-link to='/'>戻る</router-link>
     </template>
   </div>
 </template>
@@ -43,6 +44,11 @@
 <script>
 import Button from '../components/Button'
 export default {
+  props:{
+    gachaGet:{
+      required: true
+    }
+  },
   components: {
     Button
   },
