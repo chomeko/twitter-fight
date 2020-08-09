@@ -2,47 +2,53 @@
   <div id="panchi">
     <template v-if="!this.gettitle">
       <p>攻撃して称号をGETしよう！</p>
-      <div class="karada"></div>
+      <div :class="karadaStyle"></div>
       <div class="eyeball-container">
-        <span class="white"></span>
-          <span class="black"></span>
+        <span class="white--eyeball"></span>
+          <span class="black--eyeball"></span>
       </div>
       <div class="panchi__img"><img src="../assets/右ストレート.png" alt="右ストレート"></div>
       <Button type="gacha__switch" class="switch" @myclick="getTitle">お前にぴったしな称号を与えよう<br><span>Getする</span></Button>
     </template>
     <template v-if="this.gettitle">
       <div class="animate__animated animate__zoomInDown">
-        <div class="title__item">{{gachaGet.id}}</div>
+        <div class="addtitle__wrapper">
+          <AddTitle v-bind="gachaGet" class="title__item"></AddTitle>
+        </div>
         <div class="title__sutefuri gettitle__style">
           <dl v-if=gachaGet.hp>
             <dt>最大HP :</dt>
-            <dd>{{gachaGet.hp}}</dd>
+            <dd class="sutefuri--color">+{{gachaGet.hp}}</dd>
           </dl>
           <dl v-if=gachaGet.attack>
             <dt>攻撃力 :</dt>
-            <dd>{{gachaGet.attack}}</dd>
+            <dd class="sutefuri--color">+ {{gachaGet.attack}}</dd>
           </dl>
           <dl v-if=gachaGet.defense>
             <dt>防御力 :</dt>
-            <dd>{{gachaGet.defense}}</dd>
+            <dd class="sutefuri--color">+ {{gachaGet.defense}}</dd>
           </dl>
           <dl v-if=gachaGet.avoidance>
             <dt>回避力 :</dt>
-            <dd>{{gachaGet.avoidance}}</dd>
+            <dd class="sutefuri--color">+ {{gachaGet.avoidance}}</dd>
           </dl>
           <dl v-if=gachaGet.speed>
             <dt>素早さ :</dt>
-            <dd>{{gachaGet.speed}}</dd>
+            <dd class="sutefuri--color">+ {{gachaGet.speed}}</dd>
           </dl>
         </div>
       </div>
-      <router-link to='/'>戻る</router-link>
+      <router-link
+        to='/'
+        class="back"
+      >戻る</router-link>
     </template>
   </div>
 </template>
 
 <script>
 import Button from '../components/Button'
+import AddTitle from '../components/AddTitle'
 export default {
   props:{
     gachaGet:{
@@ -50,12 +56,20 @@ export default {
     }
   },
   components: {
-    Button
+    Button,
+    AddTitle
   },
   data(){
     return {
       gettitle: false
     }
+  },
+  computed:{
+    karadaStyle(){
+      return this.gachaGet.rea === 3 && 4
+        ? 'test'
+        : 'karada'
+  }
   },
   methods: {
     getTitle(){
@@ -86,13 +100,23 @@ p
   transform: translateX(-50%)
   position: relative
 
+.test
+  width: 300px
+  height: 300px
+  border-radius: 50%
+  background: red
+  //box-shadow: 0 0 3vw #2356FF
+  transform: translateX(-50%)
+  position: relative
+
+
 .eyeball-container
   position: absolute
   top: 30%
   left: 25%
   transform: translate(-25%, -30%)
 
-.white
+.white--eyeball
   width: 80px
   height: 56px
   background: #FFF
@@ -101,7 +125,7 @@ p
   position: relative
   transform: rotate(-4deg)
 
-.black
+.black--eyeball
   width: 32px
   height: 32px
   background: #000
@@ -126,14 +150,57 @@ p
   right: 0%
   transform: translate(30%, -70%)
 
+//ガチャ確定画面
+.addtitle__wrapper
+  display: flex
+  justify-content: center
+.title__item
+  margin-bottom: 40px
+  font-size: 36px
+  padding: 5px
+  border-radius: 10px
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000,-1px 1px 0 #000, 1px -1px 0 #000,0px 1px 0 #000,0 -1px 0 #000,-1px 0 0 #000, 1px 0 0 #000
 .gettitle__style
-  width: 90%
+  width: 200px
+  margin: auto
   height: 100%
   background: #000
   border: 3px solid #FFF
   border-radius: 10px
+  margin-bottom: 40px
+  dl
+    display: flex
+    justify-content: center
+.sutefuri--color
+  color: red
+a
+  width: 100%
+  display: inline-block
+  color: #FFF
+  text-align: center
+  &:hover
+    opacity: .5
+.white
+  color: #FFF
+  background: #D3D3D3
+  border: 3px solid #FFF
+  margin-left: 0
+.blue
+  color: #FFF
+  background: #0031FF
+  border: 3px solid #FFF
+  margin-left: 0
+.orange
+  color: #FFEB00
+  border: 3px solid #FFEB00
+  background: #9D00FF
+  margin-left: 0
+.pink
+  color: #FFD800
+  border: 3px solid #FFEB00
+  background: #FF00E2
+  margin-left: 0
 
-//ガチャ確定画面
 
 
 //keyFlame設定
@@ -154,6 +221,11 @@ p
   -moz-animation: karada 2s linear infinite
   -webkit-animation: karada 2s linear infinite
   -o-animation: karada 2s linear infinite
+.test
+  animation: test 2s linear infinite
+  -moz-animation: test 2s linear infinite
+  -webkit-animation: test 2s linear infinite
+  -o-animation: test 2s linear infinite
 
 @keyframes karada
   0%,
@@ -163,6 +235,20 @@ p
   50%
     box-shadow: 0 0 .5vw #082180, 0 0 1.5vw #082180, 0 0 5vw #082180, 0 0 5vw #082180, 0 0 .2vw #082180, .5vw .5vw .1vw #0A3940
     background: #146C80
+
+@keyframes test
+  0%
+    background-color: #e74c3c
+  20%
+    background-color: #f1c40f
+  40%
+    background-color: #1abc9c
+  60%
+    background-color: #3498db
+  80%
+    background-color: #9b59b6
+  100%
+    background-color: #e74c3c
 
 @keyframes panchi
   0%

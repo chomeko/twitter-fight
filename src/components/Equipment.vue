@@ -69,10 +69,10 @@ export default {
     color: white
   .blue
     color: #538fff
-  .orange
-    color: #ff8300
+  .purple
+    color: #9D00FF
   .pink
-    color: #ff11e0
+    color: #FF00E2
 
   .fade-enter,
   .fade-leave-to
