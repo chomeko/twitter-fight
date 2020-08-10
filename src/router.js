@@ -49,7 +49,9 @@ const router = new Router({
     },
     {
       path: '/gacha',
+      name: 'gacha',
       component: Gacha,
+      props: true,
       meta: { requiresAuth: true }
     },
     {

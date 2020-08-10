@@ -10,8 +10,8 @@
       <Button v-if="!switchEquip" type="menu" size="menu--size" @myclick="Equipment">装備</Button>
       <Button v-else type="menu" size="menu--size" @myclick="Equipment">戻る</Button>
       <!-- ガチャボタン -->
-      <router-link to="/Gacha">
-        <Button type="menu" size="menu--size" @emitGacha="emitGachaChild">ガチャ</Button>
+      <router-link :to="{ name: 'gacha', params: { loginUid: loginUid } }">
+        <Button type="menu" size="menu--size">ガチャ</Button>
       </router-link>
     </div>
   </div>
@@ -20,13 +20,17 @@
 <script>
   import Button from '../components/Button'
 export default {
+  props:{
+    loginUid:{
+      required: true
+    }
+  },
   components: {
     Button
   },
   data(){
     return {
-      switchEquip: false,
-      emit: []
+      switchEquip: false
     }
   },
   methods: {
@@ -34,11 +38,6 @@ export default {
     Equipment(){
       this.switchEquip = !this.switchEquip
       this.$emit('emitEquipment',this.switchEquip)
-    },
-    emitGachaChild(emitGachaChild){
-      this.emit = emitGachaChild
-      console.log(this.emit)
-      this.$emit('emitGacha',this.emit)
     }
   }
 }

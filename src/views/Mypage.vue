@@ -61,7 +61,7 @@
       </div>
     </transition>
 
-    <Footer v-if="oldSutefuri" :equipment="equipment" @emitEquipment="footerEmit"></Footer>
+    <Footer v-if="oldSutefuri" :equipment="equipment" :login-uid="loginUid" @emitEquipment="footerEmit"></Footer>
   </div>
 </template>
 
@@ -107,6 +107,8 @@ export default {
       db : null,
       //twitter情報
       loginUser: {},
+      //twitter__uid
+      loginUid: {},
       //ついふぁいにようこそ表示
       welcomHome: true,
       //ステータス確定前表示
@@ -149,6 +151,7 @@ export default {
     firebase.auth().onAuthStateChanged(async user => {
       if (user){
         this.loginUser = user//ユーザー情報
+        this.loginUid = user.providerData[0].uid
         this.get()//databaseからキャラクター情報取得
         await this.getTitles()//ユーザーの持ってる称号リストを取得
         await this.userEquipTitle()//ユーザーが装備してる称号を取得

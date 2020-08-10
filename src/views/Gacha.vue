@@ -17,6 +17,12 @@ import firebase from 'firebase'
 import { v4 as uuidv4 } from 'uuid'
 
 export default {
+  props:{
+    loginUid:{
+      type: String,
+      required: false
+    }
+  },
   components: {
     Button,
     Gachapanchi
@@ -77,6 +83,7 @@ export default {
       }
       //this.gachaStart = !this.gachaStart
     },
+    //ガチャを引く
     async getGacha(){
       let self = this
       const rea = this.titleRea
@@ -89,20 +96,32 @@ export default {
           await ifDocRef.get()
           .then((querySnapshot2) => {
             self.gachaGet = querySnapshot2.docs[0].data()
-            this.$emit('emitGacha',self.gachaGet)
             self.gachaStart = true
+            this.addEquipmentList(this.gachaGet)
             //console.log(self.gachaGet)
             //console.log('>')
           })
         }else{
           self.gachaGet = await querySnapshot.docs[0].data()
           self.gachaStart = true
-          this.$emit('emitGacha',self.gachaGet)
+          this.addEquipmentList(this.gachaGet)
           //console.log(self.gachaGet)
           //console.log('<=')
         }
       })
-    }
+    },
+    //引いたガチャを自分の称号リスト(database)に追加
+    addEquipmentList(gachaGet){
+      const docID = this.loginUid
+      const washingtonRef = this.db.collection('users').doc(docID).collection('titles').doc(gachaGet.id)
+      washingtonRef.set(gachaGet)
+      .then(
+        console.log('称号を追加しました')
+      )
+      .catch((error) => {
+        console.log(error);
+      })
+    },
   }
 }
 </script>
