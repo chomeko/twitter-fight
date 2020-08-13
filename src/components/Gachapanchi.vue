@@ -104,11 +104,24 @@ p
   width: 300px
   height: 300px
   border-radius: 50%
-  background: red
-  //box-shadow: 0 0 3vw #2356FF
+  background: linear-gradient(45deg,orange, yellow, green, cyan, blue, violet)
+  background-size: 400%
   transform: translateX(-50%)
   position: relative
-
+  animation: test 20s linear infinite
+  -moz-animation: test 20s linear infinite
+  -webkit-animation: test 20s linear infinite
+  -o-animation: test 20s linear infinite
+  filter: blur(8px)
+  &::before,&::after
+    content: ''
+    position: absolute
+    top: 3px
+    left: 1px
+    border-radius: 50%
+    //background: linear-gradient(#000, #262626)
+    width: 295px
+    height: 295px
 
 .eyeball-container
   position: absolute
@@ -221,11 +234,6 @@ a
   -moz-animation: karada 2s linear infinite
   -webkit-animation: karada 2s linear infinite
   -o-animation: karada 2s linear infinite
-.test
-  animation: test 2s linear infinite
-  -moz-animation: test 2s linear infinite
-  -webkit-animation: test 2s linear infinite
-  -o-animation: test 2s linear infinite
 
 @keyframes karada
   0%,
@@ -238,17 +246,11 @@ a
 
 @keyframes test
   0%
-    background-color: #e74c3c
-  20%
-    background-color: #f1c40f
-  40%
-    background-color: #1abc9c
-  60%
-    background-color: #3498db
-  80%
-    background-color: #9b59b6
+    background-position-x: 0
+  50%
+    background-position-x: 300%
   100%
-    background-color: #e74c3c
+    background-position-x: 0
 
 @keyframes panchi
   0%
