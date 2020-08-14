@@ -16,25 +16,25 @@
           <AddTitle v-bind="gachaGet" class="title__item"></AddTitle>
         </div>
         <div class="title__sutefuri gettitle__style">
-          <dl v-if=gachaGet.hp>
+          <dl v-if=gachaGet.property.hp>
             <dt>最大HP :</dt>
-            <dd class="sutefuri--color">+{{gachaGet.hp}}</dd>
+            <dd class="sutefuri--color">+{{gachaGet.property.hp}}</dd>
           </dl>
-          <dl v-if=gachaGet.attack>
+          <dl v-if=gachaGet.property.attack>
             <dt>攻撃力 :</dt>
-            <dd class="sutefuri--color">+ {{gachaGet.attack}}</dd>
+            <dd class="sutefuri--color">+ {{gachaGet.property.attack}}</dd>
           </dl>
-          <dl v-if=gachaGet.defense>
+          <dl v-if=gachaGet.property.defense>
             <dt>防御力 :</dt>
-            <dd class="sutefuri--color">+ {{gachaGet.defense}}</dd>
+            <dd class="sutefuri--color">+ {{gachaGet.property.defense}}</dd>
           </dl>
-          <dl v-if=gachaGet.avoidance>
+          <dl v-if=gachaGet.property.avoidance>
             <dt>回避力 :</dt>
-            <dd class="sutefuri--color">+ {{gachaGet.avoidance}}</dd>
+            <dd class="sutefuri--color">+ {{gachaGet.property.avoidance}}</dd>
           </dl>
-          <dl v-if=gachaGet.speed>
+          <dl v-if=gachaGet.property.speed>
             <dt>素早さ :</dt>
-            <dd class="sutefuri--color">+ {{gachaGet.speed}}</dd>
+            <dd class="sutefuri--color">+ {{gachaGet.property.speed}}</dd>
           </dl>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default {
   },
   computed:{
     karadaStyle(){
-      return this.gachaGet.rea === 3 && 4
+      return this.gachaGet.rea >= 3
         ? 'test'
         : 'karada'
   }
@@ -206,12 +206,12 @@ a
 .orange
   color: #FFEB00
   border: 3px solid #FFEB00
-  background: #9D00FF
+  background: #ff8300
   margin-left: 0
 .pink
   color: #FFD800
   border: 3px solid #FFEB00
-  background: #FF00E2
+  background: linear-gradient(45deg,orange, yellow, green, cyan, blue, violet)
   margin-left: 0
 
 

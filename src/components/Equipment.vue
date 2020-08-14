@@ -49,7 +49,7 @@ export default {
 <style lang="sass" scoped>
 #equipment
   margin-top: 8px
-  width: 160px
+  width: 100%
   height: 156px
   background: #000
   border: 3px solid #FFF
@@ -61,16 +61,18 @@ export default {
     font-size: 14px
     padding: 0 3px
   dd
-    width: 126px
+    width: 100%
     margin: 0
-    margin: auto
+    margin-left: 8px
+    display: flex
+    letter-spacing: -2px
 
   .white
     color: white
   .blue
     color: #538fff
-  .purple
-    color: #9D00FF
+  .orange
+    color: #ff8300
   .pink
     color: #FF00E2
 

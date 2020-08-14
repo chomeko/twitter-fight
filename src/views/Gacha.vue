@@ -3,6 +3,11 @@
     <template v-if="!this.gachaStart">
       <h2 class="neon">称号<span>ガチャ</span></h2>
       <Button type="menu" @myclick="Strat">１回500コイン</Button>
+      <router-link
+        class="back"
+        to=router.go(-1)
+      >戻る
+      </router-link>
     </template>
     <template v-if="this.gachaStart">
       <Gachapanchi :gachaGet=gachaGet></Gachapanchi>
@@ -114,14 +119,45 @@ export default {
     addEquipmentList(gachaGet){
       const docID = this.loginUid
       const washingtonRef = this.db.collection('users').doc(docID).collection('titles').doc(gachaGet.id)
-      washingtonRef.set(gachaGet)
-      .then(
-        console.log('称号を追加しました')
-      )
-      .catch((error) => {
-        console.log(error);
+      this.db.runTransaction(function(transaction){
+        return transaction.get(washingtonRef).then(function(docRef){
+          //持っていなかったら追加
+          if(!docRef.exists){
+            washingtonRef.set(gachaGet)
+            console.log('追加しました')
+          }
+          //データのcountをプラスする
+          const gachaData = docRef.data()
+          const increment = gachaData.count + 1
+          // const hp = gachaData.property.hp
+          // const attack = gachaData.property.attack
+          // const defense = gachaData.property.defense
+          // const avoidance = gachaData.property.avoidance
+          const speed = gachaData.property.speed
+          const count = gachaData.count
+          const result = speed / 2 * count
+          console.log(count)
+          //持っていたらcountをプラスしてステータス1.５倍にする
+          if(count > 0){
+            console.log('A')
+            if(speed){
+              transaction.update(washingtonRef,{
+                count: increment,
+                speed: result
+              })
+            }
+          }
+          else{
+            console.log('B')
+            transaction.update(washingtonRef,{
+              count: increment,
+              speed: speed
+            })
+          }
+        })
+        //.then(console.log('できた'))
       })
-    },
+    }
   }
 }
 </script>
@@ -155,6 +191,15 @@ export default {
     transform: translate(-50%, -80%)
     &:active
       transform: translate(-50%, -70%)
+
+  .back
+    position: absolute
+    bottom: 5%
+    left: 50%
+    transform: translate(-50%, -5%)
+    color: #FFF
+    cursor: pointer
+
   .neon
     animation: neon 1s ease infinite
     -moz-animation: neon 1s ease infinite

@@ -1,5 +1,5 @@
 <template>
-  <dd :class="color">{{id}}</dd>
+  <dd :class="color">{{id}}<span v-if="count > 0">+{{count}}</span></dd>
 </template>
 <script>
   export default {
@@ -12,6 +12,10 @@
         type: Number,
         required: false
       },
+      count: {
+        type: Number,
+        required: true
+      }
     },
     computed: {
       color() {

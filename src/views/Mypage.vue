@@ -213,7 +213,7 @@ export default {
       }
       else {
         //称号装備画面から送られてきた称号を5件まで追加して基礎ステータスに足す処理
-        if(this.addTitle.equip.length < 5){
+        if(this.addTitle.equip.length < 4){
           this.addTitle.equip.push(addTitleToStatus)
           this.addEquipTitles(addTitleToStatus)
           if (addTitleToStatus.property.hp) {
