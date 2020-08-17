@@ -14,7 +14,7 @@
       },
       count: {
         type: Number,
-        required: true
+        required: false
       }
     },
     computed: {

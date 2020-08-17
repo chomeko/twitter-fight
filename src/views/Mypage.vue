@@ -295,7 +295,7 @@ export default {
       await docRef.get()
       .then((doc) => {
         if (doc.exists) {
-          console.log('doc.data()')
+          //console.log('doc.data()')
           self.output = doc.data()
         } else {
           console.log("No such document!")
@@ -313,7 +313,7 @@ export default {
       const data = querySnapshot.docs.map(doc => {
         return doc.data()
       })
-      console.log('称号取得完了しました')
+      //console.log('称号取得完了しました')
       this.equipmentTitles = data
     },
     //ユーザーが装備してる称号を取得
@@ -325,7 +325,7 @@ export default {
       .then((doc) => {
         doc.forEach((doc) => {
           self.addTitle = doc.data()
-          console.log('装備してる称号を取得しました')
+          //console.log('装備してる称号を取得しました')
         })
       })
       .catch(function(error) {
