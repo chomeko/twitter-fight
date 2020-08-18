@@ -98,8 +98,8 @@ export default {
       .then(async (querySnapshot) => {
         if(querySnapshot.empty){
           await ifDocRef.get()
-          .then((querySnapshot2) => {
-            self.gachaGet = querySnapshot2.docs[0].data()
+          .then(async (querySnapshot2) => {
+            self.gachaGet = await querySnapshot2.docs[0].data()
             self.gachaStart = true
             this.addEquipmentList(this.gachaGet)
             //console.log(self.gachaGet)
@@ -120,54 +120,110 @@ export default {
       const washingtonRef = this.db.collection('users').doc(docID).collection('titles').doc(gachaGet.id)
       this.db.runTransaction(function(transaction){
         return transaction.get(washingtonRef).then(function(docRef){
-          const gachaData = docRef.data()
           //持っていなかったら追加
           if(!docRef.exists){
-            washingtonRef.set(gachaGet)
+            transaction.set(washingtonRef,{
+              id: gachaGet.id,
+              rea: gachaGet.rea,
+              random: gachaGet.random,
+              property: gachaGet.property
+            })
             console.log('追加しました')
           }
-          //countが0より大きかったら１プラスする。
-          else if(gachaData.count){
-            console.log('カウント０より大きい時の処理')
+          //countがあれば+1をしていく
+          else if(docRef.data().count){
+            const count = docRef.data().count + 1
+            const resultHp = docRef.data().hp + docRef.data().property.hp / 2
+            const resultAttack = docRef.data().attack + docRef.data().property.attack / 2
+            const resultDefense = docRef.data().defense + docRef.data().property.defense / 2
+            const resultAvoidance = docRef.data().avoidance + docRef.data().property.avoidance / 2
+            const resultSpeed = docRef.data().speed + docRef.data().property.speed / 2
+            console.log('カウント+1しました')
             transaction.update(washingtonRef,{
-                count: gachaData.count + 1
+                count: count
               })
             //ステータスがあれば基礎ステータスの半分をプラスする（1.5倍）
-            if(gachaData.property.speed){
-              console.log('speed1.5倍の処理')
+            if(docRef.data().property.hp){
+              console.log('hp1.5倍の処理')
               transaction.update(washingtonRef,{
-                speed: gachaData.speed + gachaData.property.speed / 2
+                hp: resultHp
               })
             }
-            if(gachaData.property.avoidance){
+            if(docRef.data().property.attack){
+              console.log('attack1.5倍の処理')
+              transaction.update(washingtonRef,{
+                attack: resultAttack
+              })
+            }
+            if(docRef.data().property.defense){
+              console.log('defense1.5倍の処理')
+              transaction.update(washingtonRef,{
+                defense: resultDefense
+              })
+            }
+            if(docRef.data().property.avoidance){
               console.log('avoidance1.5倍の処理')
               transaction.update(washingtonRef,{
-                avoidance: gachaData.avoidance + gachaData.property.avoidance / 2
+                avoidance: resultAvoidance
+              })
+            }
+            if(docRef.data().property.speed){
+              console.log('speed1.5倍の処理')
+              transaction.update(washingtonRef,{
+                speed: resultSpeed
               })
             }
           }
-          //カウントが０だった場合１プラス。各ステータスに基礎ステータス1.5倍プラス。
+          //カウントなければカウントに1を持たす。各ステータスを追加して基礎ステータスの半分を入れる。
           else{
-            console.log('カウントが0の時の処理')
+            const hp = docRef.data().property.hp / 2
+            const attack = docRef.data().property.attack / 2
+            const defense = docRef.data().property.defense / 2
+            const avoidance = docRef.data().property.avoidance / 2
+            const speed = docRef.data().property.speed / 2
+            console.log('カウントがない時の処理')
             transaction.update(washingtonRef,{
               count: 1
             })
-            if(gachaData.property.speed){
-              console.log('speedプロパティに基礎ステータスの半分')
+            if(docRef.data().property.hp){
+              console.log('hpプロパティに基礎ステータスの半分')
               transaction.update(washingtonRef,{
-                speed: gachaData.property.speed / 2
+                hp: hp
               })
             }
-            if(gachaData.property.avoidance){
-              console.log('avoidance1.5倍の処理')
+            if(docRef.data().property.attack){
+              console.log('attackプロパティに基礎ステータスの半分')
               transaction.update(washingtonRef,{
-                avoidance: gachaData.property.avoidance / 2
+                attack: attack
+              })
+            }
+            if(docRef.data().property.defense){
+              console.log('defenseプロパティに基礎ステータスの半分')
+              transaction.update(washingtonRef,{
+                defense: defense
+              })
+            }
+            if(docRef.data().property.avoidance){
+              console.log('avoidanceプロパティに基礎ステータスの半分')
+              transaction.update(washingtonRef,{
+                avoidance: avoidance
+              })
+            }
+            if(docRef.data().property.speed){
+              console.log('speedプロパティに基礎ステータスの半分')
+              transaction.update(washingtonRef,{
+                speed: speed
               })
             }
           }
         })
-        //.then(console.log('できた'))
       })
+      .then(() => {
+        console.log('成功')
+      })
+      .catch(error => {
+      console.log(error)
+    })
     }
   }
 }
