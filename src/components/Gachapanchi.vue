@@ -15,6 +15,7 @@
         <div class="addtitle__wrapper">
           <AddTitle v-bind="gachaGet" class="title__item"></AddTitle>
         </div>
+        <p class="message">{{message}}</p>
         <div class="title__sutefuri gettitle__style">
           <dl v-if=gachaGet.property.hp>
             <dt>最大HP :</dt>
@@ -52,6 +53,10 @@ import AddTitle from '../components/AddTitle'
 export default {
   props:{
     gachaGet:{
+      required: true
+    },
+    message: {
+      type: String,
       required: true
     }
   },
@@ -167,8 +172,10 @@ p
 .addtitle__wrapper
   display: flex
   justify-content: center
+.message
+  padding: 10px
+  font-size: 16px
 .title__item
-  margin-bottom: 40px
   font-size: 36px
   padding: 5px
   border-radius: 10px

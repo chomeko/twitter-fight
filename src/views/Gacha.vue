@@ -10,7 +10,7 @@
       </router-link>
     </template>
     <template v-if="this.gachaStart">
-      <Gachapanchi :gachaGet=gachaGet></Gachapanchi>
+      <Gachapanchi :gachaGet=gachaGet :message=message></Gachapanchi>
     </template>
   </div>
 </template>
@@ -36,7 +36,8 @@ export default {
     return {
       gachaStart: false,
       titleRea: '',
-      gachaGet: null
+      gachaGet: null,
+      message: ''
     }
   },
   created(){
@@ -116,6 +117,7 @@ export default {
     },
     //引いたガチャを自分の称号リスト(database)に追加
     addEquipmentList(gachaGet){
+      let self = this
       const docID = this.loginUid
       const washingtonRef = this.db.collection('users').doc(docID).collection('titles').doc(gachaGet.id)
       this.db.runTransaction(function(transaction){
@@ -128,6 +130,7 @@ export default {
               random: gachaGet.random,
               property: gachaGet.property
             })
+            self.message = `きみにぴったりな称号だ！`
             console.log('追加しました')
           }
           //countがあれば+1をしていく
@@ -173,6 +176,7 @@ export default {
                 speed: resultSpeed
               })
             }
+            self.message = `既に持っている。${docRef.data().id}+${count}になりステータスが更に1.5倍になった`
           }
           //カウントなければカウントに1を持たす。各ステータスを追加して基礎ステータスの半分を入れる。
           else{
@@ -215,10 +219,12 @@ export default {
                 speed: speed
               })
             }
+            self.message = `既に持っている。${docRef.data().id}+1になりステータスが更に1.5倍になった`
           }
         })
       })
       .then(() => {
+        //self.message = '既に持っている。ステータスが1.5倍になった'
         console.log('成功')
       })
       .catch(error => {
