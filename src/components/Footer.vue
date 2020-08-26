@@ -10,7 +10,7 @@
       <Button v-if="!switchEquip" type="menu" size="menu--size" @myclick="Equipment">装備</Button>
       <Button v-else type="menu" size="menu--size" @myclick="Equipment">戻る</Button>
       <!-- ガチャボタン -->
-      <router-link :to="{ name: 'gacha', params: { loginUid: loginUid } }">
+      <router-link :to="{ name: 'gacha', params: { loginUid: loginUid, output: output} }">
         <Button type="menu" size="menu--size">ガチャ</Button>
       </router-link>
     </div>
@@ -23,6 +23,10 @@ export default {
   props:{
     loginUid:{
       required: true
+    },
+    output:{
+      type: Number,
+      required: false
     }
   },
   components: {

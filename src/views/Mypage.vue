@@ -61,7 +61,7 @@
       </div>
     </transition>
 
-    <Footer v-if="oldSutefuri" :equipment="equipment" :login-uid="loginUid" @emitEquipment="footerEmit"></Footer>
+    <Footer v-if="oldSutefuri" :equipment="equipment" :login-uid="loginUid" :output="output.coin" @emitEquipment="footerEmit"></Footer>
   </div>
 </template>
 
@@ -123,6 +123,7 @@ export default {
         defense: 0,
         avoidance: 0,
         speed: 0,
+        coin: 100,
         exp: 0
       },
       //db関連
@@ -194,21 +195,21 @@ export default {
         const index = this.addTitle.equip.findIndex(({id}) => id === addTitleToStatus.id)
         this.addTitle.equip.splice(index,1)
         this.DeleteEquipTitles(addTitleToStatus)
-        if (addTitleToStatus.property.hp) {
-          this.output.hp = this.output.hp - addTitleToStatus.property.hp
-        }
-        if (addTitleToStatus.property.attack) {
-          this.output.attack = this.output.attack - addTitleToStatus.property.attack
-        }
-        if (addTitleToStatus.property.defence) {
-          this.output.defence = this.output.defence - addTitleToStatus.property.defence
-        }
-        if (addTitleToStatus.property.avoidance) {
-          this.output.avoidance = this.output.avoidance - addTitleToStatus.property.avoidance
-        }
-        if (addTitleToStatus.property.speed) {
-          this.output.speed = this.output.speed - addTitleToStatus.property.speed
-        }
+          if (addTitleToStatus.property.hp) {
+            this.output.hp = this.output.hp - addTitleToStatus.property.hp
+          }
+          if (addTitleToStatus.property.attack) {
+            this.output.attack = this.output.attack - addTitleToStatus.property.attack
+          }
+          if (addTitleToStatus.property.defense) {
+            this.output.defense = this.output.defense - addTitleToStatus.property.defense
+          }
+          if (addTitleToStatus.property.avoidance) {
+            this.output.avoidance = this.output.avoidance - addTitleToStatus.property.avoidance
+          }
+          if (addTitleToStatus.property.speed) {
+            this.output.speed = this.output.speed - addTitleToStatus.property.speed
+          }
         this.userSutefuri()
       }
       else {
@@ -222,8 +223,8 @@ export default {
           if (addTitleToStatus.property.attack) {
             this.output.attack = this.output.attack + addTitleToStatus.property.attack
           }
-          if (addTitleToStatus.property.defence) {
-            this.output.defence = this.output.defence + addTitleToStatus.property.defence
+          if (addTitleToStatus.property.defense) {
+            this.output.defense = this.output.defense + addTitleToStatus.property.defense
           }
           if (addTitleToStatus.property.avoidance) {
             this.output.avoidance = this.output.avoidance + addTitleToStatus.property.avoidance
@@ -259,7 +260,8 @@ export default {
         defense: this.character.defense,
         avoidance: this.character.avoidance,
         speed: this.character.speed,
-        exp: this.character.exp
+        exp: this.character.exp,
+        coin: this.character.coin
       })
       .then(
         console.log('キャラクター作成完了しました')

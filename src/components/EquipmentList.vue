@@ -4,7 +4,7 @@
     <hr>
     <ul>
       <li v-for="(equipmentTitle, index) in equipmentTitles" :key="index">
-        <span :class="fontColor(equipmentTitle)" @click="addTilteToStatus(index)">{{equipmentTitle.id}}<span v-if="equipmentTitle.count > 0">+{{equipmentTitle.count}}</span></span>
+        <span :class="fontColor(equipmentTitle)" @click="addTilteToStatus(index)">{{equipmentTitle.id}}</span>
       </li>
     </ul>
   </div>

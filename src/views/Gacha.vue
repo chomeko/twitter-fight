@@ -1,8 +1,14 @@
 <template>
   <div id="gacha">
     <template v-if="!this.gachaStart">
+      <Coin :output="output" class="coin"></Coin>
+    </template>
+    <template v-if="!this.gachaStart">
       <h2 class="neon">称号<span>ガチャ</span></h2>
-      <Button type="menu" @myclick="Strat">１回500コイン</Button>
+      <div class="containerMenu">
+        <p class="message">{{message}}</p>
+        <Button type="menu" @myclick="Strat">１回500コイン</Button>
+      </div>
       <router-link
         class="back"
         to=router.go(-1)
@@ -18,6 +24,7 @@
 <script>
 import Button from '../components/Button'
 import Gachapanchi from  '../components/Gachapanchi'
+import Coin from '../components/Coin'
 import firebase from 'firebase'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -26,11 +33,16 @@ export default {
     loginUid:{
       type: String,
       required: false
+    },
+    output: {
+      type: Number,
+      required: false
     }
   },
   components: {
     Button,
-    Gachapanchi
+    Gachapanchi,
+    Coin
   },
   data(){
     return {
@@ -55,37 +67,41 @@ export default {
       return random
     },
     async Strat(){
-      //配列
-      const normal = 60
-      const rare = 90
-      const epic = 98
-      const legend = 100
-      //1~100
-      const result = this.getRandom()
-      //console.log(result)
-      if(result <= normal){
-        this.titleRea = 1
-        await this.getGacha()
-        //1~60
-        console.log('ノーマル')
-      }
-      else if( result <= rare){
-        this.titleRea = 2
-        await this.getGacha()
-        //61~90
-        console.log('レア')
-      }
-      else if( result <= epic){
-        this.titleRea = 3
-        await this.getGacha()
-        //91~98
-        console.log('エピック')
-      }
-      else if( result <= legend){
-        this.titleRea = 4
-        await this.getGacha()
-        //99~100
-        console.log('legend')
+      if(this.output >= 100){
+        const normal = 60
+        const rare = 90
+        const epic = 98
+        const legend = 100
+        //1~100
+        const result = this.getRandom()
+        //console.log(result)
+        if(result <= normal){
+          this.titleRea = 1
+          await this.getGacha()
+          //1~60
+          console.log('ノーマル')
+        }
+        else if( result <= rare){
+          this.titleRea = 2
+          await this.getGacha()
+          //61~90
+          console.log('レア')
+        }
+        else if( result <= epic){
+          this.titleRea = 3
+          await this.getGacha()
+          //91~98
+          console.log('エピック')
+        }
+        else if( result <= legend){
+          this.titleRea = 4
+          await this.getGacha()
+          //99~100
+          console.log('legend')
+        }
+      }else{
+        this.message = "コインが足りません"
+        console.log(this.message)
       }
     },
     //ガチャを引く
@@ -97,8 +113,10 @@ export default {
       let ifDocRef = this.db.collection("titles").where('rea', '==', rea).where('random', '<=', randomKey).limit(1)
       await docRef.get()
       .then(async (querySnapshot) => {
+        //取得できなかった違う条件で引く
         if(querySnapshot.empty){
           await ifDocRef.get()
+          //違う条件で取得できたらの処理
           .then(async (querySnapshot2) => {
             self.gachaGet = await querySnapshot2.docs[0].data()
             self.gachaStart = true
@@ -106,6 +124,7 @@ export default {
             //console.log(self.gachaGet)
             //console.log('>')
           })
+        //最初の条件で取得できたら
         }else{
           self.gachaGet = await querySnapshot.docs[0].data()
           self.gachaStart = true
@@ -133,98 +152,17 @@ export default {
             self.message = `きみにぴったりな称号だ！`
             console.log('追加しました')
           }
-          //countがあれば+1をしていく
-          else if(docRef.data().count){
-            const count = docRef.data().count + 1
-            const resultHp = docRef.data().hp + docRef.data().property.hp / 2
-            const resultAttack = docRef.data().attack + docRef.data().property.attack / 2
-            const resultDefense = docRef.data().defense + docRef.data().property.defense / 2
-            const resultAvoidance = docRef.data().avoidance + docRef.data().property.avoidance / 2
-            const resultSpeed = docRef.data().speed + docRef.data().property.speed / 2
-            console.log('カウント+1しました')
-            transaction.update(washingtonRef,{
-                count: count
-              })
-            //ステータスがあれば基礎ステータスの半分をプラスする（1.5倍）
-            if(docRef.data().property.hp){
-              console.log('hp1.5倍の処理')
-              transaction.update(washingtonRef,{
-                hp: resultHp
-              })
-            }
-            if(docRef.data().property.attack){
-              console.log('attack1.5倍の処理')
-              transaction.update(washingtonRef,{
-                attack: resultAttack
-              })
-            }
-            if(docRef.data().property.defense){
-              console.log('defense1.5倍の処理')
-              transaction.update(washingtonRef,{
-                defense: resultDefense
-              })
-            }
-            if(docRef.data().property.avoidance){
-              console.log('avoidance1.5倍の処理')
-              transaction.update(washingtonRef,{
-                avoidance: resultAvoidance
-              })
-            }
-            if(docRef.data().property.speed){
-              console.log('speed1.5倍の処理')
-              transaction.update(washingtonRef,{
-                speed: resultSpeed
-              })
-            }
-            self.message = `既に持っている。${docRef.data().id}+${count}になりステータスが更に1.5倍になった`
-          }
-          //カウントなければカウントに1を持たす。各ステータスを追加して基礎ステータスの半分を入れる。
+          //持っていたら無駄になる
           else{
-            const hp = docRef.data().property.hp / 2
-            const attack = docRef.data().property.attack / 2
-            const defense = docRef.data().property.defense / 2
-            const avoidance = docRef.data().property.avoidance / 2
-            const speed = docRef.data().property.speed / 2
-            console.log('カウントがない時の処理')
-            transaction.update(washingtonRef,{
-              count: 1
-            })
-            if(docRef.data().property.hp){
-              console.log('hpプロパティに基礎ステータスの半分')
-              transaction.update(washingtonRef,{
-                hp: hp
-              })
-            }
-            if(docRef.data().property.attack){
-              console.log('attackプロパティに基礎ステータスの半分')
-              transaction.update(washingtonRef,{
-                attack: attack
-              })
-            }
-            if(docRef.data().property.defense){
-              console.log('defenseプロパティに基礎ステータスの半分')
-              transaction.update(washingtonRef,{
-                defense: defense
-              })
-            }
-            if(docRef.data().property.avoidance){
-              console.log('avoidanceプロパティに基礎ステータスの半分')
-              transaction.update(washingtonRef,{
-                avoidance: avoidance
-              })
-            }
-            if(docRef.data().property.speed){
-              console.log('speedプロパティに基礎ステータスの半分')
-              transaction.update(washingtonRef,{
-                speed: speed
-              })
-            }
-            self.message = `既に持っている。${docRef.data().id}+1になりステータスが更に1.5倍になった`
+            console.log('持っている時の処理')
+            // transaction.update(washingtonRef,{
+            //   count: 1
+            // })
+            self.message = "残念既に持っているようだ。"
           }
         })
       })
       .then(() => {
-        //self.message = '既に持っている。ステータスが1.5倍になった'
         console.log('成功')
       })
       .catch(error => {
@@ -248,6 +186,10 @@ export default {
     top: 40%
     left: 50%
     transform: translate(-50%, -40%)
+  .coin
+    left: 50%
+    margin-top: 40px
+    transform: translateX(-50%)
 
   .neon
     color: #FB4264
@@ -257,13 +199,16 @@ export default {
     span
       font-size: 35px
 
-  .menu
+  .containerMenu
     position: absolute
     top: 80%
     left: 50%
     transform: translate(-50%, -80%)
     &:active
       transform: translate(-50%, -70%)
+    .message
+      //letter-spacing: .1px
+      font-size: 14px
 
   .back
     position: absolute
