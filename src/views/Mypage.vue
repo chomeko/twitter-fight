@@ -41,7 +41,7 @@
           @addTitleToStatus="emitEvent"
           key="equipment"
         >
-      </EquipmentList>
+        </EquipmentList>
       </transition-group>
       <div class="components__flex">
         <!-- ここのv-ifはaddTitleをキャラ作成時配列(空)をdatabaseに登録してるからv-ifはtureになり
@@ -61,7 +61,7 @@
       </div>
     </transition>
 
-    <Footer v-if="oldSutefuri" :equipment="equipment" :login-uid="loginUid" :output="output.coin" @emitEquipment="footerEmit"></Footer>
+    <Footer v-if="oldSutefuri" :equipment="equipment" :login-uid="loginUid" :output="output" @emitEquipment="footerEmit"></Footer>
   </div>
 </template>
 

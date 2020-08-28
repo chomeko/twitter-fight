@@ -3,7 +3,7 @@
   <!-- バトル,装備、ガチャボタン -->
     <div class="menu__container">
       <!-- バトル -->
-      <router-link to="/Battle">
+      <router-link :to="{ name: 'battle', params: { output: output }}">
         <Button type="menu" size="menu--size">バトル</Button>
       </router-link>
       <!-- 装備 -->
@@ -11,10 +11,9 @@
       <Button v-else type="menu" size="menu--size" @myclick="Equipment">戻る</Button>
       <!-- ガチャボタン -->
       <router-link
-        :to="{ name: 'gacha', params: { loginUid: loginUid, output: output} }">
+        :to="{ name: 'gacha', params: { loginUid: loginUid, output: output.coin} }">
         <Button type="menu" size="menu--size">ガチャ</Button>
       </router-link>
-      <!-- <router-view @resultcoin="coin = $event"></router-view> -->
     </div>
   </div>
 </template>
@@ -27,8 +26,7 @@ export default {
       required: true
     },
     output:{
-      type: Number,
-      required: false
+      required: true
     }
   },
   components: {
@@ -58,14 +56,4 @@ export default {
     .menu
       &:nth-child(2)
         margin: 0px 10px
-
-  .fade-enter,
-  .fade-leave-to
-    opacity: 0
-  .fade-enter-active
-    transition: opacity .5s
-  .fade-leave-active
-    transition: opacity .5s
-    //position: absolute
-
 </style>

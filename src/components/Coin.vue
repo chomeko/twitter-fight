@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="coin__container">
     <span>所持コイン</span>
     <span>{{output}}</span>
   </div>
@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style lang="sass">
-  .container
+  .coin__container
     border: 3px solid #FFF
     border-radius: 10px
     width: 120px

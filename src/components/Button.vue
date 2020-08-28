@@ -73,6 +73,13 @@ export default {
       border: 1px solid #fff
     span
       font-size: 20px
+  .battle
+    width: 120px
+    height: 100px
+    background: #000
+    cursor: pointer
+    color: #fff
+    border: 3px solid #FFF
   //サイズ
   .menu--size
     padding: 20px 30px

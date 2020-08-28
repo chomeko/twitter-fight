@@ -34,7 +34,9 @@ const router = new Router({
     },
     {
       path: '/battle',
+      name: 'battle',
       component: Battle,
+      props: true,
       meta: { requiresAuth: true },
     },
     {
