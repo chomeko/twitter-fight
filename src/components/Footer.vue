@@ -10,9 +10,11 @@
       <Button v-if="!switchEquip" type="menu" size="menu--size" @myclick="Equipment">装備</Button>
       <Button v-else type="menu" size="menu--size" @myclick="Equipment">戻る</Button>
       <!-- ガチャボタン -->
-      <router-link :to="{ name: 'gacha', params: { loginUid: loginUid, output: output} }">
+      <router-link
+        :to="{ name: 'gacha', params: { loginUid: loginUid, output: output} }">
         <Button type="menu" size="menu--size">ガチャ</Button>
       </router-link>
+      <!-- <router-view @resultcoin="coin = $event"></router-view> -->
     </div>
   </div>
 </template>
@@ -34,7 +36,8 @@ export default {
   },
   data(){
     return {
-      switchEquip: false
+      switchEquip: false,
+      // coin: 0
     }
   },
   methods: {

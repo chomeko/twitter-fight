@@ -7,7 +7,7 @@
       <h2 class="neon">称号<span>ガチャ</span></h2>
       <div class="containerMenu">
         <p class="message">{{message}}</p>
-        <Button type="menu" @myclick="Strat">１回500コイン</Button>
+        <Button type="menu" @myclick="Strat">１回100コイン</Button>
       </div>
       <router-link
         class="back"
@@ -68,6 +68,7 @@ export default {
     },
     async Strat(){
       if(this.output >= 100){
+        await this.updateCoin()
         const normal = 60
         const rare = 90
         const epic = 98
@@ -168,6 +169,15 @@ export default {
       .catch(error => {
       console.log(error)
     })
+    },
+    //所持コインから引いてupdate
+    updateCoin(){
+      const resultCoin = this.output - 100
+      const docID = this.loginUid
+      this.db.collection('sutefuri').doc(docID)
+      .update({
+        coin: resultCoin
+      })
     }
   }
 }
