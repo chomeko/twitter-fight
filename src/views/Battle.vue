@@ -10,9 +10,11 @@
       <Button type="battle" @myclick="battleStart">バトル開始</Button>
     </template>
     <template v-if="battleFlag">
-      <transition name="fade" mode="out-in">
-        <p>バトル画面</p>
-      </transition>
+      <transition-group name="fade">
+        <div class="myCharacter__container" key="TwitterImg">
+          <TwitterImg v-if="loginUser.photoURL" :loginUser="loginUser"></TwitterImg>
+        </div>
+      </transition-group>
     </template>
     <router-link
       class="back"
@@ -24,26 +26,36 @@
 
 <script>
 import Button from '../components/Button'
+import TwitterImg from '../components/TwitterImg'
 
 export default {
   props: {
+    loginUser: {
+      required: false
+    },
     output: {
       required: false
     }
   },
   components: {
-    Button
+    Button,
+    TwitterImg
   },
   data(){
     return {
       battleFlag: false
     }
   },
+  fetch(){
+    if(this.output === undefined){
+      console.log('undefined')
+    }
+  },
   methods: {
     battleStart(){
       this.battleFlag = true
     }
-  }
+  },
 }
 </script>
 
@@ -79,6 +91,8 @@ export default {
   left: 50%
   transform: translate(-50%, -5%)
 
+.fade-move
+  transition: transform 1s
 .fade-enter,
 .fade-leave-to
   opacity: 0

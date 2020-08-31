@@ -30,8 +30,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default {
   props:{
-    loginUid:{
-      type: String,
+    loginUser:{
       required: false
     },
     output: {
@@ -138,7 +137,7 @@ export default {
     //引いたガチャを自分の称号リスト(database)に追加
     addEquipmentList(gachaGet){
       let self = this
-      const docID = this.loginUid
+      const docID = String(this.loginUser.providerData[0].uid)
       const washingtonRef = this.db.collection('users').doc(docID).collection('titles').doc(gachaGet.id)
       this.db.runTransaction(function(transaction){
         return transaction.get(washingtonRef).then(function(docRef){
@@ -173,7 +172,7 @@ export default {
     //所持コインから引いてupdate
     updateCoin(){
       const resultCoin = this.output - 100
-      const docID = this.loginUid
+      const docID = String(this.loginUser.providerData[0].uid)
       this.db.collection('sutefuri').doc(docID)
       .update({
         coin: resultCoin

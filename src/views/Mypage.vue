@@ -57,11 +57,11 @@
       appear
     >
       <div class="user__image" v-if="!equipment">
-        <img v-if="loginUser.photoURL" :src='twitterImg'>
+        <TwitterImg v-if="loginUser.photoURL" :loginUser="loginUser"></TwitterImg>
       </div>
     </transition>
 
-    <Footer v-if="oldSutefuri" :equipment="equipment" :login-uid="loginUid" :output="output" @emitEquipment="footerEmit"></Footer>
+    <Footer v-if="oldSutefuri" :equipment="equipment" :loginUser="loginUser" :output="output" @emitEquipment="footerEmit"></Footer>
   </div>
 </template>
 
@@ -74,7 +74,9 @@ import CharaStatus from '../components/CharaStatus'
 import CharaInformation from '../components/CharaInformation'
 import EquipmentList from '../components/EquipmentList'
 import Equipment from '../components/Equipment'
+import TwitterImg from '../components/TwitterImg'
 import Footer from '../components/Footer'
+
 
 
 
@@ -86,6 +88,7 @@ export default {
     CharaInformation,
     EquipmentList,
     Equipment,
+    TwitterImg,
     Footer
   },
   localStorage: {
@@ -176,11 +179,6 @@ export default {
   },
   created() {
     this.db = firebase.firestore() // dbインスタンスを初期化
-  },
-  computed:{
-    twitterImg(){
-      return this.loginUser.photoURL.split('_normal').join('')
-    }
   },
   methods: {
     // emitGacha(emitGachaAdd){
