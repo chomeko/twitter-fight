@@ -3,7 +3,7 @@
   <!-- バトル,装備、ガチャボタン -->
     <div class="menu__container">
       <!-- バトル -->
-      <router-link :to="{ name: 'battle', params: { loginUser: loginUser, output: output }}">
+      <router-link :to="{ name: 'battle'}">
         <Button type="menu" size="menu--size">バトル</Button>
       </router-link>
       <!-- 装備 -->

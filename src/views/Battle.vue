@@ -12,7 +12,7 @@
     <template v-if="battleFlag">
       <transition-group name="fade">
         <div class="myCharacter__container" key="TwitterImg">
-          <TwitterImg v-if="loginUser.photoURL" :loginUser="loginUser"></TwitterImg>
+          <TwitterImg v-if="user.photoURL" :loginUser="user"></TwitterImg>
         </div>
       </transition-group>
     </template>
@@ -29,14 +29,7 @@ import Button from '../components/Button'
 import TwitterImg from '../components/TwitterImg'
 
 export default {
-  props: {
-    loginUser: {
-      required: false
-    },
-    output: {
-      required: false
-    }
-  },
+  inject: ["$user"],
   components: {
     Button,
     TwitterImg
@@ -46,16 +39,21 @@ export default {
       battleFlag: false
     }
   },
-  fetch(){
-    if(this.output === undefined){
-      console.log('undefined')
+  // created(){
+  //   if(this.loginUser === undefined){
+  //     this.loginUser = this.$user
+  //   }
+  // },
+  computed: {
+    user(){
+      return this.$user()
     }
   },
   methods: {
     battleStart(){
       this.battleFlag = true
     }
-  },
+  }
 }
 </script>
 

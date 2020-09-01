@@ -37,7 +37,12 @@ export default {
         this.userData = {}
       }
     })
-  }
+  },
+  provide(){
+    return {
+      $user: () => this.userData
+    }
+  },
 }
 </script>
 
