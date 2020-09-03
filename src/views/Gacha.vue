@@ -53,6 +53,9 @@ export default {
   },
   created(){
     this.db = firebase.firestore() // dbインスタンスを初期化
+    if(this.output === undefined){
+      this.$router.replace('/mypage')
+    }
   },
   methods: {
     getRandom(){
