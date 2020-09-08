@@ -15,6 +15,7 @@
     "uuid": "^8.3.0",
     "vue": "^2.6.11",
     "vue-localstorage": "^0.6.2",
+    "vue-nl2br": "^0.1.2",
     "vue-router": "^3.3.4"
   },
   "devDependencies": {

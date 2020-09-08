@@ -7,24 +7,33 @@
       >
         <h2>ついふぁい<span>ユーザー</span>を<br><span>倒し</span>に行く</h2>
       </transition>
-      <Button type="battle" @myclick="battleStart">バトル開始</Button>
+      <Button type="battle" @myclick="battle">バトル開始</Button>
     </template>
     <template v-if="battleFlag">
       <transition-group name="fade">
         <div class="enemyCharacter" key="ememy">
           <span>レベル: 50</span>
-          <span class="enemyCharacter__name">りんご@エンジニア光る星／個人開発がんばりんご</span>
+          <span class="enemyCharacter__name">{{enemyName}}</span>
           <TwitterImg v-if="user.photoURL" :loginUser="user"></TwitterImg>
-          <span class="enemyCharacter__hp"></span>
+          <div class="enemyCharacter__hp">
+            <div id="max"></div>
+            <div id="now"></div>
+            <span>{{this.enemy.hp}}</span>
+          </div>
         </div>
         <div class="message__container" key="message">
-          <p>りんご@エンジニア光る星／個人開発がんばりんご<br>が現れました。<br>戦闘を開始しますか？<br>はい<br>逃げる</p>
+          <nl2br tag="p" :text="this.message"></nl2br>
         </div>
+        <div class="btn__container" key="btn__container">
+          <span @click="battleStart">戦う</span>
+          <span v-if="escapebtn" @click="escape">逃げる</span>
+        </div>
+
         <div class="myCharacter" key="TwitterImg">
           <TwitterImg v-if="user.photoURL" :loginUser="user"></TwitterImg>
           <div class="character__hp">
             <span></span>
-            <span>9999</span>
+            <span>{{this.myUser.hp}}</span>
           </div>
         </div>
       </transition-group>
@@ -39,19 +48,39 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 import Button from '../components/Button'
 import TwitterImg from '../components/TwitterImg'
+import Nl2br from 'vue-nl2br'
 
 export default {
   inject: ["$user"],
   components: {
     Button,
-    TwitterImg
+    TwitterImg,
+    Nl2br,
   },
   data(){
     return {
-      battleFlag: false
+      battleFlag: false,
+      enemyName: 'りんご@エンジニア光る星／個人開発がんばりんご',
+      enemy: {
+        lv: 50,
+        hp: 1500,
+        attack: 500,
+        defense: 500,
+        avoidance: 500,
+        speed: 50,
+      },
+      myUser: {},
+      message: '',
+      escapebtn: true,
+      enemyHp: '',
+      str: ''
     }
+  },
+  created(){
+    this.db = firebase.firestore() // dbインスタンスを初期化
   },
   computed: {
     user(){
@@ -59,9 +88,58 @@ export default {
     }
   },
   methods: {
-    battleStart(){
+    battle(){
+      this.getUser()
       this.battleFlag = true
-    }
+      this.message = `${this.enemyName}\nが現れました。\n戦闘を開始しますか？`
+    },
+    //戦う
+    battleStart(){
+      this.escapebtn = false
+      if(this.myUser.speed > this.enemy.speed){
+        const maxhp = this.enemy.hp
+        let nowHp = maxhp
+        const M = document.getElementById("max")
+        let myUserAttack = this.myUser.attack
+        this.enemy.hp = nowHp - myUserAttack
+        nowHp = nowHp - myUserAttack
+        if(nowHp > 0){
+          if(myUserAttack == 0){
+            this.message = `${this.enemyName}に攻撃をかわされた！`
+          }
+          else{
+            this.message = `${this.$user().displayName}の攻撃\n${this.enemyName}に` + myUserAttack + "のダメージ"
+          }
+        }
+        else{
+          nowHp = 0
+          this.message = `${this.enemyName}は力尽きた`
+        }
+        M.style.width = 200 / maxhp * nowHp + "px"
+      }
+    },
+    //逃げる
+    escape(){
+      this.battleFlag = false
+    },
+    //ユーザー情報取得
+    async getUser(){
+      let self = this
+      let docID = String(this.$user().providerData[0].uid)
+      let docRef = this.db.collection("sutefuri").doc(docID)
+      await docRef.get()
+      .then((doc) => {
+        if (doc.exists) {
+          //console.log('doc.data()')
+          self.myUser = doc.data()
+        } else {
+          console.log("No such document!")
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting document:", error);
+      })
+    },
   }
 }
 </script>
@@ -112,13 +190,13 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
     border: 3px solid #FFF
     border-radius: 5px
   &__hp
-    width: 100px
-    height: 20px
-    background: #14FF00
-    border: 3px solid #FFF
-    border-radius: 3px
+    width: 200px
     margin: auto
-    margin-top: 6px
+    #max
+      width: 200px
+      height: 20px
+      background-color: #14FF00
+
 img
     width: 140px
     height: auto
@@ -154,9 +232,9 @@ img
       font-size: 14px
       text-align: center
 .message__container
-  margin-top: 16px
   font-size: 14px
   width: 100%
+  height: 130px
   border: 3px solid #FFF
   border-radius: 10px
   +mq(pc)
@@ -165,6 +243,19 @@ img
     padding: 5px 10px
     margin: 0
     line-height: 2
+.btn__container
+  position: relative
+  span
+    padding: 5px
+    border: 1px solid #FFF
+    &:nth-of-type(1)
+      position: absolute
+      left: 0
+      top: 10px
+    &:nth-of-type(2)
+      position: absolute
+      right: 0
+      top: 10px
 
 .back
   color: #FFF
@@ -183,5 +274,4 @@ img
   transition: opacity .5s
 .fade-leave-active
   transition: opacity .5s
-
 </style>

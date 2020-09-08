@@ -4,6 +4,8 @@ import router from './router'
 import animate from 'animate.css'
 import lodash from 'lodash'
 import VueLocalStorage from 'vue-localstorage'
+import Nl2br from 'vue-nl2br'
+
 
 
 import firebase from 'firebase'
@@ -30,5 +32,6 @@ new Vue({
   lodash,
   animate,
   router,
+  Nl2br,
   render: h => h(App),
 }).$mount('#app')
