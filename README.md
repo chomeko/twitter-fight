@@ -9,3 +9,5 @@
 ## npm i --save lodash
 
 ## npm install vue-localstorage --save
+
+## npm install --save vue-typer

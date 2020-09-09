@@ -14,15 +14,20 @@
         <div class="enemyCharacter" key="ememy">
           <span>レベル: 50</span>
           <span class="enemyCharacter__name">{{enemyName}}</span>
-          <TwitterImg v-if="user.photoURL" :loginUser="user"></TwitterImg>
+          <TwitterImg v-if="user.photoURL" :loginUser="user" class="enemyCharacter__img"></TwitterImg>
           <div class="enemyCharacter__hp">
-            <div id="max"></div>
+            <div id="max" ref="max"></div>
             <div id="now"></div>
             <span>{{this.enemy.hp}}</span>
           </div>
         </div>
         <div class="message__container" key="message">
-          <nl2br tag="p" :text="this.message"></nl2br>
+          <!-- <nl2br tag="p" :text="this.message"></nl2br> -->
+          <vue-typer
+            :text="this.message"
+            :repeat='0'
+            :type-delay='15'
+          ></vue-typer>
         </div>
         <div class="btn__container" key="btn__container">
           <span @click="battleStart">戦う</span>
@@ -51,14 +56,16 @@
 import firebase from 'firebase'
 import Button from '../components/Button'
 import TwitterImg from '../components/TwitterImg'
-import Nl2br from 'vue-nl2br'
+// import Nl2br from 'vue-nl2br'
+import { VueTyper } from 'vue-typer'
 
 export default {
   inject: ["$user"],
   components: {
     Button,
     TwitterImg,
-    Nl2br,
+    // Nl2br,
+    VueTyper
   },
   data(){
     return {
@@ -74,9 +81,8 @@ export default {
       },
       myUser: {},
       message: '',
+      messageView: '',
       escapebtn: true,
-      enemyHp: '',
-      str: ''
     }
   },
   created(){
@@ -92,30 +98,36 @@ export default {
       this.getUser()
       this.battleFlag = true
       this.message = `${this.enemyName}\nが現れました。\n戦闘を開始しますか？`
+      //最大hpの追加
+      this.$set(this.enemy,'maxhp', this.enemy.hp)
+      //this.$set(this.enemy,'maxhp', this.enemy.hp)
     },
     //戦う
     battleStart(){
+      //逃げるボタン非表示
       this.escapebtn = false
+      //hpゲージ
+      const M = this.$refs.max
+      //ダメージ
+      const myAttack = this.myUser.attack
+      //const enemyAttack = this.enemy.attack
+
+      //speed高い方から攻撃
       if(this.myUser.speed > this.enemy.speed){
-        const maxhp = this.enemy.hp
-        let nowHp = maxhp
-        const M = document.getElementById("max")
-        let myUserAttack = this.myUser.attack
-        this.enemy.hp = nowHp - myUserAttack
-        nowHp = nowHp - myUserAttack
-        if(nowHp > 0){
-          if(myUserAttack == 0){
+        this.enemy.hp -= myAttack
+        if(this.enemy.hp > 0){
+          if(this.myUser.attack == 0){
             this.message = `${this.enemyName}に攻撃をかわされた！`
           }
           else{
-            this.message = `${this.$user().displayName}の攻撃\n${this.enemyName}に` + myUserAttack + "のダメージ"
+            this.message = `${this.$user().displayName}の攻撃\n${this.enemyName}に\n` + this.myUser.attack + "のダメージを与えた"
           }
         }
         else{
-          nowHp = 0
-          this.message = `${this.enemyName}は力尽きた`
+          this.enemy.hp = 0
+          this.message = `${this.enemyName}を倒した！`
         }
-        M.style.width = 200 / maxhp * nowHp + "px"
+        M.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"
       }
     },
     //逃げる
@@ -149,7 +161,6 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
 =mq($breakpoint: sp)
   @media #{map-get($breakpoints, $breakpoint)}
     @content
-
 
 #battle
   max-width: 400px
@@ -189,6 +200,8 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   &__name
     border: 3px solid #FFF
     border-radius: 5px
+  &__img
+    opacity: 1
   &__hp
     width: 200px
     margin: auto
@@ -237,6 +250,7 @@ img
   height: 130px
   border: 3px solid #FFF
   border-radius: 10px
+  padding: 10px
   +mq(pc)
     margin-top: 24px
   p
@@ -274,4 +288,8 @@ img
   transition: opacity .5s
 .fade-leave-active
   transition: opacity .5s
+
+.vue-typer /deep/
+  .custom.char.typed
+    color: #FFF
 </style>
