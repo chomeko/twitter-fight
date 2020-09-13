@@ -35,7 +35,6 @@ export default {
   data(){
     return {
       switchEquip: false,
-      // coin: 0
     }
   },
   methods: {

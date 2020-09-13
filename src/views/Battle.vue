@@ -11,33 +11,35 @@
     </template>
     <template v-if="battleFlag">
       <transition-group name="fade">
+        <!-- 敵 -->
         <div class="enemyCharacter" key="ememy">
           <span>レベル: 50</span>
           <span class="enemyCharacter__name">{{enemyName}}</span>
-          <TwitterImg v-if="user.photoURL" :loginUser="user" class="enemyCharacter__img"></TwitterImg>
+          <TwitterImg v-if="user.photoURL" :loginUser="user" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
           <div class="enemyCharacter__hp">
-            <div id="max" ref="max"></div>
-            <div id="now"></div>
+            <div id="enemyMaxGauge" ref="enemyMax"></div>
             <span>{{this.enemy.hp}}</span>
           </div>
         </div>
+        <!-- メッセージ -->
         <div class="message__container" key="message">
-          <!-- <nl2br tag="p" :text="this.message"></nl2br> -->
           <vue-typer
             :text="this.message"
             :repeat='0'
             :type-delay='15'
           ></vue-typer>
         </div>
+        <!-- 戦闘ボタン -->
         <div class="btn__container" key="btn__container">
-          <span @click="battleStart">戦う</span>
-          <span v-if="escapebtn" @click="escape">逃げる</span>
+          <button v-if="!battleEnd" v-bind:disabled="clickBattleBtn" @click="battleStart">戦う</button>
+          <button v-if="battleEnd" @click="experiencePoint">次へ</button>
+          <button v-if="escapebtn" @click="escape">逃げる</button>
         </div>
-
-        <div class="myCharacter" key="TwitterImg">
-          <TwitterImg v-if="user.photoURL" :loginUser="user"></TwitterImg>
-          <div class="character__hp">
-            <span></span>
+        <!-- 自分 -->
+        <div class="myCharacter" key="myCharacter">
+          <TwitterImg v-if="user.photoURL" :loginUser="user" :class="{opacity:myUserEnd}"></TwitterImg>
+          <div class="myCharacter__hp">
+            <div id="myMaxGauge" ref="myMax"></div>
             <span>{{this.myUser.hp}}</span>
           </div>
         </div>
@@ -73,16 +75,19 @@ export default {
       enemyName: 'りんご@エンジニア光る星／個人開発がんばりんご',
       enemy: {
         lv: 50,
-        hp: 1500,
-        attack: 500,
+        hp: 1000,
+        attack: 300,
         defense: 500,
         avoidance: 500,
         speed: 50,
       },
       myUser: {},
       message: '',
-      messageView: '',
+      battleEnd: false,
       escapebtn: true,
+      myUserEnd: false,
+      enemyEnd: false,
+      clickBattleBtn: false,
     }
   },
   created(){
@@ -94,45 +99,124 @@ export default {
     }
   },
   methods: {
-    battle(){
-      this.getUser()
+    async battle(){
+      await this.getUser()
       this.battleFlag = true
       this.message = `${this.enemyName}\nが現れました。\n戦闘を開始しますか？`
       //最大hpの追加
       this.$set(this.enemy,'maxhp', this.enemy.hp)
-      //this.$set(this.enemy,'maxhp', this.enemy.hp)
+      this.$set(this.myUser,'maxhp', this.myUser.hp)
     },
+
     //戦う
     battleStart(){
-      //逃げるボタン非表示
-      this.escapebtn = false
-      //hpゲージ
-      const M = this.$refs.max
-      //ダメージ
-      const myAttack = this.myUser.attack
-      //const enemyAttack = this.enemy.attack
+      this.escapebtn = false//逃げるボタン非表示
+      this.clickBattleBtn = true
+      this.myUser.speed > this.enemy.speed ? this.myTurn() : this.enemyTurn()
+    },
 
-      //speed高い方から攻撃
-      if(this.myUser.speed > this.enemy.speed){
-        this.enemy.hp -= myAttack
-        if(this.enemy.hp > 0){
-          if(this.myUser.attack == 0){
-            this.message = `${this.enemyName}に攻撃をかわされた！`
-          }
-          else{
-            this.message = `${this.$user().displayName}の攻撃\n${this.enemyName}に\n` + this.myUser.attack + "のダメージを与えた"
-          }
-        }
-        else{
-          this.enemy.hp = 0
-          this.message = `${this.enemyName}を倒した！`
-        }
-        M.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"
-      }
+    //再読み込み
+    reset(){
+      this.$router.go({path: this.$router.currentRoute.path})
     },
     //逃げる
     escape(){
       this.battleFlag = false
+    },
+
+    // 自分のターンの処理
+    myTurn(){
+      const E = this.$refs.enemyMax//hpゲージ
+      const M = this.$refs.myMax//自分のゲージ
+      const myAttack = this.myUser.attack//myダメージ
+      const enemyAttack = this.enemy.attack//enemyダメージ
+      //攻撃開始
+      this.enemy.hp -= myAttack
+      E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//enemyのhpゲージを減らす
+      //敵のhpがまだあれば
+      if(this.enemy.hp > 0){
+        this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた"
+        //2秒後に敵の攻撃
+        setTimeout(() => {
+          this.myUser.hp -= enemyAttack
+          M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//myuserのhpゲージを減らす
+          //自分のhpがまだあればダメージ表示
+          //自分のhpが０だったら戦闘終了
+          if(this.myUser.hp > 0){
+            this.message = `${this.enemyName}の攻撃\n` + enemyAttack + "のダメージを受けた"
+          }else{
+            this.myUser.hp = 0
+            this.myUserEnd = true
+            this.message = `${this.enemyName}の攻撃\n` + enemyAttack + "のダメージを受けた\n" + `${this.$user().displayName}は` + "やられてしまった...！"
+            this.battleEnd = true
+          }
+          this.clickBattleBtn = false
+        }, 2000)
+      }
+      //敵のhpが０だったら戦闘終了
+      else{
+        this.enemy.hp = 0
+        E.style.width = 0//enemyのhpゲージを減らす
+        this.enemyEnd = true
+        this.battleEnd = true
+        this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた\n" + `${this.enemyName}を` + "倒した！"
+      }
+    },
+
+    // 敵のターンの処理
+    enemyTurn(){
+      const E = this.$refs.enemyMax//hpゲージ
+      const M = this.$refs.myMax//自分のゲージ
+      const myAttack = this.myUser.attack//myダメージ
+      const enemyAttack = this.enemy.attack//enemyダメージ
+
+      //攻撃開始
+      this.myUser.hp -= enemyAttack
+      M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
+      //自分のhpがまだあれば
+      if(this.myUser.hp > 0){
+        this.message = `${this.enemyName}の攻撃\n` + enemyAttack + "のダメージを受けた"
+        //2秒後に自分の攻撃
+        setTimeout(() => {
+          this.enemy.hp -= myAttack
+          E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//hpゲージを減らす
+          //敵のhpがまだあればダメージ表示
+          //敵のhpが０だったら戦闘終了
+          if(this.enemy.hp > 0){
+            this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた"
+          }else{
+            this.enemy.hp = 0
+            this.enemyEnd = true
+            this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた\n" + `${this.enemyName}を` + "倒した！"
+            this.battleEnd = true
+          }
+          this.clickBattleBtn = false
+        }, 2000)
+      }
+      //敵のhpが０だったら戦闘終了
+      else{
+        this.myUser.hp = 0
+        E.style.width = 0//enemyのhpゲージを減らす
+        this.myUserEnd = true
+        this.battleEnd = true
+        this.message = `${this.enemyName}の攻撃\n` + myAttack + "のダメージを受けた\n" + `${this.$user().displayName}に\n` + "やられてしまった...！"
+      }
+    },
+    //経験値get
+    experiencePoint(){
+      this.message = '100経験値をゲットした'
+      setTimeout(() => {
+        this.getCoin()
+      }, 1000)
+    },
+    //コインゲット
+    getCoin(){
+      let docID = String(this.$user().providerData[0].uid)
+      let docRef = this.db.collection("sutefuri").doc(docID)
+      docRef.update({
+        coin: firebase.firestore.FieldValue.increment(100)
+      })
+      this.message = '100コインをGETした！'
     },
     //ユーザー情報取得
     async getUser(){
@@ -205,11 +289,10 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   &__hp
     width: 200px
     margin: auto
-    #max
+    #enemyMaxGauge
       width: 200px
       height: 20px
       background-color: #14FF00
-
 img
     width: 140px
     height: auto
@@ -224,13 +307,13 @@ img
     padding: 3px
     border: 3px solid #FFF
     border-radius: 5px
-.character__hp
-  width: 120px
-  height: 54px
-  background: #000
-  border: 3px solid #FFF
-  border-radius: 5px
-  margin: auto
+  &__hp
+    width: 200px
+    margin: auto
+    #myMaxGauge
+      width: 200px
+      height: 20px
+      background-color: #14FF00
   span
     display: block
     &:nth-child(1)
@@ -259,7 +342,7 @@ img
     line-height: 2
 .btn__container
   position: relative
-  span
+  button
     padding: 5px
     border: 1px solid #FFF
     &:nth-of-type(1)
@@ -292,4 +375,10 @@ img
 .vue-typer /deep/
   .custom.char.typed
     color: #FFF
+
+.opacity
+  opacity: .2
+
+.noClick
+  opacity: 0
 </style>
