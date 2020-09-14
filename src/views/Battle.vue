@@ -14,11 +14,11 @@
         <!-- 敵 -->
         <div class="enemyCharacter" key="ememy">
           <span>レベル: 50</span>
-          <span class="enemyCharacter__name">{{enemyName}}</span>
-          <TwitterImg v-if="user.photoURL" :loginUser="user" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
+          <span class="enemyCharacter__name">{{enemy2Name.displayName}}</span>
+          <TwitterImg v-if="enemy2Name.photoURL" :loginUser="enemy2Name" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
           <div class="enemyCharacter__hp">
             <div id="enemyMaxGauge" ref="enemyMax"></div>
-            <span>{{this.enemy.hp}}</span>
+            <span>{{this.enemy2.hp}}</span>
           </div>
         </div>
         <!-- メッセージ -->
@@ -32,8 +32,9 @@
         <!-- 戦闘ボタン -->
         <div class="btn__container" key="btn__container">
           <button v-if="!battleEnd" v-bind:disabled="clickBattleBtn" @click="battleStart">戦う</button>
-          <button v-if="battleEnd" @click="experiencePoint">次へ</button>
-          <button v-if="escapebtn" @click="escape">逃げる</button>
+          <button v-if="battleEnd" @click="experiencePoint" v-bind:disabled="clickBattleBtn">次へ</button>
+          <button v-if="escapebtn" @click="reset">逃げる</button>
+          <button v-if="!escapebtn" @click="reset" v-bind:disabled="!clickBattleBtn">次の敵を探す</button>
         </div>
         <!-- 自分 -->
         <div class="myCharacter" key="myCharacter">
@@ -76,12 +77,14 @@ export default {
       enemy: {
         lv: 50,
         hp: 1000,
-        attack: 300,
-        defense: 500,
-        avoidance: 500,
-        speed: 50,
+        attack: 200,
+        defense: 300,
+        avoidance: 50,
+        speed: 500,
       },
       myUser: {},
+      enemy2: {},
+      enemy2Name: {},
       message: '',
       battleEnd: false,
       escapebtn: true,
@@ -99,29 +102,39 @@ export default {
     }
   },
   methods: {
+    //戦闘を開始するかしないか
     async battle(){
       await this.getUser()
+      await this.getEnemy()
       this.battleFlag = true
       this.message = `${this.enemyName}\nが現れました。\n戦闘を開始しますか？`
       //最大hpの追加
       this.$set(this.enemy,'maxhp', this.enemy.hp)
       this.$set(this.myUser,'maxhp', this.myUser.hp)
     },
-
     //戦う
     battleStart(){
-      this.escapebtn = false//逃げるボタン非表示
       this.clickBattleBtn = true
       this.myUser.speed > this.enemy.speed ? this.myTurn() : this.enemyTurn()
     },
-
     //再読み込み
     reset(){
       this.$router.go({path: this.$router.currentRoute.path})
     },
-    //逃げる
-    escape(){
-      this.battleFlag = false
+
+    //ダメージ計算関数
+    damage(a,d,k){
+      const attack = a
+      const defence = d
+      let dame = 0
+      const avoidance = 100 - k
+      const random = Math.floor( Math.random() * ( 100 )) + 1
+      if(random <= avoidance){
+        dame
+      }else{
+        dame = attack * attack / defence
+      }
+      return Math.ceil(dame)
     },
 
     // 自分のターンの処理
@@ -129,28 +142,34 @@ export default {
       const E = this.$refs.enemyMax//hpゲージ
       const M = this.$refs.myMax//自分のゲージ
       const myAttack = this.myUser.attack//myダメージ
+      const myDefense = this.myUser.defense//my防御
       const enemyAttack = this.enemy.attack//enemyダメージ
+      const enemyDefense = this.enemy.defense//enemy防御
+      const myDamage = this.damage(myAttack,enemyDefense,this.enemy.avoidance)
+      const enemyDamage = this.damage(enemyAttack,myDefense,this.myUser.avoidance)
       //攻撃開始
-      this.enemy.hp -= myAttack
+      this.enemy.hp -= myDamage
       E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//enemyのhpゲージを減らす
       //敵のhpがまだあれば
       if(this.enemy.hp > 0){
-        this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた"
+        myDamage > 0 ? this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた" : this.message = `${this.$user().displayName}の攻撃\n` + "避けられた！！"
         //2秒後に敵の攻撃
         setTimeout(() => {
-          this.myUser.hp -= enemyAttack
+          this.myUser.hp -= enemyDamage
           M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//myuserのhpゲージを減らす
           //自分のhpがまだあればダメージ表示
           //自分のhpが０だったら戦闘終了
           if(this.myUser.hp > 0){
-            this.message = `${this.enemyName}の攻撃\n` + enemyAttack + "のダメージを受けた"
+            enemyDamage > 0 ? this.message = `${this.enemyName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName}の攻撃\n` + "紙一重で避けた！！"
+            this.clickBattleBtn =false
           }else{
             this.myUser.hp = 0
             this.myUserEnd = true
-            this.message = `${this.enemyName}の攻撃\n` + enemyAttack + "のダメージを受けた\n" + `${this.$user().displayName}は` + "やられてしまった...！"
-            this.battleEnd = true
+            M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
+            this.message = `${this.enemyName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は` + "やられてしまった...！"
+            this.escapebtn = false//逃げるボタン非表示
+            this.clickBattleBtn = true
           }
-          this.clickBattleBtn = false
         }, 2000)
       }
       //敵のhpが０だったら戦闘終了
@@ -159,7 +178,9 @@ export default {
         E.style.width = 0//enemyのhpゲージを減らす
         this.enemyEnd = true
         this.battleEnd = true
+        this.escapebtn = false//逃げるボタン非表示
         this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた\n" + `${this.enemyName}を` + "倒した！"
+        this.clickBattleBtn = false
       }
     },
 
@@ -168,38 +189,44 @@ export default {
       const E = this.$refs.enemyMax//hpゲージ
       const M = this.$refs.myMax//自分のゲージ
       const myAttack = this.myUser.attack//myダメージ
+      const myDefense = this.myUser.defense//my防御
       const enemyAttack = this.enemy.attack//enemyダメージ
+      const enemyDefense = this.enemy.defense//enemy防御
+      const myDamage = this.damage(myAttack,enemyDefense,this.enemy.avoidance)
+      const enemyDamage = this.damage(enemyAttack,myDefense,this.myUser.avoidance)
 
       //攻撃開始
-      this.myUser.hp -= enemyAttack
+      this.myUser.hp -= enemyDamage
       M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
       //自分のhpがまだあれば
       if(this.myUser.hp > 0){
-        this.message = `${this.enemyName}の攻撃\n` + enemyAttack + "のダメージを受けた"
+        enemyDamage > 0 ? this.message = `${this.enemyName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName}の攻撃\n` + "紙一重で避けた！！"
         //2秒後に自分の攻撃
         setTimeout(() => {
-          this.enemy.hp -= myAttack
+          this.enemy.hp -= myDamage
           E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//hpゲージを減らす
           //敵のhpがまだあればダメージ表示
           //敵のhpが０だったら戦闘終了
           if(this.enemy.hp > 0){
-            this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた"
+            myDamage > 0 ? this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた" : this.message = `${this.$user().displayName}の攻撃\n` + "避けられた！！"
           }else{
             this.enemy.hp = 0
             this.enemyEnd = true
-            this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた\n" + `${this.enemyName}を` + "倒した！"
+            this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた\n" + `${this.enemyName}を` + "倒した！"
             this.battleEnd = true
+            this.escapebtn = false//逃げるボタン非表示
           }
           this.clickBattleBtn = false
         }, 2000)
       }
-      //敵のhpが０だったら戦闘終了
+      //自分のhpが０だったら戦闘終了
       else{
         this.myUser.hp = 0
-        E.style.width = 0//enemyのhpゲージを減らす
         this.myUserEnd = true
-        this.battleEnd = true
-        this.message = `${this.enemyName}の攻撃\n` + myAttack + "のダメージを受けた\n" + `${this.$user().displayName}に\n` + "やられてしまった...！"
+        this.escapebtn = false//逃げるボタン非表示
+        M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
+        this.message = `${this.enemyName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は\n` + "やられてしまった...！"
+        this.clickBattleBtn = true
       }
     },
     //経験値get
@@ -208,6 +235,7 @@ export default {
       setTimeout(() => {
         this.getCoin()
       }, 1000)
+      this.clickBattleBtn = true
     },
     //コインゲット
     getCoin(){
@@ -236,6 +264,26 @@ export default {
         console.log("Error getting document:", error);
       })
     },
+    //敵情報取得
+    async getEnemy(){
+      let self = this
+      const db = firebase.firestore()
+      let docRef = this.db.collection("sutefuri")
+      await docRef.get()
+      .then(function(querySnapshot){
+        querySnapshot.forEach(function(doc) {
+          self.enemy2 = doc.data()
+          db.collection("users").doc(doc.id).get()
+          .then((doc) => {
+            if (doc.exists) {
+              self.enemy2Name = doc.data()
+            } else {
+              console.log("No such document!")
+            }
+          })
+        })
+      })
+    }
   }
 }
 </script>
