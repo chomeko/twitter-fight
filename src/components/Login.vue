@@ -13,6 +13,7 @@
 <script>
 import firebase from 'firebase'
 import Button from '../components/Button'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   components: {
@@ -28,10 +29,13 @@ export default {
         if (user) {
           const db = firebase.firestore()
           const docID = String(user.providerData[0].uid)
+          const randomKey = uuidv4()
+
           db.collection('users').doc(docID)
           .set({
             displayName: user.displayName,
-            photoURL: user.photoURL
+            photoURL: user.photoURL,
+            random: randomKey
           })
           .then(
             console.log('ユーザー作成完了しました')

@@ -7,7 +7,7 @@
       <h2 class="neon">称号<span>ガチャ</span></h2>
       <div class="containerMenu">
         <p class="message">{{message}}</p>
-        <Button type="menu" @myclick="Strat">１回100コイン</Button>
+        <Button type="menu" @myclick.once="Strat">１回100コイン</Button>
       </div>
       <router-link
         class="back"
@@ -124,16 +124,12 @@ export default {
             self.gachaGet = await querySnapshot2.docs[0].data()
             self.gachaStart = true
             this.addEquipmentList(this.gachaGet)
-            //console.log(self.gachaGet)
-            //console.log('>')
           })
         //最初の条件で取得できたら
         }else{
           self.gachaGet = await querySnapshot.docs[0].data()
           self.gachaStart = true
           this.addEquipmentList(this.gachaGet)
-          //console.log(self.gachaGet)
-          //console.log('<=')
         }
       })
     },

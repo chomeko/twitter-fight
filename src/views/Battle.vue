@@ -7,7 +7,7 @@
       >
         <h2>ついふぁい<span>ユーザー</span>を<br><span>倒し</span>に行く</h2>
       </transition>
-      <Button type="battle" @myclick="battle">バトル開始</Button>
+      <Button type="battle" @myclick.once="battle">バトル開始</Button>
     </template>
     <template v-if="battleFlag">
       <transition-group name="fade">
@@ -61,6 +61,7 @@ import Button from '../components/Button'
 import TwitterImg from '../components/TwitterImg'
 // import Nl2br from 'vue-nl2br'
 import { VueTyper } from 'vue-typer'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   inject: ["$user"],
@@ -79,8 +80,8 @@ export default {
         hp: 1000,
         attack: 200,
         defense: 300,
-        avoidance: 50,
-        speed: 500,
+        avoidance: 5,
+        speed: 300,
       },
       myUser: {},
       enemy2: {},
@@ -127,7 +128,7 @@ export default {
       const attack = a
       const defence = d
       let dame = 0
-      const avoidance = 100 - k
+      const avoidance = 100 - k//回避は装備込みMax６０までとする
       const random = Math.floor( Math.random() * ( 100 )) + 1
       if(random <= avoidance){
         dame
@@ -264,24 +265,63 @@ export default {
         console.log("Error getting document:", error);
       })
     },
+    // randomkey(){
+    //   const randomKey = uuidv4()
+    // },
+    // testUser(){
+    //   let docID = "yN1KD7IDfq9lF7rAJKow"
+    //   let docRef = this.db.collection("sutefuri").doc(String(docID))
+    //   docRef.set({
+    //     lv: 50,
+    //     hp: 1000,
+    //     attack: 200,
+    //     defense: 300,
+    //     avoidance: 50,
+    //     speed: 50,
+    //   })
+    // },
     //敵情報取得
     async getEnemy(){
       let self = this
       const db = firebase.firestore()
-      let docRef = this.db.collection("sutefuri")
+      const randomKey = uuidv4()
+      let docRef = db.collection("users").where('random', '>', randomKey).limit(1)
+      let ifDocRef = db.collection("users").where('random', '<=', randomKey).limit(1)
       await docRef.get()
-      .then(function(querySnapshot){
-        querySnapshot.forEach(function(doc) {
-          self.enemy2 = doc.data()
-          db.collection("users").doc(doc.id).get()
+      .then(async (querySnapshot) => {
+        //取得できなかったら違う条件で引く
+        if(querySnapshot.empty){
+          await ifDocRef.get()
+          //違う条件で取得できたらの処理
+          .then(async (querySnapshot2) => {
+            //名前と画像取得
+            self.enemy2Name = await querySnapshot2.docs[0].data()
+            const docId = await querySnapshot2.docs[0].id
+            //ステータス取得
+            db.collection("sutefuri").doc(String(docId)).get()
+            .then((doc) => {
+              if (doc.exists) {
+                self.enemy2 = doc.data()
+              } else {
+                console.log("違う条件No such document!")
+              }
+            })
+          })
+        //最初の条件で取得できたら
+        }else{
+          //名前と画像取得
+          self.enemy2Name = await querySnapshot.docs[0].data()
+          const docId = await querySnapshot.docs[0].id
+          //ステータス取得
+          db.collection("sutefuri").doc(String(docId)).get()
           .then((doc) => {
             if (doc.exists) {
-              self.enemy2Name = doc.data()
+              self.enemy2 = doc.data()
             } else {
               console.log("No such document!")
             }
           })
-        })
+        }
       })
     }
   }
