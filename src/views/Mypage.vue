@@ -127,7 +127,9 @@ export default {
         avoidance: 0,
         speed: 0,
         coin: 100,
-        exp: 0
+        exp: 0,
+        winner: 0,
+        lose: 0
       },
       //db関連
       output: '', // 保存したデータをgetで取得したもの
@@ -239,11 +241,11 @@ export default {
     },
     //基礎キャラクターステータス作成時
     createCharacter() {
-      this.character.hp = _.random(500)
+      this.character.hp = _.random(1000)
       this.character.attack = _.random(100)
       this.character.defense = _.random(100)
-      this.character.avoidance = _.random(100)
-      this.character.speed = _.random(100)
+      this.character.avoidance = 5
+      this.character.speed = _.random(10)
       this.welcomHome = false
       this.beforeSutefuri = true
     },
@@ -259,7 +261,9 @@ export default {
         avoidance: this.character.avoidance,
         speed: this.character.speed,
         exp: this.character.exp,
-        coin: this.character.coin
+        coin: this.character.coin,
+        winner: this.character.winner,
+        lose: this.character.lose,
       })
       .then(
         console.log('キャラクター作成完了しました')

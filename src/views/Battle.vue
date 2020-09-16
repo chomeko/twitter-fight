@@ -14,11 +14,11 @@
         <!-- 敵 -->
         <div class="enemyCharacter" key="ememy">
           <span>レベル: 50</span>
-          <span class="enemyCharacter__name">{{enemy2Name.displayName}}</span>
-          <TwitterImg v-if="enemy2Name.photoURL" :loginUser="enemy2Name" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
+          <span class="enemyCharacter__name">{{enemyName.displayName}}</span>
+          <TwitterImg v-if="enemyName.photoURL" :loginUser="enemyName" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
           <div class="enemyCharacter__hp">
             <div id="enemyMaxGauge" ref="enemyMax"></div>
-            <span>{{this.enemy2.hp}}</span>
+            <span>{{this.enemy.hp}}</span>
           </div>
         </div>
         <!-- メッセージ -->
@@ -74,18 +74,9 @@ export default {
   data(){
     return {
       battleFlag: false,
-      enemyName: 'りんご@エンジニア光る星／個人開発がんばりんご',
-      enemy: {
-        lv: 50,
-        hp: 1000,
-        attack: 200,
-        defense: 300,
-        avoidance: 5,
-        speed: 300,
-      },
       myUser: {},
-      enemy2: {},
-      enemy2Name: {},
+      enemy: {},
+      enemyName: {},
       message: '',
       battleEnd: false,
       escapebtn: true,
@@ -108,9 +99,9 @@ export default {
       await this.getUser()
       await this.getEnemy()
       this.battleFlag = true
-      this.message = `${this.enemyName}\nが現れました。\n戦闘を開始しますか？`
+      this.message = `${this.enemyName.displayName}\nが現れました。\n戦闘を開始しますか？`
       //最大hpの追加
-      this.$set(this.enemy,'maxhp', this.enemy.hp)
+      //this.$set(this.enemy,'maxhp', this.enemy.hp)
       this.$set(this.myUser,'maxhp', this.myUser.hp)
     },
     //戦う
@@ -128,7 +119,7 @@ export default {
       const attack = a
       const defence = d
       let dame = 0
-      const avoidance = 100 - k//回避は装備込みMax６０までとする
+      const avoidance = k//回避は装備込みMax６０までとする
       const random = Math.floor( Math.random() * ( 100 )) + 1
       if(random <= avoidance){
         dame
@@ -136,6 +127,21 @@ export default {
         dame = attack * attack / defence
       }
       return Math.ceil(dame)
+    },
+
+    //１だと勝ち ０だと負け
+    record(vs){
+      let docID = String(this.$user().providerData[0].uid)
+      let docRef = this.db.collection("sutefuri").doc(docID)
+      if(vs > 0){
+        docRef.update({
+          winner: firebase.firestore.FieldValue.increment(1)
+        })
+      }else{
+        docRef.update({
+          lose: firebase.firestore.FieldValue.increment(1)
+        })
+      }
     },
 
     // 自分のターンの処理
@@ -161,13 +167,14 @@ export default {
           //自分のhpがまだあればダメージ表示
           //自分のhpが０だったら戦闘終了
           if(this.myUser.hp > 0){
-            enemyDamage > 0 ? this.message = `${this.enemyName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName}の攻撃\n` + "紙一重で避けた！！"
+            enemyDamage > 0 ? this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName.displayName}の攻撃\n` + "紙一重で避けた！！"
             this.clickBattleBtn =false
           }else{
             this.myUser.hp = 0
             this.myUserEnd = true
             M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
-            this.message = `${this.enemyName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は` + "やられてしまった...！"
+            this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は` + "やられてしまった...！"
+            this.record(0)
             this.escapebtn = false//逃げるボタン非表示
             this.clickBattleBtn = true
           }
@@ -180,7 +187,8 @@ export default {
         this.enemyEnd = true
         this.battleEnd = true
         this.escapebtn = false//逃げるボタン非表示
-        this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた\n" + `${this.enemyName}を` + "倒した！"
+        this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた\n" + `${this.enemyName.displayName}を` + "倒した！"
+        this.record(1)
         this.clickBattleBtn = false
       }
     },
@@ -201,7 +209,7 @@ export default {
       M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
       //自分のhpがまだあれば
       if(this.myUser.hp > 0){
-        enemyDamage > 0 ? this.message = `${this.enemyName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName}の攻撃\n` + "紙一重で避けた！！"
+        enemyDamage > 0 ? this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName.displayName}の攻撃\n` + "紙一重で避けた！！"
         //2秒後に自分の攻撃
         setTimeout(() => {
           this.enemy.hp -= myDamage
@@ -213,7 +221,8 @@ export default {
           }else{
             this.enemy.hp = 0
             this.enemyEnd = true
-            this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた\n" + `${this.enemyName}を` + "倒した！"
+            this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた\n" + `${this.enemyName.displayName}を` + "倒した！"
+            this.record(1)
             this.battleEnd = true
             this.escapebtn = false//逃げるボタン非表示
           }
@@ -226,26 +235,38 @@ export default {
         this.myUserEnd = true
         this.escapebtn = false//逃げるボタン非表示
         M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
-        this.message = `${this.enemyName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は\n` + "やられてしまった...！"
+        this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は\n` + "やられてしまった...！"
+        this.record(0)
         this.clickBattleBtn = true
       }
     },
     //経験値get
-    experiencePoint(){
-      this.message = '100経験値をゲットした'
-      setTimeout(() => {
-        this.getCoin()
-      }, 1000)
-      this.clickBattleBtn = true
-    },
-    //コインゲット
-    getCoin(){
+    async experiencePoint(){
       let docID = String(this.$user().providerData[0].uid)
       let docRef = this.db.collection("sutefuri").doc(docID)
-      docRef.update({
+      await docRef.update({
+        exp: firebase.firestore.FieldValue.increment(10),
         coin: firebase.firestore.FieldValue.increment(100)
       })
-      this.message = '100コインをGETした！'
+      this.message = '100経験値をゲットした'
+      await docRef.get()
+      .then(async (doc) => {
+        //console.log(doc.data().exp)
+        if(doc.data().exp % 50 === 0){
+          await docRef.update({
+            lv: firebase.firestore.FieldValue.increment(1),
+            hp: firebase.firestore.FieldValue.increment(200),
+            attack: firebase.firestore.FieldValue.increment(10),
+            defense: firebase.firestore.FieldValue.increment(10),
+            speed: firebase.firestore.FieldValue.increment(10),
+          })
+          this.message = 'レベルが上がった\n' + 'ステータスが強化された'
+        }
+      })
+      setTimeout(() => {
+        this.message = '100コインをGETした！'
+      }, 1000)
+      this.clickBattleBtn = true
     },
     //ユーザー情報取得
     async getUser(){
@@ -255,7 +276,6 @@ export default {
       await docRef.get()
       .then((doc) => {
         if (doc.exists) {
-          //console.log('doc.data()')
           self.myUser = doc.data()
         } else {
           console.log("No such document!")
@@ -265,21 +285,6 @@ export default {
         console.log("Error getting document:", error);
       })
     },
-    // randomkey(){
-    //   const randomKey = uuidv4()
-    // },
-    // testUser(){
-    //   let docID = "yN1KD7IDfq9lF7rAJKow"
-    //   let docRef = this.db.collection("sutefuri").doc(String(docID))
-    //   docRef.set({
-    //     lv: 50,
-    //     hp: 1000,
-    //     attack: 200,
-    //     defense: 300,
-    //     avoidance: 50,
-    //     speed: 50,
-    //   })
-    // },
     //敵情報取得
     async getEnemy(){
       let self = this
@@ -295,13 +300,14 @@ export default {
           //違う条件で取得できたらの処理
           .then(async (querySnapshot2) => {
             //名前と画像取得
-            self.enemy2Name = await querySnapshot2.docs[0].data()
+            self.enemyName = await querySnapshot2.docs[0].data()
             const docId = await querySnapshot2.docs[0].id
             //ステータス取得
             db.collection("sutefuri").doc(String(docId)).get()
             .then((doc) => {
               if (doc.exists) {
-                self.enemy2 = doc.data()
+                self.enemy = doc.data()
+                self.$set(self.enemy,'maxhp', self.enemy.hp)
               } else {
                 console.log("違う条件No such document!")
               }
@@ -310,13 +316,14 @@ export default {
         //最初の条件で取得できたら
         }else{
           //名前と画像取得
-          self.enemy2Name = await querySnapshot.docs[0].data()
+          self.enemyName = await querySnapshot.docs[0].data()
           const docId = await querySnapshot.docs[0].id
           //ステータス取得
           db.collection("sutefuri").doc(String(docId)).get()
           .then((doc) => {
             if (doc.exists) {
-              self.enemy2 = doc.data()
+              self.enemy = doc.data()
+              self.$set(self.enemy,'maxhp', self.enemy.hp)
             } else {
               console.log("No such document!")
             }

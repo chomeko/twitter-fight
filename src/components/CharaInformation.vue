@@ -4,7 +4,7 @@
     <Coin :output="output.coin"></Coin>
     <p>Lv： {{output.lv}}</p>
     <p>EXP : {{output.exp}}</p>
-    <p>次のレベルまであと{{output.exp}}exp</p>
+    <p>勝率 : {{output.winner}}勝{{output.lose}}敗</p>
   </div>
 </template>
 
