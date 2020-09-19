@@ -15,7 +15,13 @@
         <div class="enemyCharacter" key="ememy">
           <span>レベル: 50</span>
           <span class="enemyCharacter__name">{{enemyName.displayName}}</span>
-          <TwitterImg v-if="enemyName.photoURL" :loginUser="enemyName" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
+          <div class="animeImg">
+            <TwitterImg v-if="enemyName.photoURL" :loginUser="enemyName" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
+          </div>
+          <!-- 攻撃エフェクト -->
+          <div class="lottie" key="anime">
+            <lottie v-if="anime" :options="welcomeLottie" :height="150" :width="150" :animCreated="handleAnimation"/>
+          </div>
           <div class="enemyCharacter__hp">
             <div id="enemyMaxGauge" ref="enemyMax"></div>
             <span>{{this.enemy.hp}}</span>
@@ -63,13 +69,18 @@ import TwitterImg from '../components/TwitterImg'
 import { VueTyper } from 'vue-typer'
 import { v4 as uuidv4 } from 'uuid'
 
+import Lottie from "@/components/Lottie.vue"
+// 斬撃アニメーション
+import * as data from "@/assets/斬撃.json"
+
 export default {
   inject: ["$user"],
   components: {
     Button,
     TwitterImg,
     // Nl2br,
-    VueTyper
+    VueTyper,
+    Lottie
   },
   data(){
     return {
@@ -83,6 +94,7 @@ export default {
       myUserEnd: false,
       enemyEnd: false,
       clickBattleBtn: false,
+      anime: false
     }
   },
   created(){
@@ -91,9 +103,16 @@ export default {
   computed: {
     user(){
       return this.$user()
+    },
+    welcomeLottie () {
+      return { animationData: data }
     }
   },
   methods: {
+    //斬撃アニメーション
+    handleAnimation (anim) {
+      this.anim = anim
+    },
     //戦闘を開始するかしないか
     async battle(){
       await this.getUser()
@@ -155,6 +174,7 @@ export default {
       const myDamage = this.damage(myAttack,enemyDefense,this.enemy.avoidance)
       const enemyDamage = this.damage(enemyAttack,myDefense,this.myUser.avoidance)
       //攻撃開始
+      this.anime = true
       this.enemy.hp -= myDamage
       E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//enemyのhpゲージを減らす
       //敵のhpがまだあれば
@@ -206,6 +226,7 @@ export default {
 
       //攻撃開始
       this.myUser.hp -= enemyDamage
+      this.anime = false
       M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
       //自分のhpがまだあれば
       if(this.myUser.hp > 0){
@@ -217,8 +238,10 @@ export default {
           //敵のhpがまだあればダメージ表示
           //敵のhpが０だったら戦闘終了
           if(this.enemy.hp > 0){
+            myDamage > 0 ? this.anime = true : this.anime = false
             myDamage > 0 ? this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた" : this.message = `${this.$user().displayName}の攻撃\n` + "避けられた！！"
           }else{
+            this.anime = true
             this.enemy.hp = 0
             this.enemyEnd = true
             this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた\n" + `${this.enemyName.displayName}を` + "倒した！"
@@ -347,7 +370,6 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   margin: auto
   height: 90vh
   overflow: hidden
-  position: relative
   h2
     margin-top: 160px
     text-align: center
@@ -370,6 +392,7 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   margin-top: 8px
   font-size: 14px
   text-align: center
+  position: relative
   +mq(sp)
     margin-top: 40px
   +mq(pc)
@@ -388,6 +411,12 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
       width: 200px
       height: 20px
       background-color: #14FF00
+//攻撃エフェクト
+::v-deep .lottie
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
 img
     width: 140px
     height: auto
@@ -422,6 +451,7 @@ img
     &:nth-child(2)
       font-size: 14px
       text-align: center
+
 .message__container
   font-size: 14px
   width: 100%

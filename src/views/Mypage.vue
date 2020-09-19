@@ -57,6 +57,16 @@
       appear
     >
       <div class="user__image" v-if="!equipment">
+        <!-- <lottie-animation
+          path="https://assets8.lottiefiles.com/packages/lf20_1gQ5ih.json"
+          :loop="false"
+          :autoPlay="true"
+          :loopDelayMin="2.5"
+          :loopDelayMax="5"
+          :speed="1"
+          :width="256"
+          :height="256"
+        /> -->
         <TwitterImg v-if="loginUser.photoURL" :loginUser="loginUser"></TwitterImg>
       </div>
     </transition>
@@ -77,6 +87,8 @@ import Equipment from '../components/Equipment'
 import TwitterImg from '../components/TwitterImg'
 import Footer from '../components/Footer'
 
+// import LottieAnimation from 'lottie-vuejs'
+
 
 
 
@@ -89,7 +101,8 @@ export default {
     EquipmentList,
     Equipment,
     TwitterImg,
-    Footer
+    Footer,
+    // LottieAnimation
   },
   localStorage: {
     welcomHome: {
