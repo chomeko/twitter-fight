@@ -11,9 +11,6 @@
     <Login></Login>
     <Explain></Explain>
     <ExplainBattle></ExplainBattle>
-
-    <lottie v-if="anime" class="login-lottie" :options="welcomeLottie" :height="300" :width="300" :animCreated="handleAnimation"/>
-    <button @click="animePlay">アニメ</button>
   </div>
 </template>
 
@@ -23,9 +20,7 @@ import Eyeball from '../components/Eyeball'
 import Explain from '../components/Explain'
 import ExplainBattle from '../components/ExplainBattle'
 
-import Lottie from "@/components/Lottie.vue"
-// 動く顔のアニメーション
-import * as data from "@/assets/斬撃.json"
+
 
 export default {
   components: {
@@ -33,35 +28,16 @@ export default {
     Explain,
     ExplainBattle,
     Login,
-    Lottie
-
-  },
-  data(){
-    return {
-      anime: false
-    }
-  },
-  computed: {
-    welcomeLottie () {
-      return { animationData: data }
-    }
-  },
-  methods: {
-    handleAnimation (anim) {
-      this.anim = anim
-    },
-    animePlay(){
-      this.anime = !this.anime
-    }
   }
 }
 </script>
 
 <style lang="sass" scoped>
   #home
-    width: 100%
-    height: auto
-    padding: 0 24px 10px
+    max-width: 400px
+    height: 100%
+    padding: 10px
+    margin: auto
   .mvlogo__p
     color: #9A9A9A
     font-size: 18px
@@ -71,12 +47,4 @@ export default {
     margin-bottom: 64px
     font-size: 48px
     text-align: center
-
-  // .login-lottie
-  //   position: absolute
-  //   top: 1000px
-  //   right: 0
-  //   bottom: 0
-  //   left: 0
-  //   margin: 0 auto
 </style>

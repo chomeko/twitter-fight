@@ -258,7 +258,7 @@ export default {
       this.character.attack = _.random(100)
       this.character.defense = _.random(100)
       this.character.avoidance = 5
-      this.character.speed = _.random(10)
+      this.character.speed = _.random(100)
       this.welcomHome = false
       this.beforeSutefuri = true
     },

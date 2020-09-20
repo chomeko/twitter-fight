@@ -62,7 +62,6 @@ header
 footer
   text-align: center
   width: 100%
-  position: absolute
   bottom: 0
 
 *

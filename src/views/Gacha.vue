@@ -186,7 +186,7 @@ export default {
   max-width: 400px
   padding: 10px
   margin: auto
-  height: 90vh
+  height: 85vh
   overflow: hidden
   position: relative
   h2

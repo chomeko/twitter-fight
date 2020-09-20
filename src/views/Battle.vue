@@ -21,11 +21,13 @@
           <!-- 攻撃エフェクト -->
           <div class="enemyLottie" key="enemyAnime">
             <lottie v-if="enemyAnime" :options="zangeki" :height="150" :width="150" :animCreated="handleAnimation"/>
+            <lottie v-if="enemyLose" :options="bakuhatu" :height="150" :width="150" :animCreated="handleAnimation"/>
           </div>
           <div class="enemyCharacter__hp">
-            <div id="enemyMaxGauge" ref="enemyMax"></div>
-            <span>{{this.enemy.hp}}</span>
+            <div id="enemyMaxGauge"></div>
+            <div class="maxHpGauge" ref="enemyMax"></div>
           </div>
+          <span class="maxHpGauge__enemyHp">{{this.enemy.hp}}</span>
         </div>
         <!-- メッセージ -->
         <div class="message__container" key="message">
@@ -48,11 +50,13 @@
           <!-- 攻撃エフェクト -->
           <div class="myUserLottie" key="myUserAnime">
             <lottie v-if="myUserAnime" :options="ookiduti" :height="100" :width="100" :animCreated="handleAnimation"/>
+            <lottie v-if="myUserLose" :options="bakuhatu" :height="150" :width="150" :animCreated="handleAnimation"/>
           </div>
           <div class="myCharacter__hp">
-            <div id="myMaxGauge" ref="myMax"></div>
-            <span>{{this.myUser.hp}}</span>
+            <div id="myMaxGauge"></div>
+            <div class="maxHpGauge" ref="myMax"></div>
           </div>
+          <span class="maxHpGauge__myUserHp">{{this.myUser.hp}}</span>
         </div>
       </transition-group>
     </template>
@@ -77,6 +81,7 @@ import Lottie from "@/components/Lottie.vue"
 // 斬撃アニメーション
 import * as zangeki from "@/assets/斬撃.json"
 import * as ookiduti from "@/assets/大木槌.json"
+import * as bakuhatu from "@/assets/爆発.json"
 
 export default {
   inject: ["$user"],
@@ -100,7 +105,9 @@ export default {
       enemyEnd: false,
       clickBattleBtn: false,
       enemyAnime: false,
-      myUserAnime: false
+      enemyLose: false,
+      myUserAnime: false,
+      myUserLose: false
     }
   },
   created(){
@@ -111,10 +118,13 @@ export default {
       return this.$user()
     },
     zangeki () {
-      return { animationData: zangeki }
+      return { animationData: zangeki, loop: false }
     },
     ookiduti () {
-      return { animationData: ookiduti }
+      return { animationData: ookiduti, loop: false }
+    },
+    bakuhatu(){
+      return { animationData: bakuhatu, loop: false }
     }
   },
   methods: {
@@ -203,7 +213,7 @@ export default {
             this.clickBattleBtn =false
           }else{
             this.myUser.hp = 0
-            this.myUserAnime = true
+            this.myUserLose = true
             this.myUserEnd = true
             M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
             this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は` + "やられてしまった...！"
@@ -216,7 +226,7 @@ export default {
       //敵のhpが０だったら戦闘終了
       else{
         this.enemy.hp = 0
-        this.enemyAnime = true
+        this.enemyLose = true
         E.style.width = 0//enemyのhpゲージを減らす
         this.enemyEnd = true
         this.battleEnd = true
@@ -257,7 +267,7 @@ export default {
             myDamage > 0 ? this.enemyAnime = true : this.enemyAnime = false
             myDamage > 0 ? this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた" : this.message = `${this.$user().displayName}の攻撃\n` + "避けられた！！"
           }else{
-            this.enemyAnime = true
+            this.enemyLose = true
             this.enemy.hp = 0
             this.enemyEnd = true
             E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//hpゲージを減らす
@@ -272,7 +282,7 @@ export default {
       //自分のhpが０だったら戦闘終了
       else{
         this.myUser.hp = 0
-        this.myUserAnime = true
+        this.myUserLose = true
         this.myUserEnd = true
         this.escapebtn = false//逃げるボタン非表示
         M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
@@ -386,7 +396,7 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   max-width: 400px
   padding: 10px
   margin: auto
-  height: 90vh
+  height: 88vh
   overflow: hidden
   h2
     margin-top: 160px
@@ -410,6 +420,8 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   margin-top: 8px
   font-size: 14px
   text-align: center
+  background-image: url(../assets/battlebg.png)
+  background-size: cover
   position: relative
   +mq(sp)
     margin-top: 40px
@@ -418,17 +430,34 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   span
     display: block
   &__name
+    background: #000
     border: 3px solid #FFF
     border-radius: 5px
   &__img
     opacity: 1
   &__hp
     width: 200px
+    height: 20px
     margin: auto
-    #enemyMaxGauge
+    position: relative
+    ::v-deep .maxHpGauge
+      position: absolute
+      top: 1px
+      left: 1px
+      width: 198px
+      height: 18px
+      margin: auto
+      background: #14FF00
+      &__enemyHp
+        display: block
+    ::v-deep #enemyMaxGauge
+      position: absolute
+      top: 0
+      left: 0
       width: 200px
       height: 20px
-      background-color: #14FF00
+      background-color: red
+      border: 1px solid #FFF
 //攻撃エフェクト
 ::v-deep .enemyLottie
   position: absolute
@@ -453,11 +482,27 @@ img
     border-radius: 5px
   &__hp
     width: 200px
+    height: 20px
     margin: auto
-    #myMaxGauge
+    position: relative
+    ::v-deep .maxHpGauge
+      position: absolute
+      top: 1px
+      left: 1px
+      width: 198px
+      height: 18px
+      margin: auto
+      background: #14FF00
+      &__myUserHp
+        display: block
+    ::v-deep #myMaxGauge
+      position: absolute
+      top: 0
+      left: 0
       width: 200px
       height: 20px
-      background-color: #14FF00
+      background-color: red
+      border: 1px solid #FFF
   span
     display: block
     &:nth-child(1)
@@ -474,9 +519,9 @@ img
 //攻撃エフェクト
 ::v-deep .myUserLottie
   position: absolute
-  top: 10%
+  top: 0%
   left: 50%
-  transform: translate(-50%, -10%)
+  transform: translate(-50%, 0%)
 
 .message__container
   font-size: 14px
@@ -509,9 +554,9 @@ img
   color: #FFF
   cursor: pointer
   position: absolute
-  bottom: 5%
+  bottom: 10%
   left: 50%
-  transform: translate(-50%, -5%)
+  transform: translate(-50%, -10%)
 
 .fade-move
   transition: transform 1s
