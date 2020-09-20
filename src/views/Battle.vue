@@ -19,8 +19,8 @@
             <TwitterImg v-if="enemyName.photoURL" :loginUser="enemyName" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
           </div>
           <!-- 攻撃エフェクト -->
-          <div class="lottie" key="anime">
-            <lottie v-if="anime" :options="welcomeLottie" :height="150" :width="150" :animCreated="handleAnimation"/>
+          <div class="enemyLottie" key="enemyAnime">
+            <lottie v-if="enemyAnime" :options="zangeki" :height="150" :width="150" :animCreated="handleAnimation"/>
           </div>
           <div class="enemyCharacter__hp">
             <div id="enemyMaxGauge" ref="enemyMax"></div>
@@ -45,6 +45,10 @@
         <!-- 自分 -->
         <div class="myCharacter" key="myCharacter">
           <TwitterImg v-if="user.photoURL" :loginUser="user" :class="{opacity:myUserEnd}"></TwitterImg>
+          <!-- 攻撃エフェクト -->
+          <div class="myUserLottie" key="myUserAnime">
+            <lottie v-if="myUserAnime" :options="ookiduti" :height="100" :width="100" :animCreated="handleAnimation"/>
+          </div>
           <div class="myCharacter__hp">
             <div id="myMaxGauge" ref="myMax"></div>
             <span>{{this.myUser.hp}}</span>
@@ -71,7 +75,8 @@ import { v4 as uuidv4 } from 'uuid'
 
 import Lottie from "@/components/Lottie.vue"
 // 斬撃アニメーション
-import * as data from "@/assets/斬撃.json"
+import * as zangeki from "@/assets/斬撃.json"
+import * as ookiduti from "@/assets/大木槌.json"
 
 export default {
   inject: ["$user"],
@@ -94,7 +99,8 @@ export default {
       myUserEnd: false,
       enemyEnd: false,
       clickBattleBtn: false,
-      anime: false
+      enemyAnime: false,
+      myUserAnime: false
     }
   },
   created(){
@@ -104,8 +110,11 @@ export default {
     user(){
       return this.$user()
     },
-    welcomeLottie () {
-      return { animationData: data }
+    zangeki () {
+      return { animationData: zangeki }
+    },
+    ookiduti () {
+      return { animationData: ookiduti }
     }
   },
   methods: {
@@ -174,23 +183,27 @@ export default {
       const myDamage = this.damage(myAttack,enemyDefense,this.enemy.avoidance)
       const enemyDamage = this.damage(enemyAttack,myDefense,this.myUser.avoidance)
       //攻撃開始
-      this.anime = true
+      this.myUserAnime = false
       this.enemy.hp -= myDamage
       E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//enemyのhpゲージを減らす
       //敵のhpがまだあれば
       if(this.enemy.hp > 0){
+        myDamage > 0 ? this.enemyAnime = true : this.enemyAnime = false
         myDamage > 0 ? this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた" : this.message = `${this.$user().displayName}の攻撃\n` + "避けられた！！"
         //2秒後に敵の攻撃
         setTimeout(() => {
           this.myUser.hp -= enemyDamage
+          this.enemyAnime = false
           M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//myuserのhpゲージを減らす
           //自分のhpがまだあればダメージ表示
           //自分のhpが０だったら戦闘終了
           if(this.myUser.hp > 0){
+            enemyDamage > 0 ? this.myUserAnime = true : this.myUserAnime = false
             enemyDamage > 0 ? this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName.displayName}の攻撃\n` + "紙一重で避けた！！"
             this.clickBattleBtn =false
           }else{
             this.myUser.hp = 0
+            this.myUserAnime = true
             this.myUserEnd = true
             M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
             this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は` + "やられてしまった...！"
@@ -203,6 +216,7 @@ export default {
       //敵のhpが０だったら戦闘終了
       else{
         this.enemy.hp = 0
+        this.enemyAnime = true
         E.style.width = 0//enemyのhpゲージを減らす
         this.enemyEnd = true
         this.battleEnd = true
@@ -226,24 +240,27 @@ export default {
 
       //攻撃開始
       this.myUser.hp -= enemyDamage
-      this.anime = false
+      this.enemyAnime = false
       M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
       //自分のhpがまだあれば
       if(this.myUser.hp > 0){
+        enemyDamage > 0 ? this.myUserAnime = true : this.myUserAnime = false
         enemyDamage > 0 ? this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName.displayName}の攻撃\n` + "紙一重で避けた！！"
         //2秒後に自分の攻撃
         setTimeout(() => {
           this.enemy.hp -= myDamage
+          this.myUserAnime = false
           E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//hpゲージを減らす
           //敵のhpがまだあればダメージ表示
           //敵のhpが０だったら戦闘終了
           if(this.enemy.hp > 0){
-            myDamage > 0 ? this.anime = true : this.anime = false
+            myDamage > 0 ? this.enemyAnime = true : this.enemyAnime = false
             myDamage > 0 ? this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた" : this.message = `${this.$user().displayName}の攻撃\n` + "避けられた！！"
           }else{
-            this.anime = true
+            this.enemyAnime = true
             this.enemy.hp = 0
             this.enemyEnd = true
+            E.style.width = (this.enemy.hp / this.enemy.maxhp * 100) + "%"//hpゲージを減らす
             this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた\n" + `${this.enemyName.displayName}を` + "倒した！"
             this.record(1)
             this.battleEnd = true
@@ -255,6 +272,7 @@ export default {
       //自分のhpが０だったら戦闘終了
       else{
         this.myUser.hp = 0
+        this.myUserAnime = true
         this.myUserEnd = true
         this.escapebtn = false//逃げるボタン非表示
         M.style.width = (this.myUser.hp / this.myUser.maxhp * 100) + "%"//hpゲージを減らす
@@ -412,7 +430,7 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
       height: 20px
       background-color: #14FF00
 //攻撃エフェクト
-::v-deep .lottie
+::v-deep .enemyLottie
   position: absolute
   top: 50%
   left: 50%
@@ -425,6 +443,8 @@ img
       margin-top: 16px
 .myCharacter
   text-align: center
+  position: relative
+  z-index: -1
   img
     width: 100px
     height: auto
@@ -451,6 +471,12 @@ img
     &:nth-child(2)
       font-size: 14px
       text-align: center
+//攻撃エフェクト
+::v-deep .myUserLottie
+  position: absolute
+  top: 10%
+  left: 50%
+  transform: translate(-50%, -10%)
 
 .message__container
   font-size: 14px
