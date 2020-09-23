@@ -1,11 +1,13 @@
 <template>
   <div class="container">
-    <h2>ターン制オート戦闘</h2>
+    <h2>ターン制バトル</h2>
     <hr>
     <p>
-      戦闘はターン制バトルで自動で勝敗が決まり、
-      攻撃防御回避素早さのステータスで競い合います。
+      戦闘はターン制バトルで攻撃防御回避素早さのステータスで競い合います。
     </p>
+    <div class="img__container">
+      <img src="@/assets/戦闘gif.gif" alt="戦闘gif">
+    </div>
   </div>
 </template>
 
@@ -17,6 +19,7 @@
     background: #000
     border: 3px solid #FFF
     border-radius: 10px
+    padding-bottom: 16px
     p
       padding: 0 10px
       font-weight: bold
@@ -25,4 +28,10 @@
     font-size: 18px
     text-align: center
     color: #FFC400
+  .img__container
+    width: 100%
+    display: flex
+    justify-content: center
+    img
+      width: 330px
 </style>
