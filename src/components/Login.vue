@@ -13,42 +13,20 @@
 <script>
 import firebase from 'firebase'
 import Button from '../components/Button'
-import { v4 as uuidv4 } from 'uuid'
+// import { v4 as uuidv4 } from 'uuid'
 
 export default {
   components: {
     Button
   },
+  // created(){
+  //   this.initApp()
+  // },
   methods: {
     login(){
       const provider = new firebase.auth.TwitterAuthProvider()
-      firebase.auth().signInWithPopup(provider)
-      .then((result) =>{
-        console.log('ログインに成功しました')
-        const user = result.user
-        if (user) {
-          const db = firebase.firestore()
-          const docID = String(user.providerData[0].uid)
-          const randomKey = uuidv4()
-
-          db.collection('users').doc(docID)
-          .set({
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            random: randomKey
-          })
-          .then(
-            console.log('ユーザー作成完了しました')
-          )
-          .catch((error) => {
-          console.log(error)
-          })
-        }
-      })
-      .catch((error => {
-        console.log(error)
-      }))
-    }
+      firebase.auth().signInWithRedirect(provider)
+    },
   }
 }
 </script>

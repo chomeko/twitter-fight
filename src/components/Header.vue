@@ -19,7 +19,7 @@
             class="link"
             exact
             @click.native="Navactive"
-          >ヘルプ</router-link>
+          >お問い合せ</router-link>
           <router-link
             to="/Termsofservice"
             class="link"

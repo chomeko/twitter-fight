@@ -13,7 +13,7 @@
       <transition-group name="fade">
         <!-- 敵 -->
         <div class="enemyCharacter" key="ememy">
-          <span>レベル: 50</span>
+          <span>レベル : {{enemy.lv}}</span>
           <span class="enemyCharacter__name">{{enemyName.displayName}}</span>
           <div class="animeImg">
             <TwitterImg v-if="enemyName.photoURL" :loginUser="enemyName" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
@@ -39,10 +39,10 @@
         </div>
         <!-- 戦闘ボタン -->
         <div class="btn__container" key="btn__container">
-          <button v-if="!battleEnd" v-bind:disabled="clickBattleBtn" @click="battleStart">戦う</button>
-          <button v-if="battleEnd" @click="experiencePoint" v-bind:disabled="clickBattleBtn">次へ</button>
-          <button v-if="escapebtn" @click="reset">逃げる</button>
-          <button v-if="!escapebtn" @click="reset" v-bind:disabled="!clickBattleBtn">次の敵を探す</button>
+          <Button v-if="!battleEnd" v-bind:disabled="clickBattleBtn" type="battle__select" @myclick="battleStart">戦う</Button>
+          <Button v-if="battleEnd" type="battle__select" @myclick="experiencePoint" v-bind:disabled="clickBattleBtn">次へ</Button>
+          <Button v-if="escapebtn" type="battle__select" @myclick="reset">逃げる</Button>
+          <Button v-if="!escapebtn" type="battle__select" @myclick="reset" v-bind:disabled="!clickBattleBtn">次の敵を探す</Button>
         </div>
         <!-- 自分 -->
         <div class="myCharacter" key="myCharacter">
@@ -297,9 +297,9 @@ export default {
       let docRef = this.db.collection("sutefuri").doc(docID)
       await docRef.update({
         exp: firebase.firestore.FieldValue.increment(10),
-        coin: firebase.firestore.FieldValue.increment(100)
+        coin: firebase.firestore.FieldValue.increment(10)
       })
-      this.message = '100経験値をゲットした'
+      this.message = '10経験値をゲットした'
       await docRef.get()
       .then(async (doc) => {
         //console.log(doc.data().exp)
@@ -315,7 +315,7 @@ export default {
         }
       })
       setTimeout(() => {
-        this.message = '100コインをGETした！'
+        this.message = '10コインをGETした！'
       }, 1000)
       this.clickBattleBtn = true
     },

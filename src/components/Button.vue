@@ -80,6 +80,12 @@ export default {
     cursor: pointer
     color: #fff
     border: 3px solid #FFF
+    &__select
+      background: #f6f6f6
+      border-radius: 0px
+      color: #000
+      cursor: pointer
+      padding: 10px 5px
   //サイズ
   .menu--size
     padding: 20px 30px

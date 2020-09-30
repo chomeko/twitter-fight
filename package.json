@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "jest"
   },
   "dependencies": {
     "animate.css": "^4.1.0",
@@ -23,12 +24,17 @@
     "vue-typer": "^1.2.0"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^1.0.4",
+    "@firebase/testing": "^0.20.11",
     "@vue/cli-plugin-babel": "~4.4.0",
     "@vue/cli-plugin-eslint": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "fs": "0.0.1-security",
+    "http": "0.0.1-security",
+    "jest": "^26.4.2",
     "node-sass": "^4.14.1",
     "normalize.css": "^8.0.1",
     "sass-loader": "^8.0.2",

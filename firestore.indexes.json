@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "titles",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "rea",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "random",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

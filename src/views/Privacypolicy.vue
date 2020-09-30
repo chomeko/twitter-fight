@@ -43,11 +43,12 @@
       <h3>5.個人情報に関するお問い合わせ、開示等の請求に関する窓口</h3>
         <p><a href="https://twitter.com/chomeko3o" rel="noopener" target="_blank">管理人TwitterのDM</a>よりご連絡ください。</p>
     </div>
-    <router-link
-      class="back"
-      to=router.go(-1)
-    >戻る
-    </router-link>
+    <div class="back">
+      <router-link
+        to=router.go(-1)
+      >戻る
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -74,6 +75,9 @@
   .container
     padding: 10px
   .back
-    display: flex
-    justify-content: center
+    text-align: center
+    a
+      display: inline-block
+      margin: auto
+      padding: 20px
 </style>

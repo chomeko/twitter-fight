@@ -1,7 +1,7 @@
 <template>
   <div id="mypage">
     <!-- 初期ログイン後に表示 -->
-    <div v-if="welcomHome">
+    <div v-if="output === '' ">
       <transition
         enter-active-class="animate__animated animate__zoomInDown"
         appear
@@ -15,11 +15,11 @@
     </div>
 
     <!-- キャラクターステータス作成画面 -->
-    <template v-if="beforeSutefuri">
+    <template v-if="output === '' ">
       <div class="before__status">
         <NewStatus :character="character"></NewStatus>
       </div>
-      <div class="statusButton">
+      <div v-if="beforeSutefuri" class="statusButton">
         <Button type="userStatus" @myclick="createCharacter">やり直す</Button>
         <Button type="userStatus" @myclick="okCharacter">確定する</Button>
         <p>このステータスでよいか？</p>
@@ -27,7 +27,7 @@
     </template>
 
     <!-- キャラクターステータス確定後 -->
-    <template v-if="oldSutefuri">
+    <template v-if="output != ''">
       <transition-group name="fade">
         <CharaInformation
           v-if="!equipment"
@@ -43,6 +43,8 @@
         >
         </EquipmentList>
       </transition-group>
+
+      <!-- 装備中のコンポーネントとステータスコンポーネント -->
       <div class="components__flex">
         <!-- ここのv-ifはaddTitleをキャラ作成時配列(空)をdatabaseに登録してるからv-ifはtureになり
         Equipment内のv-if="addTitle.equip[0]"などのerrorを回避する目的 -->
@@ -57,21 +59,12 @@
       appear
     >
       <div class="user__image" v-if="!equipment">
-        <!-- <lottie-animation
-          path="https://assets8.lottiefiles.com/packages/lf20_1gQ5ih.json"
-          :loop="false"
-          :autoPlay="true"
-          :loopDelayMin="2.5"
-          :loopDelayMax="5"
-          :speed="1"
-          :width="256"
-          :height="256"
-        /> -->
         <TwitterImg v-if="loginUser.photoURL" :loginUser="loginUser"></TwitterImg>
+        <!-- <button @click="randomGacha">ランダム</button> -->
       </div>
     </transition>
 
-    <Footer v-if="oldSutefuri" :equipment="equipment" :loginUser="loginUser" :output="output" @emitEquipment="footerEmit"></Footer>
+    <Footer v-if="output != ''" :equipment="equipment" :loginUser="loginUser" :output="output" @emitEquipment="footerEmit"></Footer>
   </div>
 </template>
 
@@ -86,6 +79,8 @@ import EquipmentList from '../components/EquipmentList'
 import Equipment from '../components/Equipment'
 import TwitterImg from '../components/TwitterImg'
 import Footer from '../components/Footer'
+
+import { v4 as uuidv4 } from 'uuid'
 
 // import LottieAnimation from 'lottie-vuejs'
 
@@ -104,20 +99,20 @@ export default {
     Footer,
     // LottieAnimation
   },
-  localStorage: {
-    welcomHome: {
-      type: Boolean,
-      default: true
-    },
-    beforeSutefuri: {
-      type: Boolean,
-      default: false
-    },
-    oldSutefuri: {
-      type: Boolean,
-      default: false
-    }
-  },
+  // localStorage: {
+  //   welcomHome: {
+  //     type: Boolean,
+  //     default: true
+  //   },
+  //   beforeSutefuri: {
+  //     type: Boolean,
+  //     default: false
+  //   },
+  //   oldSutefuri: {
+  //     type: Boolean,
+  //     default: false
+  //   }
+  // },
   data(){
     return {
       db : null,
@@ -126,11 +121,11 @@ export default {
       //twitter__uid
       loginUid: {},
       //ついふぁいにようこそ表示
-      welcomHome: true,
+      // welcomHome: true,
       //ステータス確定前表示
       beforeSutefuri: false,
       //ステータス表示
-      oldSutefuri: false,
+      // oldSutefuri: false,
       //キャラステータス
       character: {
         lv: 1,
@@ -157,15 +152,15 @@ export default {
   },
   //mount時にローカルストレージから状態を取得して現在のdataにする
   mounted(){
-    if (localStorage.welcomHome) {
-      this.welcomHome = this.$localStorage.get('welcomHome')
-    }
-    if (localStorage.beforeSutefuri) {
-      this.beforeSutefuri = this.$localStorage.get('beforeSutefuri')
-    }
-    if (localStorage.oldSutefuri) {
-      this.oldSutefuri = this.$localStorage.get('oldSutefuri')
-    }
+    // if (localStorage.welcomHome) {
+    //   this.welcomHome = this.$localStorage.get('welcomHome')
+    // }
+    // if (localStorage.beforeSutefuri) {
+    //   this.beforeSutefuri = this.$localStorage.get('beforeSutefuri')
+    // }
+    // if (localStorage.oldSutefuri) {
+    //   this.oldSutefuri = this.$localStorage.get('oldSutefuri')
+    // }
     //mount時にユーザー情報を取得して表示
     firebase.auth().onAuthStateChanged(async user => {
       if (user){
@@ -179,26 +174,48 @@ export default {
   },
   //描画の状態をローカルストレージに保持
   watch: {
-    welcomHome() {
-      this.welcomHome = this.$localStorage.set('welcomHome',this.welcomHome)
-    },
-    beforeSutefuri() {
-      this.beforeSutefuri = this.$localStorage.set('beforeSutefuri',this.beforeSutefuri)
-    },
-    oldSutefuri() {
-      this.oldSutefuri = this.$localStorage.set('oldSutefuri',this.oldSutefuri)
-    },
-    outputUpdate(){
-      this.output
-    }
+    // welcomHome() {
+    //   this.welcomHome = this.$localStorage.set('welcomHome',this.welcomHome)
+    // },
+    // beforeSutefuri() {
+    //   this.beforeSutefuri = this.$localStorage.set('beforeSutefuri',this.beforeSutefuri)
+    // },
+    // oldSutefuri() {
+    //   this.oldSutefuri = this.$localStorage.set('oldSutefuri',this.oldSutefuri)
+    // },
+    // outputUpdate(){
+    //   this.output
+    // }
   },
   created() {
     this.db = firebase.firestore() // dbインスタンスを初期化
   },
   methods: {
-    // emitGacha(emitGachaAdd){
-    //   this.testemit = emitGachaAdd
-    // },
+    userSet() {
+      firebase.auth().getRedirectResult()
+      .then((result) =>{
+        //console.log('ログインに成功しました')
+        const user = result.user
+        if (user) {
+          const db = firebase.firestore()
+          const docID = String(user.providerData[0].uid)
+          const randomKey = uuidv4()
+
+          db.collection('users').doc(docID)
+          .set({
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            random: randomKey
+          })
+          .then(
+            //console.log('ユーザー作成完了しました')
+          )
+          .catch((error) => {
+          console.log(error)
+          })
+        }
+      })
+    },
     //送られてきた称号名をMax５件まで保存できる処理と
     //称号装備画面から送られてきた称号を基礎ステータスに足す処理
     emitEvent(addTitleToStatus){
@@ -259,11 +276,12 @@ export default {
       this.character.defense = _.random(100)
       this.character.avoidance = 5
       this.character.speed = _.random(100)
-      this.welcomHome = false
+      // this.welcomHome = false
       this.beforeSutefuri = true
     },
     //基礎ステータス確定してdatabaseに登録
     async okCharacter(){
+      await this.userSet()
       const docID = String(this.loginUser.providerData[0].uid)
       await this.db.collection('sutefuri').doc(docID)
       .set({
@@ -287,7 +305,7 @@ export default {
       await this.addEmptyTitle()
       await this.get()
       this.beforeSutefuri = false
-      this.oldSutefuri = true
+      // this.oldSutefuri = true
     },
     //初期装備データ空を登録する
     async addEmptyTitle(){
@@ -298,7 +316,7 @@ export default {
       washingtonRef.get()
       .then((doc) => {
         self.addTitle = doc.data()
-        console.log('空称号を追加しデータを取得しました')
+        //console.log('空称号を追加しデータを取得しました')
       })
       .catch((error) => {
         console.log(error);
@@ -361,7 +379,7 @@ export default {
         speed: this.output.speed,
       })
       .then(
-        console.log('ステータス更新')
+        //console.log('ステータス更新')
       )
       .catch((error) => {
         console.log(error);
@@ -373,7 +391,7 @@ export default {
       const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
       washingtonRef.update({equip: firebase.firestore.FieldValue.arrayUnion(addTitleToStatus)})
       .then(
-        console.log('称号を追加しました')
+        //console.log('称号を追加しました')
       )
       .catch((error) => {
         console.log(error);
@@ -385,7 +403,7 @@ export default {
       const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
       washingtonRef.update({equip: firebase.firestore.FieldValue.arrayRemove(addTitleToStatus)})
       .then(
-        console.log('称号を削除しました')
+        //console.log('称号を削除しました')
       )
       .catch((error) => {
         console.log(error);
