@@ -20,135 +20,129 @@
 const data = {
   "rules": {
     "files": [{
-      "content": "rules_version \u003d \u00272\u0027;\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /sutefuri/{document\u003d**} {\n      allow read: if request.auth !\u003d null;\n      allow write: if request.auth !\u003d null;\n    }\n    match /users/{document\u003d**} {\n      allow read: if request.auth !\u003d null;\n      allow write: if request.auth !\u003d null;\n    }\n    match /titles/{document\u003d**} {\n      allow read: if request.auth !\u003d null;\n      allow write: if false;\n    }\n  }\n}"
+      "content": "rules_version \u003d \u00272\u0027;\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /sutefuri/{uid} {\n      allow read: if request.auth.uid \u003d\u003d uid;\n      allow write: if request.auth.uid \u003d\u003d uid;\n        match /equip/{document\u003d**} {\n          allow read: if request.auth.uid \u003d\u003d uid;\n          allow write: if request.auth.uid \u003d\u003d uid;\n        }\n    }\n    match /users/{uid} {\n      allow read: if request.auth.uid \u003d\u003d uid;\n      allow write: if request.auth.uid \u003d\u003d uid;\n        match /titles/{document\u003d**} {\n          allow read: if request.auth.uid \u003d\u003d uid;\n          allow write: if request.auth.uid \u003d\u003d uid;\n        }\n    }\n    match /titles/{document\u003d**} {\n      allow read: if request.auth !\u003d null;\n      allow write: if false;\n    }\n  }\n}"
     }]
   },
   "report": [{
     "sourcePosition": {
+      "line": 8,
+      "column": 26,
+      "currentOffset": 272,
+      "endOffset": 294
+    },
+    "children": [{
+      "sourcePosition": {
+        "line": 8,
+        "column": 26,
+        "currentOffset": 272,
+        "endOffset": 287
+      },
+      "children": [{
+        "sourcePosition": {
+          "line": 8,
+          "column": 26,
+          "currentOffset": 272,
+          "endOffset": 283
+        },
+        "children": [{
+          "sourcePosition": {
+            "line": 8,
+            "column": 26,
+            "currentOffset": 272,
+            "endOffset": 278
+          }
+        }]
+      }]
+    }, {
+      "sourcePosition": {
+        "line": 8,
+        "column": 46,
+        "currentOffset": 292,
+        "endOffset": 294
+      }
+    }]
+  }, {
+    "sourcePosition": {
+      "line": 9,
+      "column": 27,
+      "currentOffset": 323,
+      "endOffset": 345
+    },
+    "children": [{
+      "sourcePosition": {
+        "line": 9,
+        "column": 27,
+        "currentOffset": 323,
+        "endOffset": 338
+      },
+      "children": [{
+        "sourcePosition": {
+          "line": 9,
+          "column": 27,
+          "currentOffset": 323,
+          "endOffset": 334
+        },
+        "children": [{
+          "sourcePosition": {
+            "line": 9,
+            "column": 27,
+            "currentOffset": 323,
+            "endOffset": 329
+          }
+        }]
+      }]
+    }, {
+      "sourcePosition": {
+        "line": 9,
+        "column": 47,
+        "currentOffset": 343,
+        "endOffset": 345
+      }
+    }]
+  }, {
+    "sourcePosition": {
       "line": 5,
       "column": 22,
-      "currentOffset": 146,
-      "endOffset": 165
+      "currentOffset": 138,
+      "endOffset": 160
     },
-    "values": [{
-      "value": {
-        "boolValue": true
-      },
-      "count": 1
-    }],
     "children": [{
       "sourcePosition": {
         "line": 5,
         "column": 22,
-        "currentOffset": 146,
-        "endOffset": 157
+        "currentOffset": 138,
+        "endOffset": 153
       },
-      "values": [{
-        "value": {
-          "mapValue": {
-            "fields": {
-              "uid": {
-                "stringValue": "alice"
-              },
-              "token": {
-                "mapValue": {
-                  "fields": {
-                    "uid": {
-                      "stringValue": "alice"
-                    },
-                    "iat": {
-                      "intValue": "0"
-                    },
-                    "sub": {
-                      "stringValue": "alice"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "count": 1
-      }],
       "children": [{
         "sourcePosition": {
           "line": 5,
           "column": 22,
-          "currentOffset": 146,
-          "endOffset": 152
+          "currentOffset": 138,
+          "endOffset": 149
         },
-        "values": [{
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:24:00.826Z"
-                },
-                "auth": {
-                  "mapValue": {
-                    "fields": {
-                      "uid": {
-                        "stringValue": "alice"
-                      },
-                      "token": {
-                        "mapValue": {
-                          "fields": {
-                            "uid": {
-                              "stringValue": "alice"
-                            },
-                            "iat": {
-                              "intValue": "0"
-                            },
-                            "sub": {
-                              "stringValue": "alice"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": false
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "fields": {
-                  "nullValue": null
-                },
-                "method": {
-                  "stringValue": "get"
-                }
-              }
-            }
-          },
-          "count": 1
+        "children": [{
+          "sourcePosition": {
+            "line": 5,
+            "column": 22,
+            "currentOffset": 138,
+            "endOffset": 144
+          }
         }]
       }]
+    }, {
+      "sourcePosition": {
+        "line": 5,
+        "column": 42,
+        "currentOffset": 158,
+        "endOffset": 160
+      }
     }]
   }, {
     "sourcePosition": {
       "line": 6,
       "column": 23,
-      "currentOffset": 190,
-      "endOffset": 209
+      "currentOffset": 185,
+      "endOffset": 207
     },
     "values": [{
       "value": {
@@ -165,38 +159,17 @@ const data = {
       "sourcePosition": {
         "line": 6,
         "column": 23,
-        "currentOffset": 190,
-        "endOffset": 201
+        "currentOffset": 185,
+        "endOffset": 200
       },
       "values": [{
         "value": {
-          "mapValue": {
-            "fields": {
-              "uid": {
-                "stringValue": "alice"
-              },
-              "token": {
-                "mapValue": {
-                  "fields": {
-                    "uid": {
-                      "stringValue": "alice"
-                    },
-                    "iat": {
-                      "intValue": "0"
-                    },
-                    "sub": {
-                      "stringValue": "alice"
-                    }
-                  }
-                }
-              }
-            }
-          }
+          "stringValue": "alice"
         },
         "count": 7
       }, {
         "value": {
-          "nullValue": null
+          "stringValue": "bob"
         },
         "count": 3
       }],
@@ -204,1070 +177,2442 @@ const data = {
         "sourcePosition": {
           "line": 6,
           "column": 23,
-          "currentOffset": 190,
+          "currentOffset": 185,
           "endOffset": 196
         },
         "values": [{
           "value": {
             "mapValue": {
               "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:52.699Z"
+                "uid": {
+                  "stringValue": "alice"
                 },
-                "auth": {
+                "token": {
                   "mapValue": {
                     "fields": {
                       "uid": {
                         "stringValue": "alice"
                       },
-                      "token": {
-                        "mapValue": {
-                          "fields": {
-                            "uid": {
-                              "stringValue": "alice"
-                            },
-                            "iat": {
-                              "intValue": "0"
-                            },
-                            "sub": {
-                              "stringValue": "alice"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "writeFields": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "mapValue": {
-                    "fields": {
-                      "data": {
-                        "mapValue": {
-                          "fields": {
-                            "owner": {
-                              "stringValue": "alice"
-                            },
-                            "createAt": {
-                              "timestampValue": "2020-09-29T15:25:52.699Z"
-                            }
-                          }
-                        }
+                      "iat": {
+                        "intValue": "0"
                       },
-                      "__name__": {
-                        "pathValue": {
-                          "segments": [{
-                            "simple": "databases"
-                          }, {
-                            "simple": "(default)"
-                          }, {
-                            "simple": "documents"
-                          }, {
-                            "simple": "sutefuri"
-                          }, {
-                            "simple": "alice"
-                          }]
-                        }
-                      },
-                      "id": {
+                      "sub": {
                         "stringValue": "alice"
                       }
                     }
                   }
-                },
-                "method": {
-                  "stringValue": "create"
                 }
               }
             }
           },
-          "count": 1
+          "count": 7
         }, {
           "value": {
             "mapValue": {
               "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:52.762Z"
+                "uid": {
+                  "stringValue": "bob"
                 },
-                "auth": {
-                  "nullValue": null
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "writeFields": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "mapValue": {
-                    "fields": {
-                      "data": {
-                        "mapValue": {
-                          "fields": {
-                            "owner": {
-                              "stringValue": "alice"
-                            },
-                            "createAt": {
-                              "timestampValue": "2020-09-29T15:25:52.762Z"
-                            }
-                          }
-                        }
-                      },
-                      "__name__": {
-                        "pathValue": {
-                          "segments": [{
-                            "simple": "databases"
-                          }, {
-                            "simple": "(default)"
-                          }, {
-                            "simple": "documents"
-                          }, {
-                            "simple": "sutefuri"
-                          }, {
-                            "simple": "alice"
-                          }]
-                        }
-                      },
-                      "id": {
-                        "stringValue": "alice"
-                      }
-                    }
-                  }
-                },
-                "method": {
-                  "stringValue": "create"
-                }
-              }
-            }
-          },
-          "count": 1
-        }, {
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:52.812Z"
-                },
-                "auth": {
+                "token": {
                   "mapValue": {
                     "fields": {
                       "uid": {
-                        "stringValue": "alice"
+                        "stringValue": "bob"
                       },
-                      "token": {
-                        "mapValue": {
-                          "fields": {
-                            "uid": {
-                              "stringValue": "alice"
-                            },
-                            "iat": {
-                              "intValue": "0"
-                            },
-                            "sub": {
-                              "stringValue": "alice"
-                            }
-                          }
-                        }
+                      "iat": {
+                        "intValue": "0"
+                      },
+                      "sub": {
+                        "stringValue": "bob"
                       }
                     }
                   }
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "writeFields": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "mapValue": {
-                    "fields": {
-                      "data": {
-                        "mapValue": {
-                          "fields": {
-                            "owner": {
-                              "stringValue": "alice"
-                            },
-                            "createAt": {
-                              "timestampValue": "2020-09-29T15:25:52.812Z"
-                            }
-                          }
-                        }
-                      },
-                      "__name__": {
-                        "pathValue": {
-                          "segments": [{
-                            "simple": "databases"
-                          }, {
-                            "simple": "(default)"
-                          }, {
-                            "simple": "documents"
-                          }, {
-                            "simple": "sutefuri"
-                          }, {
-                            "simple": "alice"
-                          }]
-                        }
-                      },
-                      "id": {
-                        "stringValue": "alice"
-                      }
-                    }
-                  }
-                },
-                "method": {
-                  "stringValue": "create"
                 }
               }
             }
           },
-          "count": 1
-        }, {
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:52.820Z"
-                },
-                "auth": {
-                  "mapValue": {
-                    "fields": {
-                      "uid": {
-                        "stringValue": "alice"
-                      },
-                      "token": {
-                        "mapValue": {
-                          "fields": {
-                            "uid": {
-                              "stringValue": "alice"
-                            },
-                            "iat": {
-                              "intValue": "0"
-                            },
-                            "sub": {
-                              "stringValue": "alice"
+          "count": 3
+        }],
+        "children": [{
+          "sourcePosition": {
+            "line": 6,
+            "column": 23,
+            "currentOffset": 185,
+            "endOffset": 191
+          },
+          "values": [{
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:39.824Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
                             }
                           }
                         }
                       }
                     }
-                  }
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "updateAt"
-                    }]
-                  }
-                },
-                "writeFields": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "updateAt"
-                    }, {
-                      "stringValue": "owner"
-                    }]
-                  }
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "mapValue": {
-                    "fields": {
-                      "data": {
-                        "mapValue": {
-                          "fields": {
-                            "owner": {
-                              "stringValue": "alice"
-                            },
-                            "createAt": {
-                              "timestampValue": "2020-09-29T15:25:52.812Z"
-                            },
-                            "updateAt": {
-                              "timestampValue": "2020-09-29T15:25:52.820Z"
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:39.824Z"
+                              }
                             }
                           }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "sutefuri"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
                         }
-                      },
-                      "__name__": {
-                        "pathValue": {
-                          "segments": [{
-                            "simple": "databases"
-                          }, {
-                            "simple": "(default)"
-                          }, {
-                            "simple": "documents"
-                          }, {
-                            "simple": "sutefuri"
-                          }, {
-                            "simple": "alice"
-                          }]
-                        }
-                      },
-                      "id": {
-                        "stringValue": "alice"
                       }
                     }
+                  },
+                  "method": {
+                    "stringValue": "create"
                   }
-                },
-                "method": {
-                  "stringValue": "update"
                 }
               }
-            }
-          },
-          "count": 1
-        }, {
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:52.862Z"
-                },
-                "auth": {
-                  "mapValue": {
-                    "fields": {
-                      "uid": {
-                        "stringValue": "alice"
-                      },
-                      "token": {
-                        "mapValue": {
-                          "fields": {
-                            "uid": {
-                              "stringValue": "alice"
-                            },
-                            "iat": {
-                              "intValue": "0"
-                            },
-                            "sub": {
-                              "stringValue": "alice"
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:39.883Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "bob"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "bob"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "bob"
+                              }
                             }
                           }
                         }
                       }
                     }
-                  }
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "writeFields": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "mapValue": {
-                    "fields": {
-                      "data": {
-                        "mapValue": {
-                          "fields": {
-                            "owner": {
-                              "stringValue": "alice"
-                            },
-                            "createAt": {
-                              "timestampValue": "2020-09-29T15:25:52.862Z"
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:39.883Z"
+                              }
                             }
                           }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "sutefuri"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
                         }
-                      },
-                      "__name__": {
-                        "pathValue": {
-                          "segments": [{
-                            "simple": "databases"
-                          }, {
-                            "simple": "(default)"
-                          }, {
-                            "simple": "documents"
-                          }, {
-                            "simple": "sutefuri"
-                          }, {
-                            "simple": "alice"
-                          }]
-                        }
-                      },
-                      "id": {
-                        "stringValue": "alice"
                       }
                     }
+                  },
+                  "method": {
+                    "stringValue": "create"
                   }
-                },
-                "method": {
-                  "stringValue": "create"
                 }
               }
-            }
-          },
-          "count": 1
-        }, {
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:52.904Z"
-                },
-                "auth": {
-                  "nullValue": null
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "writeFields": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }, {
-                      "stringValue": "owner"
-                    }]
-                  }
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "mapValue": {
-                    "fields": {
-                      "data": {
-                        "mapValue": {
-                          "fields": {
-                            "owner": {
-                              "stringValue": "alice"
-                            },
-                            "createAt": {
-                              "timestampValue": "2020-09-29T15:25:52.904Z"
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:39.923Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
                             }
                           }
                         }
-                      },
-                      "__name__": {
-                        "pathValue": {
-                          "segments": [{
-                            "simple": "databases"
-                          }, {
-                            "simple": "(default)"
-                          }, {
-                            "simple": "documents"
-                          }, {
-                            "simple": "sutefuri"
-                          }, {
-                            "simple": "alice"
-                          }]
-                        }
-                      },
-                      "id": {
-                        "stringValue": "alice"
                       }
                     }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:39.923Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "sutefuri"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
                   }
-                },
-                "method": {
-                  "stringValue": "update"
                 }
               }
-            }
-          },
-          "count": 1
-        }, {
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:52.965Z"
-                },
-                "auth": {
-                  "mapValue": {
-                    "fields": {
-                      "uid": {
-                        "stringValue": "alice"
-                      },
-                      "token": {
-                        "mapValue": {
-                          "fields": {
-                            "uid": {
-                              "stringValue": "alice"
-                            },
-                            "iat": {
-                              "intValue": "0"
-                            },
-                            "sub": {
-                              "stringValue": "alice"
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:39.930Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
                             }
                           }
                         }
                       }
                     }
-                  }
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "writeFields": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "mapValue": {
-                    "fields": {
-                      "data": {
-                        "mapValue": {
-                          "fields": {
-                            "owner": {
-                              "stringValue": "alice"
-                            },
-                            "createAt": {
-                              "timestampValue": "2020-09-29T15:25:52.965Z"
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "updateAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "updateAt"
+                      }, {
+                        "stringValue": "owner"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:39.923Z"
+                              },
+                              "updateAt": {
+                                "timestampValue": "2020-10-02T13:02:39.930Z"
+                              }
                             }
                           }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "sutefuri"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
                         }
-                      },
-                      "__name__": {
-                        "pathValue": {
-                          "segments": [{
-                            "simple": "databases"
-                          }, {
-                            "simple": "(default)"
-                          }, {
-                            "simple": "documents"
-                          }, {
-                            "simple": "sutefuri"
-                          }, {
-                            "simple": "alice"
-                          }]
-                        }
-                      },
-                      "id": {
-                        "stringValue": "alice"
                       }
                     }
+                  },
+                  "method": {
+                    "stringValue": "update"
                   }
-                },
-                "method": {
-                  "stringValue": "create"
                 }
               }
-            }
-          },
-          "count": 1
-        }, {
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:52.976Z"
-                },
-                "auth": {
-                  "mapValue": {
-                    "fields": {
-                      "uid": {
-                        "stringValue": "alice"
-                      },
-                      "token": {
-                        "mapValue": {
-                          "fields": {
-                            "uid": {
-                              "stringValue": "alice"
-                            },
-                            "iat": {
-                              "intValue": "0"
-                            },
-                            "sub": {
-                              "stringValue": "alice"
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:39.968Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
                             }
                           }
                         }
                       }
                     }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:39.968Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "sutefuri"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
                   }
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "nullValue": null
-                },
-                "writeFields": {
-                  "nullValue": null
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "nullValue": null
-                },
-                "method": {
-                  "stringValue": "delete"
                 }
               }
-            }
-          },
-          "count": 1
-        }, {
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:53.015Z"
-                },
-                "auth": {
-                  "mapValue": {
-                    "fields": {
-                      "uid": {
-                        "stringValue": "alice"
-                      },
-                      "token": {
-                        "mapValue": {
-                          "fields": {
-                            "uid": {
-                              "stringValue": "alice"
-                            },
-                            "iat": {
-                              "intValue": "0"
-                            },
-                            "sub": {
-                              "stringValue": "alice"
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.003Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "bob"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "bob"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "bob"
+                              }
                             }
                           }
                         }
                       }
                     }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }, {
+                        "stringValue": "owner"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.003Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "sutefuri"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "update"
                   }
-                },
-                "headers": {
-                  "mapValue": {
-                  }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "writeFields": {
-                  "listValue": {
-                    "values": [{
-                      "stringValue": "createAt"
-                    }]
-                  }
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "mapValue": {
-                    "fields": {
-                      "data": {
-                        "mapValue": {
-                          "fields": {
-                            "owner": {
-                              "stringValue": "alice"
-                            },
-                            "createAt": {
-                              "timestampValue": "2020-09-29T15:25:53.015Z"
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.037Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
                             }
                           }
                         }
-                      },
-                      "__name__": {
-                        "pathValue": {
-                          "segments": [{
-                            "simple": "databases"
-                          }, {
-                            "simple": "(default)"
-                          }, {
-                            "simple": "documents"
-                          }, {
-                            "simple": "sutefuri"
-                          }, {
-                            "simple": "alice"
-                          }]
-                        }
-                      },
-                      "id": {
-                        "stringValue": "alice"
                       }
                     }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.037Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "sutefuri"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
                   }
-                },
-                "method": {
-                  "stringValue": "create"
                 }
               }
-            }
-          },
-          "count": 1
-        }, {
-          "value": {
-            "mapValue": {
-              "fields": {
-                "time": {
-                  "timestampValue": "2020-09-29T15:25:53.043Z"
-                },
-                "auth": {
-                  "nullValue": null
-                },
-                "headers": {
-                  "mapValue": {
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.040Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "nullValue": null
+                  },
+                  "writeFields": {
+                    "nullValue": null
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "nullValue": null
+                  },
+                  "method": {
+                    "stringValue": "delete"
                   }
-                },
-                "inTransaction": {
-                  "boolValue": true
-                },
-                "path": {
-                  "pathValue": {
-                    "segments": [{
-                      "simple": "databases"
-                    }, {
-                      "simple": "(default)"
-                    }, {
-                      "simple": "documents"
-                    }, {
-                      "simple": "sutefuri"
-                    }, {
-                      "simple": "alice"
-                    }]
-                  }
-                },
-                "transforms": {
-                  "nullValue": null
-                },
-                "writeFields": {
-                  "nullValue": null
-                },
-                "readFields": {
-                  "nullValue": null
-                },
-                "resource": {
-                  "nullValue": null
-                },
-                "method": {
-                  "stringValue": "delete"
                 }
               }
-            }
-          },
-          "count": 1
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.074Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.074Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "sutefuri"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.100Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "bob"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "bob"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "bob"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "sutefuri"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "nullValue": null
+                  },
+                  "writeFields": {
+                    "nullValue": null
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "nullValue": null
+                  },
+                  "method": {
+                    "stringValue": "delete"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }]
         }]
       }]
-    }]
-  }, {
-    "sourcePosition": {
-      "line": 9,
-      "column": 22,
-      "currentOffset": 272,
-      "endOffset": 291
-    },
-    "children": [{
+    }, {
       "sourcePosition": {
-        "line": 9,
-        "column": 22,
-        "currentOffset": 272,
-        "endOffset": 283
+        "line": 6,
+        "column": 43,
+        "currentOffset": 205,
+        "endOffset": 207
       },
-      "children": [{
-        "sourcePosition": {
-          "line": 9,
-          "column": 22,
-          "currentOffset": 272,
-          "endOffset": 278
-        }
+      "values": [{
+        "value": {
+          "stringValue": "alice"
+        },
+        "count": 10
       }]
     }]
   }, {
     "sourcePosition": {
-      "line": 10,
-      "column": 23,
-      "currentOffset": 316,
-      "endOffset": 335
+      "line": 16,
+      "column": 26,
+      "currentOffset": 545,
+      "endOffset": 567
     },
     "children": [{
       "sourcePosition": {
-        "line": 10,
-        "column": 23,
-        "currentOffset": 316,
-        "endOffset": 327
+        "line": 16,
+        "column": 26,
+        "currentOffset": 545,
+        "endOffset": 560
       },
       "children": [{
         "sourcePosition": {
-          "line": 10,
-          "column": 23,
-          "currentOffset": 316,
-          "endOffset": 322
-        }
+          "line": 16,
+          "column": 26,
+          "currentOffset": 545,
+          "endOffset": 556
+        },
+        "children": [{
+          "sourcePosition": {
+            "line": 16,
+            "column": 26,
+            "currentOffset": 545,
+            "endOffset": 551
+          }
+        }]
       }]
+    }, {
+      "sourcePosition": {
+        "line": 16,
+        "column": 46,
+        "currentOffset": 565,
+        "endOffset": 567
+      }
+    }]
+  }, {
+    "sourcePosition": {
+      "line": 17,
+      "column": 27,
+      "currentOffset": 596,
+      "endOffset": 618
+    },
+    "children": [{
+      "sourcePosition": {
+        "line": 17,
+        "column": 27,
+        "currentOffset": 596,
+        "endOffset": 611
+      },
+      "children": [{
+        "sourcePosition": {
+          "line": 17,
+          "column": 27,
+          "currentOffset": 596,
+          "endOffset": 607
+        },
+        "children": [{
+          "sourcePosition": {
+            "line": 17,
+            "column": 27,
+            "currentOffset": 596,
+            "endOffset": 602
+          }
+        }]
+      }]
+    }, {
+      "sourcePosition": {
+        "line": 17,
+        "column": 47,
+        "currentOffset": 616,
+        "endOffset": 618
+      }
     }]
   }, {
     "sourcePosition": {
       "line": 13,
       "column": 22,
-      "currentOffset": 399,
-      "endOffset": 418
+      "currentOffset": 410,
+      "endOffset": 432
     },
     "children": [{
       "sourcePosition": {
         "line": 13,
         "column": 22,
-        "currentOffset": 399,
-        "endOffset": 410
+        "currentOffset": 410,
+        "endOffset": 425
       },
       "children": [{
         "sourcePosition": {
           "line": 13,
           "column": 22,
-          "currentOffset": 399,
-          "endOffset": 405
+          "currentOffset": 410,
+          "endOffset": 421
+        },
+        "children": [{
+          "sourcePosition": {
+            "line": 13,
+            "column": 22,
+            "currentOffset": 410,
+            "endOffset": 416
+          }
+        }]
+      }]
+    }, {
+      "sourcePosition": {
+        "line": 13,
+        "column": 42,
+        "currentOffset": 430,
+        "endOffset": 432
+      }
+    }]
+  }, {
+    "sourcePosition": {
+      "line": 14,
+      "column": 23,
+      "currentOffset": 457,
+      "endOffset": 479
+    },
+    "values": [{
+      "value": {
+        "boolValue": true
+      },
+      "count": 7
+    }, {
+      "value": {
+        "boolValue": false
+      },
+      "count": 3
+    }],
+    "children": [{
+      "sourcePosition": {
+        "line": 14,
+        "column": 23,
+        "currentOffset": 457,
+        "endOffset": 472
+      },
+      "values": [{
+        "value": {
+          "stringValue": "alice"
+        },
+        "count": 7
+      }, {
+        "value": {
+          "stringValue": "bob"
+        },
+        "count": 3
+      }],
+      "children": [{
+        "sourcePosition": {
+          "line": 14,
+          "column": 23,
+          "currentOffset": 457,
+          "endOffset": 468
+        },
+        "values": [{
+          "value": {
+            "mapValue": {
+              "fields": {
+                "uid": {
+                  "stringValue": "alice"
+                },
+                "token": {
+                  "mapValue": {
+                    "fields": {
+                      "uid": {
+                        "stringValue": "alice"
+                      },
+                      "iat": {
+                        "intValue": "0"
+                      },
+                      "sub": {
+                        "stringValue": "alice"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "count": 7
+        }, {
+          "value": {
+            "mapValue": {
+              "fields": {
+                "uid": {
+                  "stringValue": "bob"
+                },
+                "token": {
+                  "mapValue": {
+                    "fields": {
+                      "uid": {
+                        "stringValue": "bob"
+                      },
+                      "iat": {
+                        "intValue": "0"
+                      },
+                      "sub": {
+                        "stringValue": "bob"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "count": 3
+        }],
+        "children": [{
+          "sourcePosition": {
+            "line": 14,
+            "column": 23,
+            "currentOffset": 457,
+            "endOffset": 463
+          },
+          "values": [{
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.164Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "nullValue": null
+                  },
+                  "writeFields": {
+                    "nullValue": null
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "photoURL": {
+                                "stringValue": "URL"
+                              },
+                              "name": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "users"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.195Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "bob"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "bob"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "bob"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.195Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "users"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.227Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.227Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "users"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.231Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "updateAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "updateAt"
+                      }, {
+                        "stringValue": "owner"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.227Z"
+                              },
+                              "updateAt": {
+                                "timestampValue": "2020-10-02T13:02:40.231Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "users"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "update"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.260Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.260Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "users"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.287Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "bob"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "bob"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "bob"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }, {
+                        "stringValue": "owner"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.287Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "users"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "update"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.315Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.315Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "users"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.319Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "nullValue": null
+                  },
+                  "writeFields": {
+                    "nullValue": null
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "nullValue": null
+                  },
+                  "method": {
+                    "stringValue": "delete"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.349Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "alice"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "alice"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "alice"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "writeFields": {
+                    "listValue": {
+                      "values": [{
+                        "stringValue": "createAt"
+                      }]
+                    }
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "mapValue": {
+                      "fields": {
+                        "data": {
+                          "mapValue": {
+                            "fields": {
+                              "owner": {
+                                "stringValue": "alice"
+                              },
+                              "createAt": {
+                                "timestampValue": "2020-10-02T13:02:40.349Z"
+                              }
+                            }
+                          }
+                        },
+                        "__name__": {
+                          "pathValue": {
+                            "segments": [{
+                              "simple": "databases"
+                            }, {
+                              "simple": "(default)"
+                            }, {
+                              "simple": "documents"
+                            }, {
+                              "simple": "users"
+                            }, {
+                              "simple": "alice"
+                            }]
+                          }
+                        },
+                        "id": {
+                          "stringValue": "alice"
+                        }
+                      }
+                    }
+                  },
+                  "method": {
+                    "stringValue": "create"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }, {
+            "value": {
+              "mapValue": {
+                "fields": {
+                  "time": {
+                    "timestampValue": "2020-10-02T13:02:40.373Z"
+                  },
+                  "auth": {
+                    "mapValue": {
+                      "fields": {
+                        "uid": {
+                          "stringValue": "bob"
+                        },
+                        "token": {
+                          "mapValue": {
+                            "fields": {
+                              "uid": {
+                                "stringValue": "bob"
+                              },
+                              "iat": {
+                                "intValue": "0"
+                              },
+                              "sub": {
+                                "stringValue": "bob"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "mapValue": {
+                    }
+                  },
+                  "inTransaction": {
+                    "boolValue": true
+                  },
+                  "path": {
+                    "pathValue": {
+                      "segments": [{
+                        "simple": "databases"
+                      }, {
+                        "simple": "(default)"
+                      }, {
+                        "simple": "documents"
+                      }, {
+                        "simple": "users"
+                      }, {
+                        "simple": "alice"
+                      }]
+                    }
+                  },
+                  "transforms": {
+                    "nullValue": null
+                  },
+                  "writeFields": {
+                    "nullValue": null
+                  },
+                  "readFields": {
+                    "nullValue": null
+                  },
+                  "resource": {
+                    "nullValue": null
+                  },
+                  "method": {
+                    "stringValue": "delete"
+                  }
+                }
+              }
+            },
+            "count": 1
+          }]
+        }]
+      }]
+    }, {
+      "sourcePosition": {
+        "line": 14,
+        "column": 43,
+        "currentOffset": 477,
+        "endOffset": 479
+      },
+      "values": [{
+        "value": {
+          "stringValue": "alice"
+        },
+        "count": 10
+      }]
+    }]
+  }, {
+    "sourcePosition": {
+      "line": 21,
+      "column": 22,
+      "currentOffset": 692,
+      "endOffset": 711
+    },
+    "children": [{
+      "sourcePosition": {
+        "line": 21,
+        "column": 22,
+        "currentOffset": 692,
+        "endOffset": 703
+      },
+      "children": [{
+        "sourcePosition": {
+          "line": 21,
+          "column": 22,
+          "currentOffset": 692,
+          "endOffset": 698
         }
       }]
     }]

@@ -11,7 +11,7 @@
     <Login></Login>
     <Explain></Explain>
     <ExplainBattle></ExplainBattle>
-    <div class="lottie" @click="loginFooter">
+    <div class="lottie">
       <lottie :options="login" :height="150" :width="200" :animCreated="handleAnimation"/>
     </div>
   </div>
@@ -23,8 +23,8 @@ import Login from '../components/Login'
 import Eyeball from '../components/Eyeball'
 import Explain from '../components/Explain'
 import ExplainBattle from '../components/ExplainBattle'
-import firebase from 'firebase'
-import { v4 as uuidv4 } from 'uuid'
+// import firebase from 'firebase'
+// import { v4 as uuidv4 } from 'uuid'
 
 import Lottie from "@/components/Lottie.vue"
 // アニメーション
@@ -49,35 +49,37 @@ export default {
     handleAnimation (anim) {
       this.anim = anim
     },
-    loginFooter(){
-      const provider = new firebase.auth.TwitterAuthProvider()
-      firebase.auth().signInWithPopup(provider)
-      .then((result) =>{
-        console.log('ログインに成功しました')
-        const user = result.user
-        if (user) {
-          const db = firebase.firestore()
-          const docID = String(user.providerData[0].uid)
-          const randomKey = uuidv4()
+    // loginFooter(){
+    //   const provider = new firebase.auth.TwitterAuthProvider()
+    //   firebase.auth().signInWithPopup(provider)
+    //   .then((result) =>{
+    //     console.log('ログインに成功しました')
+    //     const user = result.user
+    //     if (user) {
+    //       const db = firebase.firestore()
+    //       const docID = String(user.uid)
+    //       //console.log(docID)
+    //       const randomKey = uuidv4()
 
-          db.collection('users').doc(docID)
-          .set({
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            random: randomKey
-          })
-          .then(
-            console.log('ユーザー作成完了しました')
-          )
-          .catch((error) => {
-          console.log(error)
-          })
-        }
-      })
-      .catch((error => {
-        console.log(error)
-      }))
-    }
+    //       db.collection('users').doc(docID)
+    //       .set({
+    //         displayName: user.displayName,
+    //         photoURL: user.photoURL,
+    //         random: randomKey
+    //       })
+    //       .then(
+    //         console.log('ユーザー作成完了しました'),
+    //         console.log(user.uid)
+    //       )
+    //       .catch((error) => {
+    //       console.log(error)
+    //       })
+    //     }
+    //   })
+    //   .catch((error => {
+    //     console.log(error)
+    //   }))
+    // }
   }
 }
 </script>

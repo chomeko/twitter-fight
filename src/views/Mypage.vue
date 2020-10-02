@@ -119,7 +119,7 @@ export default {
       //twitter情報
       loginUser: {},
       //twitter__uid
-      loginUid: {},
+      //loginUid: {},
       //ついふぁいにようこそ表示
       // welcomHome: true,
       //ステータス確定前表示
@@ -165,27 +165,13 @@ export default {
     firebase.auth().onAuthStateChanged(async user => {
       if (user){
         this.loginUser = user//ユーザー情報
-        this.loginUid = user.providerData[0].uid
+        //this.loginUid = user.providerData[0].uid
         this.get()//databaseからキャラクター情報取得
         await this.getTitles()//ユーザーの持ってる称号リストを取得
         await this.userEquipTitle()//ユーザーが装備してる称号を取得
+        //console.log(user)
       }
     })
-  },
-  //描画の状態をローカルストレージに保持
-  watch: {
-    // welcomHome() {
-    //   this.welcomHome = this.$localStorage.set('welcomHome',this.welcomHome)
-    // },
-    // beforeSutefuri() {
-    //   this.beforeSutefuri = this.$localStorage.set('beforeSutefuri',this.beforeSutefuri)
-    // },
-    // oldSutefuri() {
-    //   this.oldSutefuri = this.$localStorage.set('oldSutefuri',this.oldSutefuri)
-    // },
-    // outputUpdate(){
-    //   this.output
-    // }
   },
   created() {
     this.db = firebase.firestore() // dbインスタンスを初期化
@@ -198,7 +184,7 @@ export default {
         const user = result.user
         if (user) {
           const db = firebase.firestore()
-          const docID = String(user.providerData[0].uid)
+          const docID = String(user.uid)
           const randomKey = uuidv4()
 
           db.collection('users').doc(docID)
@@ -282,7 +268,7 @@ export default {
     //基礎ステータス確定してdatabaseに登録
     async okCharacter(){
       await this.userSet()
-      const docID = String(this.loginUser.providerData[0].uid)
+      const docID = String(this.loginUser.uid)
       await this.db.collection('sutefuri').doc(docID)
       .set({
         lv: this.character.lv,
@@ -310,7 +296,7 @@ export default {
     //初期装備データ空を登録する
     async addEmptyTitle(){
       const self = this
-      const docID = String(this.loginUser.providerData[0].uid)
+      const docID = String(this.loginUser.uid)
       const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
       await washingtonRef.set({equip: this.addTitle})
       washingtonRef.get()
@@ -325,7 +311,7 @@ export default {
     //databaseからキャラクター情報取得
     async get(){
       let self = this
-      let docID = String(this.loginUser.providerData[0].uid)
+      let docID = String(this.loginUser.uid)
       let docRef = this.db.collection("sutefuri").doc(docID)
       await docRef.get()
       .then((doc) => {
@@ -342,7 +328,7 @@ export default {
     },
     //ユーザーの持ってる称号リストを取得
     async getTitles() {
-      let docID = String(this.loginUser.providerData[0].uid)
+      let docID = String(this.loginUser.uid)
       let docRef = this.db.collection("users").doc(docID).collection("titles").orderBy('rea', 'asc')
       const querySnapshot = await docRef.get()
       const data = querySnapshot.docs.map(doc => {
@@ -354,7 +340,7 @@ export default {
     //ユーザーが装備してる称号を取得
     async userEquipTitle(){
       let self = this
-      const docID = String(this.loginUser.providerData[0].uid)
+      const docID = String(this.loginUser.uid)
       await this.db.collection('sutefuri').doc(docID).collection('equip')
       .get()
       .then((doc) => {
@@ -369,7 +355,7 @@ export default {
     },
     //ユーザーが装備した称号のステータスを反映
     userSutefuri(){
-      const docID = String(this.loginUser.providerData[0].uid)
+      const docID = String(this.loginUser.uid)
       this.db.collection('sutefuri').doc(docID)
       .update({
         hp: this.output.hp,
@@ -387,7 +373,7 @@ export default {
     },
     //ユーザーが装備した称号をdatabaseに登録
     addEquipTitles(addTitleToStatus){
-      const docID = String(this.loginUser.providerData[0].uid)
+      const docID = String(this.loginUser.uid)
       const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
       washingtonRef.update({equip: firebase.firestore.FieldValue.arrayUnion(addTitleToStatus)})
       .then(
@@ -399,7 +385,7 @@ export default {
     },
     //ユーザーが装備した称号を削除して外す
     DeleteEquipTitles(addTitleToStatus){
-      const docID = String(this.loginUser.providerData[0].uid)
+      const docID = String(this.loginUser.uid)
       const washingtonRef = this.db.collection('sutefuri').doc(docID).collection('equip').doc('装備枠')
       washingtonRef.update({equip: firebase.firestore.FieldValue.arrayRemove(addTitleToStatus)})
       .then(

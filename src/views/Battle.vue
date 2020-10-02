@@ -169,7 +169,7 @@ export default {
 
     //１だと勝ち ０だと負け
     record(vs){
-      let docID = String(this.$user().providerData[0].uid)
+      let docID = String(this.$user().uid)
       let docRef = this.db.collection("sutefuri").doc(docID)
       if(vs > 0){
         docRef.update({
@@ -293,7 +293,7 @@ export default {
     },
     //経験値get
     async experiencePoint(){
-      let docID = String(this.$user().providerData[0].uid)
+      let docID = String(this.$user().uid)
       let docRef = this.db.collection("sutefuri").doc(docID)
       await docRef.update({
         exp: firebase.firestore.FieldValue.increment(10),
@@ -322,7 +322,7 @@ export default {
     //ユーザー情報取得
     async getUser(){
       let self = this
-      let docID = String(this.$user().providerData[0].uid)
+      let docID = String(this.$user().uid)
       let docRef = this.db.collection("sutefuri").doc(docID)
       await docRef.get()
       .then((doc) => {

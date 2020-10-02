@@ -57,7 +57,7 @@ describe('最初のテスト', () => {
     })
 
     test('SET - Not Authed', async () => {
-      const db = getAuthedFirestore(null)
+      const db = getAuthedFirestore({uid: "bob"})
       const sutefuriRef = db.collection('sutefuri').doc('alice')
       // セット出来ないこと
       await firebase.assertFails(
@@ -91,7 +91,7 @@ describe('最初のテスト', () => {
         owner: 'alice',
         createAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
-      const db = getAuthedFirestore(null)
+      const db = getAuthedFirestore({ uid: 'bob' })
       const sutefuriRef = db.collection('sutefuri').doc('alice')
       // 更新出来ないこと
       await firebase.assertFails(
@@ -120,18 +120,18 @@ describe('最初のテスト', () => {
         owner: 'alice',
         createAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
-      const db = getAuthedFirestore(null)
+      const db = getAuthedFirestore({ uid: 'bob' })
       const sutefuriRef = db.collection('sutefuri').doc('alice')
       // 削除出来ないこと
       await firebase.assertFails(sutefuriRef.delete())
     })
 
-    test('GET - Authed', async () => {
-      const db = getAuthedFirestore({ uid: 'alice' })
-      const sutefuriRef = db.collection('sutefuri').doc('alice')
-      // 1件取得出来ること
-      await firebase.assertSucceeds(sutefuriRef.get())
-    })
+    // test('GET - Authed', async () => {
+    //   const db = getAuthedFirestore({ uid: 'alice' })
+    //   const sutefuriRef = db.collection('sutefuri').doc('alice')
+    //   // 1件取得出来ること
+    //   await firebase.assertSucceeds(sutefuriRef.get())
+    // })
 
     // test('GET - Not Authed', async () => {
     //   const db = getAuthedFirestore(null)
@@ -154,4 +154,130 @@ describe('最初のテスト', () => {
     //   await firebase.assertSucceeds(sutefuriRef.get())
     // })
   })
+  describe('titles', () => {
+    test('NoSet', async () => {
+      const db = getAuthedFirestore({ uid: 'alice' })
+      const titlesRef = db.collection('titles').doc('alice')
+      // セット出来きないこと
+      await firebase.assertFails(
+        titlesRef.set({
+          owner: 'alice',
+          createAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+      )
+    })
+  })
+
+  describe('users', () => {
+    test('SET - Authed', async () => {
+      const db = getAuthedFirestore({ uid: 'alice' })
+      const usersRef = db.collection('users').doc('alice')
+      // 自分のドキュメントにセット出来ること
+      await firebase.assertSucceeds(
+        usersRef.set({
+          name: 'alice',
+          photoURL: 'URL',
+        })
+      )
+    })
+
+    test('SET - Not Authed', async () => {
+      const db = getAuthedFirestore({uid: 'bob'})
+      const usersRef = db.collection('users').doc('alice')
+      // 自分以外のドキュメントにセット出来ないこと
+      await firebase.assertFails(
+        usersRef.set({
+          owner: 'alice',
+          createAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+      )
+    })
+
+    test('UPDATE - Authed', async () => {
+      const db = getAuthedFirestore({ uid: 'alice' })
+      const usersRef = db.collection('users').doc('alice')
+      await usersRef.set({
+        owner: 'alice',
+        createAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      // 更新出来ること
+      await firebase.assertSucceeds(
+        usersRef.update({
+          owner: 'alice',
+          updateAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+      )
+    })
+
+    test('UPDATE - Not Authed', async () => {
+      const _db = getAuthedFirestore({ uid: 'alice' })
+      const _usersRef = _db.collection('users').doc('alice')
+      await _usersRef.set({
+        owner: 'alice',
+        createAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      const db = getAuthedFirestore({ uid: 'bob' })
+      const usersRef = db.collection('users').doc('alice')
+      // 更新出来ないこと
+      await firebase.assertFails(
+        usersRef.update({
+          owner: 'alice',
+          createAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+      )
+    })
+
+    test('DELETE - Authed', async () => {
+      const db = getAuthedFirestore({ uid: 'alice' })
+      const usersRef = db.collection('users').doc('alice')
+      await usersRef.set({
+        owner: 'alice',
+        createAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      // 削除出来ること
+      await firebase.assertSucceeds(usersRef.delete())
+    })
+
+    test('DELETE - Not Authed', async () => {
+      const _db = getAuthedFirestore({ uid: 'alice' })
+      const _usersRef = _db.collection('users').doc('alice')
+      await _usersRef.set({
+        owner: 'alice',
+        createAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      const db = getAuthedFirestore({ uid: 'bob' })
+      const usersRef = db.collection('users').doc('alice')
+      // 削除出来ないこと
+      await firebase.assertFails(usersRef.delete())
+    })
+
+    // test('GET - Authed', async () => {
+    //   const db = getAuthedFirestore({ uid: 'alice' })
+    //   const usersRef = db.collection('users').doc('alice')
+    //   // 1件取得出来ること
+    //   await firebase.assertSucceeds(usersRef.get())
+    // })
+
+    // test('GET - Not Authed', async () => {
+    //   const db = getAuthedFirestore(null)
+    //   const usersRef = db.collection('users').doc('alice')
+    //   // 1件取得出来ること
+    //   await firebase.assertSucceeds(usersRef.get())
+    // })
+
+    // test('LIST - Authed', async () => {
+    //   const db = getAuthedFirestore({ uid: 'alice' })
+    //   const usersRef = db.collection('users')
+    //   // 全件取得出来ること
+    //   await firebase.assertSucceeds(usersRef.get())
+    // })
+
+    // test('LIST - Not Authed', async () => {
+    //   const db = getAuthedFirestore(null)
+    //   const usersRef = db.collection('users')
+    //   // 全件取得出来ること
+    //   await firebase.assertSucceeds(usersRef.get())
+    // })
+  })
+
 })
