@@ -81,11 +81,27 @@ export default {
     color: #fff
     border: 3px solid #FFF
     &__select
-      background: #f6f6f6
-      border-radius: 0px
-      color: #000
       cursor: pointer
       padding: 10px 5px
+      &--attack
+        color: #FFF
+        border-radius: 3px
+        background: none
+        box-shadow: inset 0 0 15px rgba(251,81,81,0.4), 0 0 15px rgba(251,81,81,0.4)
+        border: #fb5454 solid 2px !important
+      &--escapebtn
+        color: #FFF
+        border-radius: 3px
+        box-shadow: inset 0 0 15px rgba(0,170,170,0.5), 0 0 15px rgba(0,170,170,0.5)
+        border: #0dd solid 2px !important
+        background: none
+      &--next
+        color: #FFF
+        box-shadow: inset 0 0 0.8em rgba(255,255,255,0.3), 0 0 0.8em rgba(255,255,255,0.3)
+        border: #fff solid 2px
+        border-radius: 3px !important
+        background: none
+
   //サイズ
   .menu--size
     padding: 20px 30px

@@ -39,12 +39,12 @@
       <!-- 戦闘ボタン -->
       <div class="btn__container">
         <div v-if="!nextBattle" class="leftBtn">
-          <Button v-if="!battleEnd" v-bind:disabled="clickBattleBtn" type="battle__select" @myclick="battleStart">戦う</Button>
-          <Button v-if="battleEnd" type="battle__select" @myclick="experiencePoint" v-bind:disabled="clickBattleBtn">次へ</Button>
+          <Button v-if="!battleEnd" v-bind:disabled="clickBattleBtn" type="battle__select--attack" @myclick="battleStart">たたかう</Button>
+          <Button v-if="battleEnd" type="battle__select--next" @myclick="experiencePoint" v-bind:disabled="clickBattleBtn">次へ</Button>
         </div>
-        <Button v-if="nextBattle" type="battle__select" class="leftBtn" @myclick="reset" v-bind:disabled="!clickBattleBtn">次の敵を探す</Button>
+        <Button v-if="nextBattle" type="battle__select--next" class="leftBtn" @myclick="reset" v-bind:disabled="!clickBattleBtn">次の敵を探す</Button>
         <div class="rightBtn">
-          <Button v-if="escapebtn" type="battle__select" @myclick="reset">逃げる</Button>
+          <Button v-if="escapebtn" type="battle__select--escapebtn" @myclick="reset">にげる</Button>
         </div>
       </div>
       <!-- 自分 -->
