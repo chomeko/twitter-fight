@@ -10,55 +10,57 @@
       <Button type="battle" @myclick.once="battle">バトル開始</Button>
     </template>
     <template v-if="battleFlag">
-      <transition-group name="fade">
-        <!-- 敵 -->
-        <div class="enemyCharacter" key="ememy">
-          <span>レベル : {{enemy.lv}}</span>
-          <span class="enemyCharacter__name">{{enemyName.displayName}}</span>
-          <div class="animeImg">
-            <TwitterImg v-if="enemyName.photoURL" :loginUser="enemyName" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
-          </div>
-          <!-- 攻撃エフェクト -->
-          <div class="enemyLottie" key="enemyAnime">
-            <lottie v-if="enemyAnime" :options="zangeki" :height="150" :width="150" :animCreated="handleAnimation"/>
-            <lottie v-if="enemyLose" :options="bakuhatu" :height="150" :width="150" :animCreated="handleAnimation"/>
-          </div>
-          <div class="enemyCharacter__hp">
-            <div id="enemyMaxGauge"></div>
-            <div class="maxHpGauge" ref="enemyMax"></div>
-          </div>
-          <span class="maxHpGauge__enemyHp">{{this.enemy.hp}}</span>
+      <!-- 敵 -->
+      <div class="enemyCharacter">
+        <span>レベル : {{enemy.lv}}</span>
+        <span class="enemyCharacter__name">{{enemyName.displayName}}</span>
+        <div class="animeImg">
+          <TwitterImg v-if="enemyName.photoURL" :loginUser="enemyName" class="enemyCharacter__img" :class="{opacity:enemyEnd}"></TwitterImg>
         </div>
-        <!-- メッセージ -->
-        <div class="message__container" key="message">
-          <vue-typer
-            :text="this.message"
-            :repeat='0'
-            :type-delay='15'
-          ></vue-typer>
+        <!-- 攻撃エフェクト -->
+        <div class="enemyLottie">
+          <lottie v-if="enemyAnime" :options="zangeki" :height="150" :width="150" :animCreated="handleAnimation"/>
+          <lottie v-if="enemyLose" :options="bakuhatu" :height="150" :width="150" :animCreated="handleAnimation"/>
         </div>
-        <!-- 戦闘ボタン -->
-        <div class="btn__container" key="btn__container">
+        <div class="enemyCharacter__hp">
+          <div id="enemyMaxGauge"></div>
+          <div class="maxHpGauge" ref="enemyMax"></div>
+        </div>
+        <span class="maxHpGauge__enemyHp">{{this.enemy.hp}}</span>
+      </div>
+      <!-- メッセージ -->
+      <div class="message__container">
+        <vue-typer
+          :text="this.message"
+          :repeat='0'
+          :type-delay='15'
+        ></vue-typer>
+      </div>
+      <!-- 戦闘ボタン -->
+      <div class="btn__container">
+        <div v-if="!nextBattle" class="leftBtn">
           <Button v-if="!battleEnd" v-bind:disabled="clickBattleBtn" type="battle__select" @myclick="battleStart">戦う</Button>
           <Button v-if="battleEnd" type="battle__select" @myclick="experiencePoint" v-bind:disabled="clickBattleBtn">次へ</Button>
+        </div>
+        <Button v-if="nextBattle" type="battle__select" class="leftBtn" @myclick="reset" v-bind:disabled="!clickBattleBtn">次の敵を探す</Button>
+        <div class="rightBtn">
           <Button v-if="escapebtn" type="battle__select" @myclick="reset">逃げる</Button>
-          <Button v-if="!escapebtn" type="battle__select" @myclick="reset" v-bind:disabled="!clickBattleBtn">次の敵を探す</Button>
         </div>
-        <!-- 自分 -->
-        <div class="myCharacter" key="myCharacter">
-          <TwitterImg v-if="user.photoURL" :loginUser="user" :class="{opacity:myUserEnd}"></TwitterImg>
-          <!-- 攻撃エフェクト -->
-          <div class="myUserLottie" key="myUserAnime">
-            <lottie v-if="myUserAnime" :options="ookiduti" :height="100" :width="100" :animCreated="handleAnimation"/>
-            <lottie v-if="myUserLose" :options="bakuhatu" :height="150" :width="150" :animCreated="handleAnimation"/>
-          </div>
-          <div class="myCharacter__hp">
-            <div id="myMaxGauge"></div>
-            <div class="maxHpGauge" ref="myMax"></div>
-          </div>
-          <span class="maxHpGauge__myUserHp">{{this.myUser.hp}}</span>
+      </div>
+      <!-- 自分 -->
+      <div class="myCharacter">
+        <TwitterImg v-if="user.photoURL" :loginUser="user" :class="{opacity:myUserEnd}"></TwitterImg>
+        <!-- 攻撃エフェクト -->
+        <div class="myUserLottie">
+          <lottie v-if="myUserAnime" :options="ookiduti" :height="100" :width="100" :animCreated="handleAnimation"/>
+          <lottie v-if="myUserLose" :options="bakuhatu" :height="150" :width="150" :animCreated="handleAnimation"/>
         </div>
-      </transition-group>
+        <div class="myCharacter__hp">
+          <div id="myMaxGauge"></div>
+          <div class="maxHpGauge" ref="myMax"></div>
+        </div>
+        <span class="maxHpGauge__myUserHp">{{this.myUser.hp}}</span>
+      </div>
     </template>
     <router-link
       v-if="!battleFlag"
@@ -99,6 +101,7 @@ export default {
       enemy: {},
       enemyName: {},
       message: '',
+      nextBattle: false,
       battleEnd: false,
       escapebtn: true,
       myUserEnd: false,
@@ -210,7 +213,7 @@ export default {
           if(this.myUser.hp > 0){
             enemyDamage > 0 ? this.myUserAnime = true : this.myUserAnime = false
             enemyDamage > 0 ? this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた" : this.message = `${this.enemyName.displayName}の攻撃\n` + "紙一重で避けた！！"
-            this.clickBattleBtn =false
+            this.clickBattleBtn = false
           }else{
             this.myUser.hp = 0
             this.myUserLose = true
@@ -220,6 +223,7 @@ export default {
             this.record(0)
             this.escapebtn = false//逃げるボタン非表示
             this.clickBattleBtn = true
+            this.nextBattle = true
           }
         }, 2000)
       }
@@ -289,6 +293,7 @@ export default {
         this.message = `${this.enemyName.displayName}の攻撃\n` + enemyDamage + "のダメージを受けた\n" + `${this.$user().displayName}は\n` + "やられてしまった...！"
         this.record(0)
         this.clickBattleBtn = true
+        this.nextBattle = true
       }
     },
     //経験値get
@@ -299,7 +304,7 @@ export default {
         exp: firebase.firestore.FieldValue.increment(10),
         coin: firebase.firestore.FieldValue.increment(10)
       })
-      this.message = '10経験値をゲットした'
+      this.message = '10経験値と10コインをGETした'
       await docRef.get()
       .then(async (doc) => {
         //console.log(doc.data().exp)
@@ -314,9 +319,7 @@ export default {
           this.message = 'レベルが上がった\n' + 'ステータスが強化された'
         }
       })
-      setTimeout(() => {
-        this.message = '10コインをGETした！'
-      }, 1000)
+      this.nextBattle = true
       this.clickBattleBtn = true
     },
     //ユーザー情報取得
@@ -426,7 +429,7 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   +mq(sp)
     margin-top: 40px
   +mq(pc)
-    margin-top: 60px
+    margin-top: 40px
   span
     display: block
   &__name
@@ -458,18 +461,18 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
       height: 20px
       background-color: red
       border: 1px solid #FFF
+  img
+    width: 140px
+    height: auto
+    margin-top: 8px
+    +mq(pc)
+      margin-top: 16px
 //攻撃エフェクト
 ::v-deep .enemyLottie
   position: absolute
   top: 50%
   left: 50%
   transform: translate(-50%, -50%)
-img
-    width: 140px
-    height: auto
-    margin-top: 8px
-    +mq(pc)
-      margin-top: 16px
 .myCharacter
   text-align: center
   position: relative
@@ -531,24 +534,18 @@ img
   border-radius: 10px
   padding: 10px
   +mq(pc)
-    margin-top: 24px
+    margin-top: 16px
   p
     padding: 5px 10px
     margin: 0
     line-height: 2
 .btn__container
-  position: relative
+  display: flex
+  justify-content: space-between
   button
-    padding: 5px
+    margin-top: 5px
+    padding: 10px
     border: 1px solid #FFF
-    &:nth-of-type(1)
-      position: absolute
-      left: 0
-      top: 10px
-    &:nth-of-type(2)
-      position: absolute
-      right: 0
-      top: 10px
 
 .back
   color: #FFF
@@ -559,7 +556,7 @@ img
   transform: translate(-50%, -10%)
 
 .fade-move
-  transition: transform 1s
+  transition: transform .5s
 .fade-enter,
 .fade-leave-to
   opacity: 0

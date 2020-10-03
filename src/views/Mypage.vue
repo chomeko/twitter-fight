@@ -451,8 +451,11 @@ export default {
   .fade-leave-to
     opacity: 0
   .fade-enter-active
-    transition: opacity .5s
+    transition: opacity .1s
   .fade-leave-active
-    transition: opacity .5s
+    transition: opacity 0s
     position: absolute
+
+  [v-cloak]
+    display: none
 </style>

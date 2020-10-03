@@ -20,36 +20,36 @@
 const data = {
   "rules": {
     "files": [{
-      "content": "rules_version \u003d \u00272\u0027;\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /sutefuri/{uid} {\n      allow read: if request.auth.uid \u003d\u003d uid;\n      allow write: if request.auth.uid \u003d\u003d uid;\n        match /equip/{document\u003d**} {\n          allow read: if request.auth.uid \u003d\u003d uid;\n          allow write: if request.auth.uid \u003d\u003d uid;\n        }\n    }\n    match /users/{uid} {\n      allow read: if request.auth.uid \u003d\u003d uid;\n      allow write: if request.auth.uid \u003d\u003d uid;\n        match /titles/{document\u003d**} {\n          allow read: if request.auth.uid \u003d\u003d uid;\n          allow write: if request.auth.uid \u003d\u003d uid;\n        }\n    }\n    match /titles/{document\u003d**} {\n      allow read: if request.auth !\u003d null;\n      allow write: if false;\n    }\n  }\n}"
+      "content": "rules_version \u003d \u00272\u0027;\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /sutefuri/{uid} {\n      allow read: if request.auth !\u003d null;\n      allow write: if request.auth.uid \u003d\u003d uid;\n        match /equip/{document\u003d**} {\n          allow read: if request.auth.uid \u003d\u003d uid;\n          allow write: if request.auth.uid \u003d\u003d uid;\n        }\n    }\n    match /users/{uid} {\n      allow read: if request.auth !\u003d null;\n      allow write: if request.auth.uid \u003d\u003d uid;\n        match /titles/{document\u003d**} {\n          allow read: if request.auth.uid \u003d\u003d uid;\n          allow write: if request.auth.uid \u003d\u003d uid;\n        }\n    }\n    match /titles/{document\u003d**} {\n      allow read: if request.auth !\u003d null;\n      allow write: if false;\n    }\n  }\n}"
     }]
   },
   "report": [{
     "sourcePosition": {
       "line": 8,
       "column": 26,
-      "currentOffset": 272,
-      "endOffset": 294
+      "currentOffset": 269,
+      "endOffset": 291
     },
     "children": [{
       "sourcePosition": {
         "line": 8,
         "column": 26,
-        "currentOffset": 272,
-        "endOffset": 287
+        "currentOffset": 269,
+        "endOffset": 284
       },
       "children": [{
         "sourcePosition": {
           "line": 8,
           "column": 26,
-          "currentOffset": 272,
-          "endOffset": 283
+          "currentOffset": 269,
+          "endOffset": 280
         },
         "children": [{
           "sourcePosition": {
             "line": 8,
             "column": 26,
-            "currentOffset": 272,
-            "endOffset": 278
+            "currentOffset": 269,
+            "endOffset": 275
           }
         }]
       }]
@@ -57,37 +57,37 @@ const data = {
       "sourcePosition": {
         "line": 8,
         "column": 46,
-        "currentOffset": 292,
-        "endOffset": 294
+        "currentOffset": 289,
+        "endOffset": 291
       }
     }]
   }, {
     "sourcePosition": {
       "line": 9,
       "column": 27,
-      "currentOffset": 323,
-      "endOffset": 345
+      "currentOffset": 320,
+      "endOffset": 342
     },
     "children": [{
       "sourcePosition": {
         "line": 9,
         "column": 27,
-        "currentOffset": 323,
-        "endOffset": 338
+        "currentOffset": 320,
+        "endOffset": 335
       },
       "children": [{
         "sourcePosition": {
           "line": 9,
           "column": 27,
-          "currentOffset": 323,
-          "endOffset": 334
+          "currentOffset": 320,
+          "endOffset": 331
         },
         "children": [{
           "sourcePosition": {
             "line": 9,
             "column": 27,
-            "currentOffset": 323,
-            "endOffset": 329
+            "currentOffset": 320,
+            "endOffset": 326
           }
         }]
       }]
@@ -95,8 +95,8 @@ const data = {
       "sourcePosition": {
         "line": 9,
         "column": 47,
-        "currentOffset": 343,
-        "endOffset": 345
+        "currentOffset": 340,
+        "endOffset": 342
       }
     }]
   }, {
@@ -104,45 +104,30 @@ const data = {
       "line": 5,
       "column": 22,
       "currentOffset": 138,
-      "endOffset": 160
+      "endOffset": 157
     },
     "children": [{
       "sourcePosition": {
         "line": 5,
         "column": 22,
         "currentOffset": 138,
-        "endOffset": 153
+        "endOffset": 149
       },
       "children": [{
         "sourcePosition": {
           "line": 5,
           "column": 22,
           "currentOffset": 138,
-          "endOffset": 149
-        },
-        "children": [{
-          "sourcePosition": {
-            "line": 5,
-            "column": 22,
-            "currentOffset": 138,
-            "endOffset": 144
-          }
-        }]
+          "endOffset": 144
+        }
       }]
-    }, {
-      "sourcePosition": {
-        "line": 5,
-        "column": 42,
-        "currentOffset": 158,
-        "endOffset": 160
-      }
     }]
   }, {
     "sourcePosition": {
       "line": 6,
       "column": 23,
-      "currentOffset": 185,
-      "endOffset": 207
+      "currentOffset": 182,
+      "endOffset": 204
     },
     "values": [{
       "value": {
@@ -159,8 +144,8 @@ const data = {
       "sourcePosition": {
         "line": 6,
         "column": 23,
-        "currentOffset": 185,
-        "endOffset": 200
+        "currentOffset": 182,
+        "endOffset": 197
       },
       "values": [{
         "value": {
@@ -177,8 +162,8 @@ const data = {
         "sourcePosition": {
           "line": 6,
           "column": 23,
-          "currentOffset": 185,
-          "endOffset": 196
+          "currentOffset": 182,
+          "endOffset": 193
         },
         "values": [{
           "value": {
@@ -237,15 +222,15 @@ const data = {
           "sourcePosition": {
             "line": 6,
             "column": 23,
-            "currentOffset": 185,
-            "endOffset": 191
+            "currentOffset": 182,
+            "endOffset": 188
           },
           "values": [{
             "value": {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:39.824Z"
+                    "timestampValue": "2020-10-02T15:01:56.237Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -320,7 +305,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:39.824Z"
+                                "timestampValue": "2020-10-02T15:01:56.237Z"
                               }
                             }
                           }
@@ -358,7 +343,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:39.883Z"
+                    "timestampValue": "2020-10-02T15:01:56.615Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -433,7 +418,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:39.883Z"
+                                "timestampValue": "2020-10-02T15:01:56.615Z"
                               }
                             }
                           }
@@ -471,7 +456,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:39.923Z"
+                    "timestampValue": "2020-10-02T15:01:56.684Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -546,7 +531,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:39.923Z"
+                                "timestampValue": "2020-10-02T15:01:56.684Z"
                               }
                             }
                           }
@@ -584,7 +569,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:39.930Z"
+                    "timestampValue": "2020-10-02T15:01:56.694Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -661,10 +646,10 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:39.923Z"
+                                "timestampValue": "2020-10-02T15:01:56.684Z"
                               },
                               "updateAt": {
-                                "timestampValue": "2020-10-02T13:02:39.930Z"
+                                "timestampValue": "2020-10-02T15:01:56.694Z"
                               }
                             }
                           }
@@ -702,7 +687,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:39.968Z"
+                    "timestampValue": "2020-10-02T15:01:56.740Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -777,7 +762,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:39.968Z"
+                                "timestampValue": "2020-10-02T15:01:56.740Z"
                               }
                             }
                           }
@@ -815,7 +800,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.003Z"
+                    "timestampValue": "2020-10-02T15:01:56.781Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -892,7 +877,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.003Z"
+                                "timestampValue": "2020-10-02T15:01:56.781Z"
                               }
                             }
                           }
@@ -930,7 +915,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.037Z"
+                    "timestampValue": "2020-10-02T15:01:56.827Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -1005,7 +990,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.037Z"
+                                "timestampValue": "2020-10-02T15:01:56.827Z"
                               }
                             }
                           }
@@ -1043,7 +1028,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.040Z"
+                    "timestampValue": "2020-10-02T15:01:56.835Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -1115,7 +1100,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.074Z"
+                    "timestampValue": "2020-10-02T15:01:56.878Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -1190,7 +1175,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.074Z"
+                                "timestampValue": "2020-10-02T15:01:56.878Z"
                               }
                             }
                           }
@@ -1228,7 +1213,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.100Z"
+                    "timestampValue": "2020-10-02T15:01:56.911Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -1302,8 +1287,8 @@ const data = {
       "sourcePosition": {
         "line": 6,
         "column": 43,
-        "currentOffset": 205,
-        "endOffset": 207
+        "currentOffset": 202,
+        "endOffset": 204
       },
       "values": [{
         "value": {
@@ -1316,29 +1301,29 @@ const data = {
     "sourcePosition": {
       "line": 16,
       "column": 26,
-      "currentOffset": 545,
-      "endOffset": 567
+      "currentOffset": 539,
+      "endOffset": 561
     },
     "children": [{
       "sourcePosition": {
         "line": 16,
         "column": 26,
-        "currentOffset": 545,
-        "endOffset": 560
+        "currentOffset": 539,
+        "endOffset": 554
       },
       "children": [{
         "sourcePosition": {
           "line": 16,
           "column": 26,
-          "currentOffset": 545,
-          "endOffset": 556
+          "currentOffset": 539,
+          "endOffset": 550
         },
         "children": [{
           "sourcePosition": {
             "line": 16,
             "column": 26,
-            "currentOffset": 545,
-            "endOffset": 551
+            "currentOffset": 539,
+            "endOffset": 545
           }
         }]
       }]
@@ -1346,37 +1331,37 @@ const data = {
       "sourcePosition": {
         "line": 16,
         "column": 46,
-        "currentOffset": 565,
-        "endOffset": 567
+        "currentOffset": 559,
+        "endOffset": 561
       }
     }]
   }, {
     "sourcePosition": {
       "line": 17,
       "column": 27,
-      "currentOffset": 596,
-      "endOffset": 618
+      "currentOffset": 590,
+      "endOffset": 612
     },
     "children": [{
       "sourcePosition": {
         "line": 17,
         "column": 27,
-        "currentOffset": 596,
-        "endOffset": 611
+        "currentOffset": 590,
+        "endOffset": 605
       },
       "children": [{
         "sourcePosition": {
           "line": 17,
           "column": 27,
-          "currentOffset": 596,
-          "endOffset": 607
+          "currentOffset": 590,
+          "endOffset": 601
         },
         "children": [{
           "sourcePosition": {
             "line": 17,
             "column": 27,
-            "currentOffset": 596,
-            "endOffset": 602
+            "currentOffset": 590,
+            "endOffset": 596
           }
         }]
       }]
@@ -1384,54 +1369,39 @@ const data = {
       "sourcePosition": {
         "line": 17,
         "column": 47,
-        "currentOffset": 616,
-        "endOffset": 618
+        "currentOffset": 610,
+        "endOffset": 612
       }
     }]
   }, {
     "sourcePosition": {
       "line": 13,
       "column": 22,
-      "currentOffset": 410,
-      "endOffset": 432
+      "currentOffset": 407,
+      "endOffset": 426
     },
     "children": [{
       "sourcePosition": {
         "line": 13,
         "column": 22,
-        "currentOffset": 410,
-        "endOffset": 425
+        "currentOffset": 407,
+        "endOffset": 418
       },
       "children": [{
         "sourcePosition": {
           "line": 13,
           "column": 22,
-          "currentOffset": 410,
-          "endOffset": 421
-        },
-        "children": [{
-          "sourcePosition": {
-            "line": 13,
-            "column": 22,
-            "currentOffset": 410,
-            "endOffset": 416
-          }
-        }]
+          "currentOffset": 407,
+          "endOffset": 413
+        }
       }]
-    }, {
-      "sourcePosition": {
-        "line": 13,
-        "column": 42,
-        "currentOffset": 430,
-        "endOffset": 432
-      }
     }]
   }, {
     "sourcePosition": {
       "line": 14,
       "column": 23,
-      "currentOffset": 457,
-      "endOffset": 479
+      "currentOffset": 451,
+      "endOffset": 473
     },
     "values": [{
       "value": {
@@ -1448,8 +1418,8 @@ const data = {
       "sourcePosition": {
         "line": 14,
         "column": 23,
-        "currentOffset": 457,
-        "endOffset": 472
+        "currentOffset": 451,
+        "endOffset": 466
       },
       "values": [{
         "value": {
@@ -1466,8 +1436,8 @@ const data = {
         "sourcePosition": {
           "line": 14,
           "column": 23,
-          "currentOffset": 457,
-          "endOffset": 468
+          "currentOffset": 451,
+          "endOffset": 462
         },
         "values": [{
           "value": {
@@ -1526,15 +1496,15 @@ const data = {
           "sourcePosition": {
             "line": 14,
             "column": 23,
-            "currentOffset": 457,
-            "endOffset": 463
+            "currentOffset": 451,
+            "endOffset": 457
           },
           "values": [{
             "value": {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.164Z"
+                    "timestampValue": "2020-10-02T15:01:57.006Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -1639,7 +1609,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.195Z"
+                    "timestampValue": "2020-10-02T15:01:57.043Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -1714,7 +1684,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.195Z"
+                                "timestampValue": "2020-10-02T15:01:57.043Z"
                               }
                             }
                           }
@@ -1752,7 +1722,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.227Z"
+                    "timestampValue": "2020-10-02T15:01:57.084Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -1827,7 +1797,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.227Z"
+                                "timestampValue": "2020-10-02T15:01:57.084Z"
                               }
                             }
                           }
@@ -1865,7 +1835,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.231Z"
+                    "timestampValue": "2020-10-02T15:01:57.090Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -1942,10 +1912,10 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.227Z"
+                                "timestampValue": "2020-10-02T15:01:57.084Z"
                               },
                               "updateAt": {
-                                "timestampValue": "2020-10-02T13:02:40.231Z"
+                                "timestampValue": "2020-10-02T15:01:57.090Z"
                               }
                             }
                           }
@@ -1983,7 +1953,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.260Z"
+                    "timestampValue": "2020-10-02T15:01:57.127Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -2058,7 +2028,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.260Z"
+                                "timestampValue": "2020-10-02T15:01:57.127Z"
                               }
                             }
                           }
@@ -2096,7 +2066,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.287Z"
+                    "timestampValue": "2020-10-02T15:01:57.156Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -2173,7 +2143,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.287Z"
+                                "timestampValue": "2020-10-02T15:01:57.156Z"
                               }
                             }
                           }
@@ -2211,7 +2181,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.315Z"
+                    "timestampValue": "2020-10-02T15:01:57.195Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -2286,7 +2256,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.315Z"
+                                "timestampValue": "2020-10-02T15:01:57.195Z"
                               }
                             }
                           }
@@ -2324,7 +2294,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.319Z"
+                    "timestampValue": "2020-10-02T15:01:57.201Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -2396,7 +2366,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.349Z"
+                    "timestampValue": "2020-10-02T15:01:57.232Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -2471,7 +2441,7 @@ const data = {
                                 "stringValue": "alice"
                               },
                               "createAt": {
-                                "timestampValue": "2020-10-02T13:02:40.349Z"
+                                "timestampValue": "2020-10-02T15:01:57.232Z"
                               }
                             }
                           }
@@ -2509,7 +2479,7 @@ const data = {
               "mapValue": {
                 "fields": {
                   "time": {
-                    "timestampValue": "2020-10-02T13:02:40.373Z"
+                    "timestampValue": "2020-10-02T15:01:57.258Z"
                   },
                   "auth": {
                     "mapValue": {
@@ -2583,8 +2553,8 @@ const data = {
       "sourcePosition": {
         "line": 14,
         "column": 43,
-        "currentOffset": 477,
-        "endOffset": 479
+        "currentOffset": 471,
+        "endOffset": 473
       },
       "values": [{
         "value": {
@@ -2597,22 +2567,22 @@ const data = {
     "sourcePosition": {
       "line": 21,
       "column": 22,
-      "currentOffset": 692,
-      "endOffset": 711
+      "currentOffset": 686,
+      "endOffset": 705
     },
     "children": [{
       "sourcePosition": {
         "line": 21,
         "column": 22,
-        "currentOffset": 692,
-        "endOffset": 703
+        "currentOffset": 686,
+        "endOffset": 697
       },
       "children": [{
         "sourcePosition": {
           "line": 21,
           "column": 22,
-          "currentOffset": 692,
-          "endOffset": 698
+          "currentOffset": 686,
+          "endOffset": 692
         }
       }]
     }]
