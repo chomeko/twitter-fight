@@ -83,20 +83,10 @@ const router = new Router({
 
 // ルーティングする時のチェック
 router.beforeEach((to, from, next) => {
-  // リダイレクト先が設定されていれば取得しておく
-  let redirect = null
-  if (to.query.redirect) {
-    redirect = to.query.redirect
-  }
   // 現在ログインしているユーザーを取得する
   firebase.auth().onAuthStateChanged(user => {
     // ユーザが認証済みの場合（userが取得できた場合）
     if (user) {
-      // リダイレクトが設定されていればリダイレクト先に
-      if (redirect  != null) {
-        next(redirect)
-        return
-      }
       // Homeページに入る時、ログインされているならmypage画面に行く
       if(to.name === "Home") {
         next({
@@ -113,9 +103,6 @@ router.beforeEach((to, from, next) => {
       if(to.matched.some(record => record.meta.requiresAuth)){
         next({
           name: 'Home',
-          query: {
-            redirect: to.fullPath
-          },
         })
       }
       // 認証が必要ない場合はそのままでOK

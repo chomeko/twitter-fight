@@ -1,7 +1,7 @@
 <template>
   <div id="mypage">
     <!-- 初期ログイン後に表示 -->
-    <div v-if="output === '' ">
+    <template v-if="output === '' ">
       <transition
         enter-active-class="animate__animated animate__zoomInDown"
         appear
@@ -12,10 +12,8 @@
       <div class="userstatus">
         <Button type="userStatus" @myclick="createCharacter">キャラステータス作成</Button>
       </div>
-    </div>
 
     <!-- キャラクターステータス作成画面 -->
-    <template v-if="output === '' ">
       <div class="before__status">
         <NewStatus :character="character"></NewStatus>
       </div>
@@ -28,22 +26,17 @@
 
     <!-- キャラクターステータス確定後 -->
     <template v-if="output != ''">
-      <transition-group name="fade">
-        <CharaInformation
-          v-if="!equipment"
-          :output="output"
-          :loginuser="loginUser"
-          key="CharaInformation"
-        ></CharaInformation>
-        <EquipmentList
-          v-if="equipment"
-          :equipmentTitles="equipmentTitles"
-          @addTitleToStatus="emitEvent"
-          key="equipment"
-        >
-        </EquipmentList>
-      </transition-group>
-
+      <CharaInformation
+        v-if="!equipment"
+        :output="output"
+        :loginuser="loginUser"
+      ></CharaInformation>
+      <EquipmentList
+        v-if="equipment"
+        :equipmentTitles="equipmentTitles"
+        @addTitleToStatus="emitEvent"
+      >
+      </EquipmentList>
       <!-- 装備中のコンポーネントとステータスコンポーネント -->
       <div class="components__flex">
         <!-- ここのv-ifはaddTitleをキャラ作成時配列(空)をdatabaseに登録してるからv-ifはtureになり
@@ -445,17 +438,11 @@ export default {
     display: flex
     justify-content: space-between
 
-  .fade-move
-    transition: transform 1s
   .fade-enter,
   .fade-leave-to
     opacity: 0
   .fade-enter-active
-    transition: opacity .1s
+    transition: opacity 3s
   .fade-leave-active
-    transition: opacity 0s
-    position: absolute
-
-  [v-cloak]
-    display: none
+    transition: opacity .5s
 </style>
