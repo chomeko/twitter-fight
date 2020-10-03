@@ -33,7 +33,7 @@
       ></CharaInformation>
       <EquipmentList
         v-if="equipment"
-        :equipmentTitles="equipmentTitles"
+        :loginUser="loginUser.uid"
         @addTitleToStatus="emitEvent"
       >
       </EquipmentList>
@@ -75,7 +75,6 @@ import Footer from '../components/Footer'
 
 import { v4 as uuidv4 } from 'uuid'
 
-// import LottieAnimation from 'lottie-vuejs'
 
 
 
@@ -90,35 +89,14 @@ export default {
     Equipment,
     TwitterImg,
     Footer,
-    // LottieAnimation
   },
-  // localStorage: {
-  //   welcomHome: {
-  //     type: Boolean,
-  //     default: true
-  //   },
-  //   beforeSutefuri: {
-  //     type: Boolean,
-  //     default: false
-  //   },
-  //   oldSutefuri: {
-  //     type: Boolean,
-  //     default: false
-  //   }
-  // },
   data(){
     return {
       db : null,
       //twitter情報
       loginUser: {},
-      //twitter__uid
-      //loginUid: {},
-      //ついふぁいにようこそ表示
-      // welcomHome: true,
       //ステータス確定前表示
       beforeSutefuri: false,
-      //ステータス表示
-      // oldSutefuri: false,
       //キャラステータス
       character: {
         lv: 1,
@@ -136,31 +114,17 @@ export default {
       output: '', // 保存したデータをgetで取得したもの
       //装備画面表示
       equipment: false,
-      // ユーザーの持ってる称号の入れ物
-      equipmentTitles: [],
       //ユーザーの持ってる称号をクリックして装備
       addTitle: [],
-      //testemit: []
     }
   },
   //mount時にローカルストレージから状態を取得して現在のdataにする
   mounted(){
-    // if (localStorage.welcomHome) {
-    //   this.welcomHome = this.$localStorage.get('welcomHome')
-    // }
-    // if (localStorage.beforeSutefuri) {
-    //   this.beforeSutefuri = this.$localStorage.get('beforeSutefuri')
-    // }
-    // if (localStorage.oldSutefuri) {
-    //   this.oldSutefuri = this.$localStorage.get('oldSutefuri')
-    // }
     //mount時にユーザー情報を取得して表示
     firebase.auth().onAuthStateChanged(async user => {
       if (user){
         this.loginUser = user//ユーザー情報
-        //this.loginUid = user.providerData[0].uid
         this.get()//databaseからキャラクター情報取得
-        await this.getTitles()//ユーザーの持ってる称号リストを取得
         await this.userEquipTitle()//ユーザーが装備してる称号を取得
         //console.log(user)
       }
@@ -255,7 +219,6 @@ export default {
       this.character.defense = _.random(100)
       this.character.avoidance = 5
       this.character.speed = _.random(100)
-      // this.welcomHome = false
       this.beforeSutefuri = true
     },
     //基礎ステータス確定してdatabaseに登録
@@ -284,7 +247,6 @@ export default {
       await this.addEmptyTitle()
       await this.get()
       this.beforeSutefuri = false
-      // this.oldSutefuri = true
     },
     //初期装備データ空を登録する
     async addEmptyTitle(){
@@ -318,17 +280,6 @@ export default {
       .catch(function(error) {
         console.log("Error getting document:", error);
       })
-    },
-    //ユーザーの持ってる称号リストを取得
-    async getTitles() {
-      let docID = String(this.loginUser.uid)
-      let docRef = this.db.collection("users").doc(docID).collection("titles").orderBy('rea', 'asc')
-      const querySnapshot = await docRef.get()
-      const data = querySnapshot.docs.map(doc => {
-        return doc.data()
-      })
-      //console.log('称号取得完了しました')
-      this.equipmentTitles = data
     },
     //ユーザーが装備してる称号を取得
     async userEquipTitle(){

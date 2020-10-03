@@ -11,23 +11,43 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 
 export default {
   props: {
-    equipmentTitles: {
-      type: Array,
+    loginUser: {
+      type: String,
       required: false
     }
   },
   data(){
     return {
+      // ユーザーの持ってる称号の入れ物
+      equipmentTitles: [],
       classNormal: 'white',
       classRea: 'blue',
       classEpic: 'orange',
       classLegend: 'pink'
     }
   },
+  created() {
+    this.db = firebase.firestore() // dbインスタンスを初期化
+  },
+  mounted(){
+    this.getTitles()
+  },
   methods: {
+    //ユーザーの持ってる称号リストを取得
+    async getTitles() {
+      let docID = String(this.loginUser)
+      let docRef = this.db.collection("users").doc(docID).collection("titles").orderBy('rea', 'asc')
+      const querySnapshot = await docRef.get()
+      const data = querySnapshot.docs.map(doc => {
+        return doc.data()
+      })
+      //console.log('称号取得完了しました')
+      this.equipmentTitles = data
+    },
     // ノーマル: 1
     // レア: 2
     // エピック: 3
