@@ -1,7 +1,7 @@
 <template>
   <div id="mypage">
     <!-- 初期ログイン後に表示 -->
-    <template v-if="output === '' ">
+    <template v-if="output == '' ">
       <transition
         enter-active-class="animate__animated animate__zoomInDown"
         appear
@@ -15,7 +15,7 @@
 
     <!-- キャラクターステータス作成画面 -->
       <div class="before__status">
-        <NewStatus :character="character"></NewStatus>
+        <CharaStatus :output="character"></CharaStatus>
       </div>
       <div v-if="beforeSutefuri" class="statusButton">
         <Button type="userStatus" @myclick="createCharacter">やり直す</Button>
@@ -65,7 +65,6 @@
 import firebase from 'firebase'
 import _ from 'lodash'
 import Button from '../components/Button'
-import NewStatus from '../components/NewStatus'
 import CharaStatus from '../components/CharaStatus'
 import CharaInformation from '../components/CharaInformation'
 import EquipmentList from '../components/EquipmentList'
@@ -82,7 +81,6 @@ import { v4 as uuidv4 } from 'uuid'
 export default {
   components: {
     Button,
-    NewStatus,
     CharaStatus,
     CharaInformation,
     EquipmentList,
