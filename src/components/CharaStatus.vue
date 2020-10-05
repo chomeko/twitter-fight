@@ -48,7 +48,7 @@ export default {
   dl
     display: flex
     margin: 5px 0
-    padding: 0 30px
+    padding: 0 20px
   dt
     width: 70px
     text-align: right
