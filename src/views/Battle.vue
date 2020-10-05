@@ -128,7 +128,7 @@ export default {
     },
     bakuhatu(){
       return { animationData: bakuhatu, loop: false }
-    }
+    },
   },
   methods: {
     //斬撃アニメーション
@@ -436,6 +436,10 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
     background: #000
     border: 3px solid #FFF
     border-radius: 5px
+    padding: 0 5px
+    white-space: nowrap
+    text-overflow: ellipsis
+    overflow: hidden
   &__img
     opacity: 1
   &__hp
