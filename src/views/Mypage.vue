@@ -212,11 +212,11 @@ export default {
     },
     //基礎キャラクターステータス作成時
     createCharacter() {
-      this.character.hp = _.random(1000)
-      this.character.attack = _.random(100)
-      this.character.defense = _.random(100)
+      this.character.hp = _.random(500,1000)
+      this.character.attack = _.random(70,100)
+      this.character.defense = _.random(70,100)
       this.character.avoidance = 5
-      this.character.speed = _.random(100)
+      this.character.speed = _.random(30,100)
       this.beforeSutefuri = true
     },
     //基礎ステータス確定してdatabaseに登録
