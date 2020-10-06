@@ -401,10 +401,9 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
 
 #battle
   max-width: 400px
-  padding: 10px
+  padding: 2px 10px
   margin: auto
   height: 88vh
-  overflow: hidden
   h2
     margin-top: 160px
     text-align: center
@@ -424,7 +423,6 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
 
 //バトル画面
 .enemyCharacter
-  margin-top: 8px
   font-size: 14px
   text-align: center
   background-image: url(../assets/battlebg.png)
@@ -541,8 +539,6 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   border: 3px solid #FFF
   border-radius: 10px
   padding: 10px
-  overflow: hidden
-  overflow-y: scroll
   +mq(pc)
     margin-top: 16px
   p
@@ -554,7 +550,7 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   justify-content: space-between
   button
     margin-top: 5px
-    padding: 10px
+    padding: 8px
     border: 1px solid #FFF
 
 .back
