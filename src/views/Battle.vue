@@ -239,7 +239,7 @@ export default {
         this.enemyEnd = true
         this.battleEnd = true
         this.escapebtn = false//逃げるボタン非表示
-        this.message = `${this.$user().displayName}の攻撃\n` + myAttack + "のダメージを与えた\n" + `${this.enemyName.displayName}を` + "倒した！"
+        this.message = `${this.$user().displayName}の攻撃\n` + myDamage + "のダメージを与えた\n" + `${this.enemyName.displayName}を` + "倒した！"
         this.record(1)
         this.clickBattleBtn = false
       }
