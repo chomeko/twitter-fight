@@ -403,7 +403,7 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   max-width: 400px
   padding: 2px 10px
   margin: auto
-  height: 88vh
+  height: 85vh
   h2
     margin-top: 160px
     text-align: center
