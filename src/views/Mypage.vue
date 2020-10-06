@@ -167,19 +167,19 @@ export default {
         this.addTitle.equip.splice(index,1)
         this.DeleteEquipTitles(addTitleToStatus)
           if (addTitleToStatus.property.hp) {
-            this.output.hp = this.output.hp - addTitleToStatus.property.hp
+            this.output.hp -= addTitleToStatus.property.hp
           }
           if (addTitleToStatus.property.attack) {
-            this.output.attack = this.output.attack - addTitleToStatus.property.attack
+            this.output.attack -= addTitleToStatus.property.attack
           }
           if (addTitleToStatus.property.defense) {
-            this.output.defense = this.output.defense - addTitleToStatus.property.defense
+            this.output.defense -= addTitleToStatus.property.defense
           }
           if (addTitleToStatus.property.avoidance) {
-            this.output.avoidance = this.output.avoidance - addTitleToStatus.property.avoidance
+            this.output.avoidance -= addTitleToStatus.property.avoidance
           }
           if (addTitleToStatus.property.speed) {
-            this.output.speed = this.output.speed - addTitleToStatus.property.speed
+            this.output.speed -= addTitleToStatus.property.speed
           }
         this.userSutefuri()
       }
@@ -189,19 +189,19 @@ export default {
           this.addTitle.equip.push(addTitleToStatus)
           this.addEquipTitles(addTitleToStatus)
           if (addTitleToStatus.property.hp) {
-            this.output.hp = this.output.hp + addTitleToStatus.property.hp
+            this.output.hp += addTitleToStatus.property.hp
           }
           if (addTitleToStatus.property.attack) {
-            this.output.attack = this.output.attack + addTitleToStatus.property.attack
+            this.output.attack += addTitleToStatus.property.attack
           }
           if (addTitleToStatus.property.defense) {
-            this.output.defense = this.output.defense + addTitleToStatus.property.defense
+            this.output.defense += addTitleToStatus.property.defense
           }
           if (addTitleToStatus.property.avoidance) {
-            this.output.avoidance = this.output.avoidance + addTitleToStatus.property.avoidance
+            this.output.avoidance += addTitleToStatus.property.avoidance
           }
           if (addTitleToStatus.property.speed) {
-            this.output.speed = this.output.speed + addTitleToStatus.property.speed
+            this.output.speed += addTitleToStatus.property.speed
           }
           this.userSutefuri()
         }
@@ -225,6 +225,7 @@ export default {
       const docID = String(this.loginUser.uid)
       await this.db.collection('sutefuri').doc(docID)
       .set({
+        name: this.loginUser.displayName,
         lv: this.character.lv,
         hp: this.character.hp,
         attack: this.character.attack,
