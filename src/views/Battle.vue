@@ -129,6 +129,10 @@ export default {
     bakuhatu(){
       return { animationData: bakuhatu, loop: false }
     },
+    // autoScroll(){
+    //   let target = document.getElementsByClassName('vue-typer')
+    //   return target.scrollintoView(false)
+    // }
   },
   methods: {
     //斬撃アニメーション
@@ -531,12 +535,14 @@ $breakpoints: ('sp': 'screen and (min-width: 400px)','pc': 'screen and (min-widt
   transform: translate(-50%, 0%)
 
 .message__container
-  font-size: 14px
+  font-size: 13px
   width: 100%
   height: 130px
   border: 3px solid #FFF
   border-radius: 10px
   padding: 10px
+  overflow: hidden
+  overflow-y: scroll
   +mq(pc)
     margin-top: 16px
   p
